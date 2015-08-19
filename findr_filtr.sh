@@ -163,30 +163,9 @@ findr TrackingNumber fl|filtr Job f | grep \"Ebay\\|Turbo\"
         find_pattern="-name \"*.rb\""
       fi
     fi
-    
-    for FINDR_DIR in `ls -l`
-    do
-      if test -d $FINDR_DIR
-      then
-        cmd="find $FINDR_DIR $find_pattern | filtr $1 $2"
-        
-        if [[ $verbose -eq 0 ]]; then 
-          #echo "be quiet"
-          cmd="exec 3>&2; exec 2> /dev/null; $cmd; exec 2>&3"
-        fi
-        
-        if [[ $debugging -eq 1 ]]; then
-          echo "call command: $cmd"
-        fi
-        
-        eval $cmd
-      fi
-    done
 
-    find_pattern="-maxdepth 1 -type f $find_pattern"
-    # cmd="find . $find_pattern | filtr $1 $2 'no-recursion'"
     cmd="find . $find_pattern | filtr $1 $2"
-
+    
     if [[ $verbose -eq 0 ]]; then 
       #echo "be quiet"
       cmd="exec 3>&2; exec 2> /dev/null; $cmd; exec 2>&3"
@@ -195,8 +174,9 @@ findr TrackingNumber fl|filtr Job f | grep \"Ebay\\|Turbo\"
     if [[ $debugging -eq 1 ]]; then
       echo "call command: $cmd"
     fi
-
+    
     eval $cmd
+
   fi
 }
 
