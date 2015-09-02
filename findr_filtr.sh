@@ -1,6 +1,12 @@
 
 alias glnum="awk -F: '{print \$1\":\"\$2}'"
 alias gsimp="grep -v spec | grep -v features | grep -v oneoff"
+# alias gcol='sed "s/#/\\#/g"' " | sed 's/\(.*\)/\\\\\"\1\\\\\"/g' | xargs ~/scripts/findr_filtr_format_columns.sh"
+# alias gcol=' sed "s/#/\\#/g"' " | sed 's/\(.*\)/\\\\\"\1\\\\\"/g' | xargs ~/scripts/findr_filtr_format_columns.sh"
+# alias gcol="sed 's/\(.*\)/\\\\\"\1\\\\\"/g' | sed 's/#/\\#/g' | xargs ~/scripts/findr_filtr_format_columns.sh"
+# alias gcol=" sed 's/\(.*\)/\\\\\"\1\\\\\"/g' | xargs ~/scripts/findr_filtr_format_columns.sh"
+# alias gcol=" sed 's/\(.*\)/\\\\\"\1\\\\\"/g' | sed 's/\(.*\)/\\\\\"\1\\\\\"/g' | xargs ~/scripts/findr_filtr_format_columns.sh"
+alias gcol=" sed 's/\(.*\)/\\\\\"\1\\\\\"/g' | sed \"s/'/’/g\" | xargs ~/scripts/findr_filtr_format_columns.sh"
 
 function filtr () {
   post_opts=""
@@ -24,6 +30,9 @@ function filtr () {
       grep_opts="${grep_opts}l"
     else
       grep_opts="${grep_opts}n"
+    fi
+    if [[ "$2" =~ "c" ]]; then 
+      post_opts="$post_opts | gcol"
     fi
     if [[ "$2" =~ "d" ]]; then 
       debugging=1
@@ -104,6 +113,7 @@ Options for both findr and filtr:
 - n:      include line numbers (passed off to 'grep -rn')
 - l:      list the files, unadorned; can be used with xargs to do further 
           processing (passed off to 'grep -rl')
+- c:      format in columns
 
 findr RetryStuckOrders f
 findr RetryStuckOrders n

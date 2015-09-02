@@ -16,7 +16,7 @@ function! WikiFileName(...)
   let @z = '^hx'
   normal @z
 
-  let $WFN = "* [".@w." (".strftime("%Y-%m-%d").")](".@y.")"
+  let $WFN = strftime("(%a, %d %b %Y)")."* [".@w." (".strftime("%Y-%m-%d").")](".@y.")"
   echo $WFN
 endfunction
 :command! -range WFN :call WikiFileName() | :r!echo "$WFN" | pbcopy
