@@ -24,10 +24,11 @@ colwe=$(expr $colw - 3)
 
 for line in $(echo "$@"); do
   line=$(echo "${line}" | sed -e 's/^[[:space:]]*//')
-  # echo ${#line}
 
   if [ ${#line} -ne 0 ]; then
-    left=$(echo ${line%: *})
+    line=$(echo "${line}" | sed -e 's/\(:[0-9]*:\)[[:space:]]*/\1 /g')
+
+    left=$(echo ${line%%: *})
     right=$(echo ${line#*: } | sed -e 's/^[[:space:]]*//')
 
     if [ ${#left} -gt $colw ]; then
