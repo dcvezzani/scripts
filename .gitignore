@@ -1,3 +1,6 @@
 .sw*
 .*.sw*
 iphone-sms-backup/
+.DS_Store
+*.bak
+*.wip
