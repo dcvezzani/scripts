@@ -62,7 +62,7 @@ $pdf_file
 
 
   pdftk $pdf_file update_info $_title output $_output
-  # pdftk /Users/davidvezzani/Documents/journal/10-oct-2015/x20151001-enerbank-loan-forms-for-david-vezzani-bbb.pdf update_info /tmp/x20151001-enerbank-loan-forms-for-david-vezzani-bbb.pdf.title.mMtcFYwGFK5LwFI output /tmp/x20151001-enerbank-loan-forms-for-david-vezzani-bbb.pdf.0u1NLymvDDZJKpw
+  # pdftk $HOME_DIR/Documents/journal/10-oct-2015/x20151001-enerbank-loan-forms-for-david-vezzani-bbb.pdf update_info /tmp/x20151001-enerbank-loan-forms-for-david-vezzani-bbb.pdf.title.mMtcFYwGFK5LwFI output /tmp/x20151001-enerbank-loan-forms-for-david-vezzani-bbb.pdf.0u1NLymvDDZJKpw
 
 
   # echo "Checking status for ${1}: $?; $@" >> /var/tmp/myScript.log

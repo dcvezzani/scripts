@@ -115,7 +115,7 @@ class PdfRebuildCrossReferenceTable
   end
 end
 
-# filename = "/Users/davidvezzani/Downloads/wip01/crystal-commerce-invoice-sample-002.pdf"
+# filename = "$HOME_DIR/Downloads/wip01/crystal-commerce-invoice-sample-002.pdf"
 filename = ARGV[0]
 if(File.exists?(filename))
   PdfRebuildCrossReferenceTable.new(filename).repair()
