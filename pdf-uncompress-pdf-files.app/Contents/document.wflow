@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AMApplicationBuild</key>
+	<string>409.2</string>
+	<key>AMApplicationVersion</key>
+	<string>2.5</string>
+	<key>AMDocumentVersion</key>
+	<string>2</string>
+	<key>actions</key>
+	<array>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionNameComment</key>
+				<string>Stop When No Input</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {input, parameters}	if ((count of (input as list))) is 0 then		set appletName to text 1 thru -5 of (do shell script "basename " &amp; (quoted form of POSIX path of (path to me)))		display notification "Drop compessed Pdf files on Application icon to uncompress pdf files" with title appletName subtitle "Missing files"		error number -128	end if	return inputend run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>InputUUID</key>
+				<string>D9126215-0EC6-4A09-93F0-1139FB1B8B34</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>9078B1E2-CFF7-41D1-8D0A-916FA83F6DD4</string>
+				<key>UUID</key>
+				<string>992B6C7C-F931-47B3-99AB-E654CF8E33D5</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:316.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionNameComment</key>
+				<string>Extract File Name(s) and Run Shell Script</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {input, parameters}	-- This script extracts the file/folder names of the items processed by this workflow, and then returns the names as a comma-delimited text string, like: "nameofitem1.jpg, nameofitem2.jpg,etc."	-- set filenames to "/Users/davidvezzani/Downloads/wip01/invoice-002.pdf"	set filenames to ""	repeat with i from 1 to the count of input		set thisItem to item i of input		(*set filenames to filenames &amp; " " &amp; thisItem*)		set thisPath to the quoted form of the POSIX path of thisItem		set thisFileName to (do shell script "basename " &amp; thisPath)		set filenames to filenames &amp; " " &amp; thisPath				if i is 1 then			set the nameString to thisFileName		else			set the nameString to nameString &amp; ", " &amp; thisFileName		end if	end repeat		(*	set logFilePath to "/var/tmp/myScript.log"	set logFile to (open for access POSIX file logFilePath with write permission)	write "[" &amp; appletName &amp; ": " &amp; filenames &amp; "]" &amp; return to logFile starting at eof	close access logFile	*)		--- run the shell/ruby scripts to rebuild the uncompressed Pdf document's cross reference table	do shell script "PDF_UNCOMPRESS_PDF_FILE_EDIT_PDF=true PDF_UNCOMPRESS_PDF_FILE_NO_PROMPT=true ~/scripts/pdf-uncompress-pdf-file.sh " &amp; filenames &amp; " &gt; /dev/null 2&gt;&amp;1 &amp;"		--- send notification of success	set appletName to text 1 thru -5 of (do shell script "basename " &amp; (quoted form of POSIX path of (path to me)))	display notification "Processing completed." with title appletName subtitle nameString		return nameStringend run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>InputUUID</key>
+				<string>FD9737BB-2B29-48E8-8FB7-57BB0CAD8B5F</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>7D6E8CFA-57D4-4460-8F71-0A31D3091843</string>
+				<key>UUID</key>
+				<string>9F7BDDBF-B644-4BDB-B064-72A4B051F846</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:813.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+	</array>
+	<key>connectors</key>
+	<dict>
+		<key>AF0040E1-7C8B-4144-98AE-5DC7D9340D1C</key>
+		<dict>
+			<key>from</key>
+			<string>992B6C7C-F931-47B3-99AB-E654CF8E33D5 - 992B6C7C-F931-47B3-99AB-E654CF8E33D5</string>
+			<key>to</key>
+			<string>9F7BDDBF-B644-4BDB-B064-72A4B051F846 - 9F7BDDBF-B644-4BDB-B064-72A4B051F846</string>
+		</dict>
+	</dict>
+	<key>workflowMetaData</key>
+	<dict>
+		<key>workflowTypeIdentifier</key>
+		<string>com.apple.Automator.application</string>
+	</dict>
+</dict>
+</plist>

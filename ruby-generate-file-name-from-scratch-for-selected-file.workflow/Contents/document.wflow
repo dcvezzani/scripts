@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AMApplicationBuild</key>
+	<string>409.2</string>
+	<key>AMApplicationVersion</key>
+	<string>2.5</string>
+	<key>AMDocumentVersion</key>
+	<string>2</string>
+	<key>actions</key>
+	<array>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionNameComment</key>
+				<string>Stop When No Input</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {input, parameters}		--set appletName to text 1 thru -5 of (do shell script "basename " &amp; (quoted form of POSIX path of (path to me)))	set appletName to "file-name-from-scratch"		if (false and ((count of (input as list))) is not 1) then		display notification "Select a single file to be renamed" with title appletName subtitle "Too many files selected"		error number -128	end if		(*
+	if ((count of (input as list))) is 0 then		set appletName to text 1 thru -5 of (do shell script "basename " &amp; (quoted form of POSIX path of (path to me)))		display notification "Select a file to be renamed" with title appletName subtitle "Missing files"		error number -128	end if
+	*)		--set thisItem to item 1 of input	--set thisPath to the quoted form of the POSIX path of thisItem		return {input, appletName}end run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>InputUUID</key>
+				<string>4E22E378-EDB6-437B-8CE6-62E04715475D</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>023D7EFF-22B6-4544-A525-F98A30B2AA43</string>
+				<key>StartAction</key>
+				<false/>
+				<key>UUID</key>
+				<string>55566C9C-A808-4FE7-A3C5-2CC188745B22</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:316.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {lastResult, parameters}	set origInput to get item 1 of lastResult	set appletName to get item 2 of lastResult		set defaultAnswer to ""		set userAnswers to display dialog "Title for file: " buttons {"Cancel", "Generate"} default button "Generate" cancel button "Cancel" default answer defaultAnswer		--set userAnswers to display dialog "Title for file: " buttons {"Cancel", "Generate"} default button "Generate" cancel button "Cancel" default answer defaultAnswer	set userAnswersText to get text of userAnswers	set useExtension to get item 1 of userAnswersText	set title to get item 2 of userAnswersText		if useExtension is "Generate wExt" then		useExtension = true	end if		return {title, origInput, appletName}end run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>InputUUID</key>
+				<string>10752CCB-B15B-4C99-93A8-E469BCDDB1A3</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>ED69882B-12FD-4B01-BF3C-6ED888892BCB</string>
+				<key>StartAction</key>
+				<false/>
+				<key>UUID</key>
+				<string>5C3CC12E-02EA-4008-9E99-B3B9DF7BA424</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:616.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionNameComment</key>
+				<string>Extract File Name(s) and Run Shell Script</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {lastResult, parameters}	set input to get item 1 of lastResult	set origInput to get item 2 of lastResult	set appletName to get item 3 of lastResult		--- run the shell/ruby scripts to generate a file name from the given title, prepended with a dts	set genFileName to do shell script "source ~/.zshrc; ruby ~/scripts/ruby-generate-file-name.rb \"" &amp; input &amp; "\""	--- &amp; " &gt; /dev/null 2&gt;&amp;1 &amp;"			set the clipboard to genFileName as text		--- send notification of success		display notification genFileName with title appletName subtitle "File name generated"		return {genFileName, origInput, appletName}end run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>InputUUID</key>
+				<string>3B2A748F-44E2-4169-AFE1-F0A45A0D42FB</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>94E368CB-F5AA-4551-A222-5AFE71B14186</string>
+				<key>UUID</key>
+				<string>6F22E60E-C3F8-4E6C-A7AD-564EF12CE60D</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:956.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {lastResult, parameters}	set genFileName to get item 1 of lastResult	set origInput to get item 2 of lastResult	set appletName to get item 3 of lastResult		set filenames to ""	repeat with i from 1 to the count of origInput		set thisItem to item i of origInput				set thisPath to the quoted form of the POSIX path of thisItem		set thisFileName to (do shell script "basename " &amp; thisPath)				set fileNameString to do shell script "echo $(basename " &amp; thisPath &amp; ")"		set fileName to "'" &amp; fileNameString &amp; "'"				set justPath to do shell script "filename=" &amp; thisPath &amp; "; echo ${filename%\\/*}"		set extension to do shell script "filename=" &amp; fileName &amp; "; echo ${filename##*.}"		set nameWithoutExtension to do shell script "filename=" &amp; fileName &amp; "; echo ${filename%%.*}"		set genFileNameWithoutExtension to do shell script "filename=" &amp; genFileName &amp; "; echo ${filename%%.*}"				set newName to null		if (count of origInput) &gt; 1 then			set incValue to do shell script "printf %03d " &amp; i			set newName to genFileNameWithoutExtension &amp; "-" &amp; incValue &amp; "." &amp; extension --&gt; Disneyland.jpg		else			set newName to genFileNameWithoutExtension &amp; "." &amp; extension --&gt; Disneyland.jpg		end if				tell application "Finder"			set fileAlias to the thisItem as alias			set fileName to name of fileAlias			set fileExtension to name extension of fileAlias						set name of fileAlias to newName		end tell				if i is 1 then			set the filenames to newName		else			set the filenames to filenames &amp; ", " &amp; newName		end if	end repeat		(*	set logFilePath to "/var/tmp/myScript.log"	set logFile to (open for access POSIX file logFilePath with write permission)	write "[" &amp; appletName &amp; ": " &amp; filenames &amp; "]" &amp; return to logFile starting at eof	close access logFile	*)		--- send notification of success	--display notification newName with title appletName subtitle "File renamed from " &amp; fileName	display notification filenames with title appletName subtitle "File(s) renamed"		return origInputend run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>InputUUID</key>
+				<string>56E8A768-945A-4D69-BFB0-70A633E486BD</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>87B6EFCA-D899-436A-88FF-BD8EF484E934</string>
+				<key>UUID</key>
+				<string>7E6F6AA5-16C8-4964-97F8-DBC24C55AEAD</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:1576.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+	</array>
+	<key>connectors</key>
+	<dict>
+		<key>1287F857-E6F1-48E6-8ABD-0BDFA8E2DA58</key>
+		<dict>
+			<key>from</key>
+			<string>6F22E60E-C3F8-4E6C-A7AD-564EF12CE60D - 6F22E60E-C3F8-4E6C-A7AD-564EF12CE60D</string>
+			<key>to</key>
+			<string>7E6F6AA5-16C8-4964-97F8-DBC24C55AEAD - 7E6F6AA5-16C8-4964-97F8-DBC24C55AEAD</string>
+		</dict>
+		<key>D0BD2A88-E85A-496D-90C4-8B3F9EFE6480</key>
+		<dict>
+			<key>from</key>
+			<string>5C3CC12E-02EA-4008-9E99-B3B9DF7BA424 - 5C3CC12E-02EA-4008-9E99-B3B9DF7BA424</string>
+			<key>to</key>
+			<string>6F22E60E-C3F8-4E6C-A7AD-564EF12CE60D - 6F22E60E-C3F8-4E6C-A7AD-564EF12CE60D</string>
+		</dict>
+		<key>DFD2CE98-9E43-454D-A4C7-C7DE5D295480</key>
+		<dict>
+			<key>from</key>
+			<string>55566C9C-A808-4FE7-A3C5-2CC188745B22 - 55566C9C-A808-4FE7-A3C5-2CC188745B22</string>
+			<key>to</key>
+			<string>5C3CC12E-02EA-4008-9E99-B3B9DF7BA424 - 5C3CC12E-02EA-4008-9E99-B3B9DF7BA424</string>
+		</dict>
+	</dict>
+	<key>workflowMetaData</key>
+	<dict>
+		<key>serviceApplicationBundleID</key>
+		<string></string>
+		<key>serviceApplicationPath</key>
+		<string></string>
+		<key>serviceInputTypeIdentifier</key>
+		<string>com.apple.Automator.fileSystemObject</string>
+		<key>serviceOutputTypeIdentifier</key>
+		<string>com.apple.Automator.nothing</string>
+		<key>serviceProcessesInput</key>
+		<integer>0</integer>
+		<key>workflowTypeIdentifier</key>
+		<string>com.apple.Automator.servicesMenu</string>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AMApplicationBuild</key>
+	<string>409.2</string>
+	<key>AMApplicationVersion</key>
+	<string>2.5</string>
+	<key>AMDocumentVersion</key>
+	<string>2</string>
+	<key>actions</key>
+	<array>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionNameComment</key>
+				<string>Stop When No Input</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {input, parameters}	if ((count of (input as list))) is 0 then		set appletName to text 1 thru -5 of (do shell script "basename " &amp; (quoted form of POSIX path of (path to me)))		display notification "Drop uncompessed Pdf files on Application icon to rebuild their cross reference table" with title appletName subtitle "Missing files"		error number -128	end if	return inputend run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>InputUUID</key>
+				<string>0E3AC4BA-FAEC-4D6F-9051-42966972380F</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>9B6DD12B-18AC-4D9B-B9FE-FBC201911114</string>
+				<key>UUID</key>
+				<string>5E248E1C-92A3-4B82-8742-6D8B57C2DF6E</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:316.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionNameComment</key>
+				<string>Extract File Name(s) and Run Shell Script</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {input, parameters}	-- This script extracts the file/folder names of the items processed by this workflow, and then returns the names as a comma-delimited text string, like: "nameofitem1.jpg, nameofitem2.jpg,etc."	-- set filenames to "/Users/davidvezzani/Downloads/wip01/invoice-002.pdf"	set filenames to ""	repeat with i from 1 to the count of input		set thisItem to item i of input		(*set filenames to filenames &amp; " " &amp; thisItem*)		set thisPath to the quoted form of the POSIX path of thisItem		set thisFileName to (do shell script "basename " &amp; thisPath)		set filenames to filenames &amp; " " &amp; thisPath				if i is 1 then			set the nameString to thisFileName		else			set the nameString to nameString &amp; ", " &amp; thisFileName		end if	end repeat		set appletName to text 1 thru -5 of (do shell script "basename " &amp; (quoted form of POSIX path of (path to me)))		(*	set logFilePath to "/var/tmp/myScript.log"	set logFile to (open for access POSIX file logFilePath with write permission)	write "[" &amp; appletName &amp; ": " &amp; filenames &amp; "]" &amp; return to logFile starting at eof	close access logFile	*)		--- run the shell/ruby scripts to rebuild the uncompressed Pdf document's cross reference table	do shell script "PDF_REBUILD_CROSS_REFERENCE_TABLE_NO_PROMPT=true /Users/davidvezzani/scripts/pdf_rebuild_cross_reference_table.sh " &amp; filenames		--- send notification of success	display notification "Processing completed." with title appletName subtitle nameString		return nameStringend run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>InputUUID</key>
+				<string>28360E60-A6F6-4A9B-A0CE-465FEBDE360A</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>E870FECC-C886-47E2-BD59-DF20B0A283F8</string>
+				<key>UUID</key>
+				<string>AE727679-244E-4B01-9300-E2AB98E42704</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:864.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+	</array>
+	<key>connectors</key>
+	<dict>
+		<key>6D29F3DB-81CB-4294-96AA-DE48445D0E7A</key>
+		<dict>
+			<key>from</key>
+			<string>5E248E1C-92A3-4B82-8742-6D8B57C2DF6E - 5E248E1C-92A3-4B82-8742-6D8B57C2DF6E</string>
+			<key>to</key>
+			<string>AE727679-244E-4B01-9300-E2AB98E42704 - AE727679-244E-4B01-9300-E2AB98E42704</string>
+		</dict>
+	</dict>
+	<key>variables</key>
+	<array>
+		<dict>
+			<key>UUID</key>
+			<string>75E8327D-2AC3-4DAB-867C-38C38BE2A92B</string>
+			<key>identifier</key>
+			<string>com.apple.Automator.Variable.Storage</string>
+			<key>name</key>
+			<string>fileName(s)</string>
+		</dict>
+		<dict>
+			<key>UUID</key>
+			<string>00F55AA5-35B9-42C8-9A9A-60318B3EFC94</string>
+			<key>identifier</key>
+			<string>com.apple.Automator.Variable.AppleScript</string>
+			<key>name</key>
+			<string>Name of This Applet</string>
+			<key>value</key>
+			<string>text from 1 thru -5 of (do shell script "basename " &amp; (quoted form of POSIX path of (path to me)))</string>
+		</dict>
+		<dict>
+			<key>UUID</key>
+			<string>26E358D8-A607-47D9-AAA0-695FF2B4FED0</string>
+			<key>identifier</key>
+			<string>com.apple.Automator.Variable.Storage</string>
+			<key>name</key>
+			<string>fileName(s) 1</string>
+		</dict>
+		<dict>
+			<key>UUID</key>
+			<string>8F98CEBB-FAED-4D44-9334-872C1CB927BA</string>
+			<key>identifier</key>
+			<string>com.apple.Automator.Variable.Storage</string>
+			<key>name</key>
+			<string>fileName(s) 2</string>
+		</dict>
+		<dict>
+			<key>UUID</key>
+			<string>A8BCC9BE-ED24-40CC-ACC3-724CE8B9E7B5</string>
+			<key>identifier</key>
+			<string>com.apple.Automator.Variable.AppleScript</string>
+			<key>name</key>
+			<string>Name of This Applet 1</string>
+			<key>value</key>
+			<string>text from 1 thru -5 of (do shell script "basename " &amp; (quoted form of POSIX path of (path to me)))</string>
+		</dict>
+		<dict>
+			<key>UUID</key>
+			<string>615B7CAD-E140-45CF-B828-2ACF501263C3</string>
+			<key>identifier</key>
+			<string>com.apple.Automator.Variable.Storage</string>
+			<key>name</key>
+			<string>finderFiles</string>
+		</dict>
+		<dict>
+			<key>UUID</key>
+			<string>EA913575-74D4-4A3A-B223-142DC33AAEBC</string>
+			<key>identifier</key>
+			<string>com.apple.Automator.Variable.Storage</string>
+			<key>name</key>
+			<string>Storage</string>
+		</dict>
+		<dict>
+			<key>UUID</key>
+			<string>992B1B87-F618-4AD3-BCD1-BA527641A6B3</string>
+			<key>identifier</key>
+			<string>com.apple.Automator.Variable.FullName</string>
+		</dict>
+	</array>
+	<key>workflowMetaData</key>
+	<dict>
+		<key>workflowTypeIdentifier</key>
+		<string>com.apple.Automator.application</string>
+	</dict>
+</dict>
+</plist>
