@@ -18,12 +18,12 @@ if [ -z "$1" ]; then
     echo "Currently using Xcode${version}"
   fi
 
-  echo "If desired, specify version of Xcode to activate (6.4, 7.0)"
+  echo "If desired, specify version of Xcode to activate (6.4, 7.1)"
   exit 0;
 else
-  if [ "$1" = '6.4' ] || [ "$1" = '7.0' ]; then
+  if [ "$1" = '6.4' ] || [ "$1" = '7.1' ]; then
   else
-    echo "Specify version of Xcode to activate (6.4, 7.0)"
+    echo "Specify version of Xcode to activate (6.4, 7.1)"
     exit 1;
   fi
 fi
