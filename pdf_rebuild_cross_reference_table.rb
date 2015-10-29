@@ -1,5 +1,6 @@
 require 'bundler/setup'
 Bundler.require
+require 'byebug'
 
 class PdfRebuildCrossReferenceTable
   attr_reader :filename, :pdf_content
@@ -76,11 +77,11 @@ class PdfRebuildCrossReferenceTable
     pdf_content.gsub!(re_offset_crt_decl, "\nstartxref\n#{offset_crt}\n")
   end
 
-  def user_confirm(override=false, &blk)
-    log "The Cross Reference Table has been refreshed"
+  def user_confirm(entry_cnt, override=false, &blk)
+    log "The Cross Reference Table has been refreshed (#{entry_cnt} entries)"
     log "Option used to suppress user confirmation" if override
 
-    ans = ((override) ? 'y' : input("Are you sure you want to update the Pdf file? (y/n)"))
+    ans = ((override) ? 'y' : input("Are you sure you want to update the Pdf file (#{entry_cnt} object entries)? (y/n)"))
 
     blk.call(ans)
   end
@@ -100,7 +101,7 @@ class PdfRebuildCrossReferenceTable
       update_crt_number_of_entries!(crt[:count])
       update_crt_offset! get_crt_offset(crt[:count])
 
-      user_confirm(@override) {|ans|
+      user_confirm(crt[:count], @override) {|ans|
         if(ans.downcase == 'y')
           File.open(filename, "wb"){|f| f.write pdf_content}
           log "Pdf file has been successfully modified: #{filename}"
@@ -122,3 +123,9 @@ if(File.exists?(filename))
 else
   log "Cannot find file: #{filename}"
 end
+
+=begin
+
+ruby /Users/davidvezzani/scripts/pdf_rebuild_cross_reference_table.rb /Users/davidvezzani/Documents/journal/10-oct-2015/form-fields.pdf
+
+=end
