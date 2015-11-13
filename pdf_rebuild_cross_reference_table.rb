@@ -2,6 +2,10 @@ require 'bundler/setup'
 Bundler.require
 require 'byebug'
 
+# Usage:
+#
+# bundle exec ruby pdf_rebuild_cross_reference_table.rb /Users/davidvezzani/Dropbox/20151101-pdf-parsing/524-406A-examples-plus-pg7e.unc.pdf
+
 class PdfRebuildCrossReferenceTable
   attr_reader :filename, :pdf_content
 

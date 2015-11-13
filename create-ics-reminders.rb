@@ -51,7 +51,7 @@ md = task.split(/[\t\n]/)
 
 summary = md[1]
 # summary.gsub!(/https*:\/\/[^ 	]+/, '<a href="\0">\0</a>')
-summary.gsub!(/https*:\/\/[^ 	]+/, '<\0>')
+# summary.gsub!(/https*:\/\/[^ 	]+/, '<\0>')
 
 jira_task_id = md[0]
 hr_min = md[4]
