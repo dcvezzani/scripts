@@ -17,8 +17,14 @@ function! WikiFileName(...)
   normal @z
 
   let $WFN = strftime("(%a, %d %b %Y)")."* [".@w."](".@y.")"
+
+  " include content and link to github wiki page
+  " use `gx` when cursor on url to open in browser
+  let cleanWfn = split($WFN, '') + ['https://github.com/crystalcommerce/core/wiki/dave-v-authored-documents' ]
+  call append(".", cleanWfn)
+  call cursor(line('.') + len(cleanWfn), 0)
+
   echo $WFN
 endfunction
 :command! -range WFN :call WikiFileName() | :r!echo "$WFN" | pbcopy
-
 
