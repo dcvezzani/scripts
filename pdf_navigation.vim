@@ -8,7 +8,11 @@ function! PdfNavigate(...)
   endif
 endfunction
 
-nmap <buffer> qobj :call PdfNavigate('obj')<CR>
-nmap <buffer> qref :call PdfNavigate('ref')<CR>
+" nmap <buffer> qobj :call PdfNavigate('obj')<CR>
+" nmap <buffer> qref :call PdfNavigate('ref')<CR>
+" unmap <buffer> qobj
+" unmap <buffer> qref
+nmap <buffer> qo :call PdfNavigate('obj')<CR>
+nmap <buffer> qr :call PdfNavigate('ref')<CR>
 
 let b:current_syntax = "pdf"
