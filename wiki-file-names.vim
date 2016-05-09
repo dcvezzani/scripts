@@ -20,7 +20,7 @@ function! WikiFileName(...)
 
   " include content and link to github wiki page
   " use `gx` when cursor on url to open in browser
-  let cleanWfn = split($WFN, '') + ['https://github.com/crystalcommerce/core/wiki/dave-v-authored-documents' ]
+  let cleanWfn = split($WFN, '') + ['https://github.com/crystalcommerce/core/wiki/dave-v-authored-documents/_edit' ]
   call append(".", cleanWfn)
   call cursor(line('.') + len(cleanWfn), 0)
 

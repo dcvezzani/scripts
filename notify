@@ -1,0 +1,10 @@
+#!/bin/bash
+
+title="${@:0:1}"
+# subtitle="asdf"
+# message="$*"
+message="${@:2:$#}"
+
+# /usr/bin/osascript -e "display notification \"$message\" with title \"title\" with subtitle \"subtitle\""
+/usr/bin/osascript -e "display notification \"$message\" with title \"$title\""
+

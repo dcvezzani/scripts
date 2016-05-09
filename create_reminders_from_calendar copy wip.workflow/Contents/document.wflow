@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AMApplicationBuild</key>
+	<string>419</string>
+	<key>AMApplicationVersion</key>
+	<string>2.6</string>
+	<key>AMDocumentVersion</key>
+	<string>2</string>
+	<key>actions</key>
+	<array>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.event-kit.item</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>2.0.1</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Calendar</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>items</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.event-kit.item</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Get Specified Calendar Items.action</string>
+				<key>ActionName</key>
+				<string>Get Specified Calendar Items</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>items</key>
+					<array>
+						<dict>
+							<key>kind</key>
+							<string>calendar</string>
+							<key>name</key>
+							<string>TimeManagement</string>
+							<key>uid</key>
+							<string>B276FDC5-44C3-46EF-A94E-37E5DD74454B</string>
+						</dict>
+					</array>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.GetSpecifiediCalItems</string>
+				<key>CFBundleVersion</key>
+				<string>2.0.1</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryCalendar</string>
+				</array>
+				<key>Class Name</key>
+				<string>AMGetiCalItemsAction</string>
+				<key>InputUUID</key>
+				<string>D3CD0B87-DDFE-4675-B0D7-6216FBA7515D</string>
+				<key>Keywords</key>
+				<array>
+					<string>Calendar</string>
+					<string>Calendars</string>
+					<string>Get</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>4F341334-A33B-4772-AA48-C72CB6B148E6</string>
+				<key>UUID</key>
+				<string>9893FC07-9816-476F-822E-E427DAE6F47E</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Calendar</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<array/>
+						<key>name</key>
+						<string>items</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:240.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Get Specified Calendar Items.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<false/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.event-kit.event</string>
+						<string>com.apple.event-kit.reminder</string>
+						<string>com.apple.event-kit.calendar</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>3.0.1</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Calendar</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>itemType</key>
+					<dict/>
+					<key>predicate</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.event-kit.event</string>
+						<string>com.apple.event-kit.reminder</string>
+						<string>com.apple.event-kit.calendar</string>
+					</array>
+				</dict>
+				<key>AMRequiredResources</key>
+				<array/>
+				<key>AMSelectedInputType</key>
+				<string>com.apple.event-kit.event</string>
+				<key>AMSelectedOutputType</key>
+				<string>com.apple.event-kit.event</string>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Filter Calendar Items 2.action</string>
+				<key>ActionName</key>
+				<string>Filter Calendar Events</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>itemType</key>
+					<string>com.apple.event-kit.event</string>
+					<key>predicate</key>
+					<data>
+					YnBsaXN0MDDUAQIDBAUGentYJHZlcnNpb25Y
+					JG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGG
+					oK8QHQcIDxQcJicqMTU6Oz5CRktUVVZXW15i
+					ZWtscXV3VSRudWxs0wkKCwwNDl8QF05TQ29t
+					cG91bmRQcmVkaWNhdGVUeXBlXxAPTlNTdWJw
+					cmVkaWNhdGVzViRjbGFzcxACgAKAHNIQCxET
+					Wk5TLm9iamVjdHOhEoADgBvUCxUWFxgZGhtf
+					EBFOU1JpZ2h0RXhwcmVzc2lvbl8QEE5TTGVm
+					dEV4cHJlc3Npb25fEBNOU1ByZWRpY2F0ZU9w
+					ZXJhdG9ygBqADoAEgBfVHR4fIAshIiMkJVlO
+					U09wZXJhbmReTlNTZWxlY3Rvck5hbWVfEBBO
+					U0V4cHJlc3Npb25UeXBlW05TQXJndW1lbnRz
+					gAaABRADgAiADVx2YWx1ZUZvcktleTrSHwso
+					KRABgAfSKywtLlokY2xhc3NuYW1lWCRjbGFz
+					c2VzXxAQTlNTZWxmRXhwcmVzc2lvbqMtLzBc
+					TlNFeHByZXNzaW9uWE5TT2JqZWN00hALMjSh
+					M4AJgAzTCx82Nzg5WU5TS2V5UGF0aIALEAqA
+					CllzdGFydERhdGXSKyw8PV8QHE5TS2V5UGF0
+					aFNwZWNpZmllckV4cHJlc3Npb26jPC8w0iss
+					P0BeTlNNdXRhYmxlQXJyYXmjP0EwV05TQXJy
+					YXnSKyxDRF8QE05TS2V5UGF0aEV4cHJlc3Np
+					b26kQ0UvMF8QFE5TRnVuY3Rpb25FeHByZXNz
+					aW9u00cfC0hJSl8QD05TQ29uc3RhbnRWYWx1
+					ZYAPEACAFtNMEAtNUFNXTlMua2V5c6JOT4AQ
+					gBGiUVKAEoATgBVdcHJlZGljYXRlVHlwZVV2
+					YWx1ZRAE0lgLWVpXTlMudGltZSNBvMeyOLNX
+					YIAU0issXF1WTlNEYXRlolww0issX2BfEBNO
+					U011dGFibGVEaWN0aW9uYXJ5o19hMFxOU0Rp
+					Y3Rpb25hcnnSKyxjZF8QGU5TQ29uc3RhbnRW
+					YWx1ZUV4cHJlc3Npb26jYy8w1B5mC2doSWlq
+					Wk5TTW9kaWZpZXJeTlNPcGVyYXRvclR5cGWA
+					GIAZEAtcaXNBZnRlckRhdGU60issbW5fEBlO
+					U0N1c3RvbVByZWRpY2F0ZU9wZXJhdG9yo29w
+					MF8QGU5TQ3VzdG9tUHJlZGljYXRlT3BlcmF0
+					b3JfEBNOU1ByZWRpY2F0ZU9wZXJhdG9y0iss
+					cnNfEBVOU0NvbXBhcmlzb25QcmVkaWNhdGWj
+					cnQwW05TUHJlZGljYXRl0issQXaiQTDSKyx4
+					eV8QE05TQ29tcG91bmRQcmVkaWNhdGWjeHQw
+					XxAPTlNLZXllZEFyY2hpdmVy0Xx9VHJvb3SA
+					AQAIABEAGgAjAC0AMgA3AFcAXQBkAH4AkACX
+					AJkAmwCdAKIArQCvALEAswC8ANAA4wD5APsA
+					/QD/AQEBDAEWASUBOAFEAUYBSAFKAUwBTgFb
+					AWABYgFkAWkBdAF9AZABlAGhAaoBrwGxAbMB
+					tQG8AcYByAHKAcwB1gHbAfoB/gIDAhICFgIe
+					AiMCOQI+AlUCXAJuAnACcgJ0AnsCgwKGAogC
+					igKNAo8CkQKTAqECpwKpAq4CtgK/AsECxgLN
+					AtAC1QLrAu8C/AMBAx0DIQMqAzUDRANGA0gD
+					SgNXA1wDeAN8A5gDrgOzA8sDzwPbA+AD4wPo
+					A/4EAgQUBBcEHAAAAAAAAAIBAAAAAAAAAH4A
+					AAAAAAAAAAAAAAAAAAQe
+					</data>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.Filter_iCal_Items_2</string>
+				<key>CFBundleVersion</key>
+				<string>3.0.1</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryCalendar</string>
+				</array>
+				<key>Class Name</key>
+				<string>Filter_iCal_Items_2</string>
+				<key>InputUUID</key>
+				<string>50169E90-5D2A-4270-B751-58158EC10936</string>
+				<key>Keywords</key>
+				<array>
+					<string>Calendar</string>
+					<string>Filter</string>
+					<string>Event</string>
+					<string>To do</string>
+					<string>Reminder</string>
+					<string>Calendar</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>E9DA4C22-0F5A-46DB-A15A-3EAC45AE4555</string>
+				<key>UUID</key>
+				<string>95BBEDE3-648D-4F86-AEB7-33A26526E3FB</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Calendar</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>com.apple.calendar-store.event</string>
+						<key>name</key>
+						<string>itemType</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+					<key>1</key>
+					<dict>
+						<key>default value</key>
+						<data>
+						</data>
+						<key>name</key>
+						<string>predicate</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>1</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:398.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Filter Calendar Items 2.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {input, parameters}	set r to {}		tell application "Calendar"		set cals to every calendar whose name is "TimeManagement"		set r to {}		repeat with c in cals			set event_list to every event in c			repeat with e in event_list				(* if start date of e is less than dateLimit then *)				set r to r &amp; {e}				(* end if *)			end repeat		end repeat	end tell		display dialog "Done. Found " &amp; (number of items of r) &amp; " events"	(* Your script goes here *)		return inputend run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>InputUUID</key>
+				<string>53FC2DD8-0DAB-425B-B0AD-3CDF9E46ACB5</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>66F984FB-913F-4A27-AA11-BB2DAA0D3E8D</string>
+				<key>UUID</key>
+				<string>2A4B0FF2-CF9E-47E7-B39C-D6A0D270495B</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>525.000000:878.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+	</array>
+	<key>connectors</key>
+	<dict>
+		<key>1E33B281-E567-4A15-8EF5-22395E180A66</key>
+		<dict>
+			<key>from</key>
+			<string>95BBEDE3-648D-4F86-AEB7-33A26526E3FB - 95BBEDE3-648D-4F86-AEB7-33A26526E3FB</string>
+			<key>to</key>
+			<string>2A4B0FF2-CF9E-47E7-B39C-D6A0D270495B - 2A4B0FF2-CF9E-47E7-B39C-D6A0D270495B</string>
+		</dict>
+		<key>565F270C-D273-4B0C-862B-1BD2F46C244C</key>
+		<dict>
+			<key>from</key>
+			<string>9893FC07-9816-476F-822E-E427DAE6F47E - 9893FC07-9816-476F-822E-E427DAE6F47E</string>
+			<key>to</key>
+			<string>95BBEDE3-648D-4F86-AEB7-33A26526E3FB - 95BBEDE3-648D-4F86-AEB7-33A26526E3FB</string>
+		</dict>
+	</dict>
+	<key>variables</key>
+	<array>
+		<dict>
+			<key>UUID</key>
+			<string>C9455ED4-9009-4F06-954F-CEECAB914C31</string>
+			<key>identifier</key>
+			<string>com.apple.Automator.Variable.Storage</string>
+			<key>name</key>
+			<string>dst_filename</string>
+		</dict>
+	</array>
+	<key>workflowMetaData</key>
+	<dict>
+		<key>workflowTypeIdentifier</key>
+		<string>com.apple.Automator.workflow</string>
+	</dict>
+</dict>
+</plist>

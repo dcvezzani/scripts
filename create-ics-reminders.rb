@@ -47,6 +47,17 @@ out = tasks.map do |task|
 #md = task.match(/(.*)\t([^\t]*)\t(\d+:\d\d) ([AP]M)$/)
 #md = task.match(/(.*)\t([^\t]*)\t(\d+:\d\d)$/)
 #md = task.match(/^((\t*)|([^\t]*)\t)([^\t]*)\t(\d+:\d\d)$/)
+
+# 0412;	walk 01	0h 30m	7:30
+# 0412;	breakfast	0h 30m	8:00
+# 0412;	finish setting up marketplace locally	3h 0m	8:30
+# 0412;	lunch	1h 0m	11:30
+# 0412;	review design docs; create design docs	1h 0m	12:30
+# 0412;	review api endpoints; propose additional	2h 0m	13:30
+# 0412;	walk 02	0h 30m	15:30
+# 0412;	recap day	1h 0m	16:00
+# 0412;	dinner		17:00
+
 md = task.split(/[\t\n]/)
 
 summary = md[1]
@@ -54,7 +65,7 @@ summary = md[1]
 # summary.gsub!(/https*:\/\/[^ 	]+/, '<\0>')
 
 jira_task_id = md[0]
-hr_min = md[4]
+hr_min = md[3]
 #am_pm = md[4]
 time_zone_indicator = ["PST", "America/Los_Angeles"]
 time_zone_offset = '-08:00'
@@ -82,7 +93,7 @@ due_local_dts = due_gmt.to_time.getlocal(time_zone_offset).strftime("%Y%m%dT%H%M
 # trigger_gmt_dts = due_gmt.to_time.getlocal('-01:00').strftime("%Y%m%dT%H%M%SZ")
 #
 # day light savings OFF
-trigger_gmt_dts = due_gmt.to_time.getlocal('+00:00').strftime("%Y%m%dT%H%M%SZ")
+trigger_gmt_dts = due_gmt.to_time.getlocal('-01:00').strftime("%Y%m%dT%H%M%SZ")
 
 x_wr_alarmuid = "#{rand.to_s.slice(2,8)}-#{rand.to_s.slice(2,4)}-#{rand.to_s.slice(2,4)}-#{rand.to_s.slice(2,4)}-#{rand.to_s.slice(2,12)}"
 
