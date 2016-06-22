@@ -18,12 +18,23 @@ if [ $# -gt 0 ]; then
     spath=/Users/davidvezzani/reliacode/crystal_commerce
     ;;
   'all')
-    spath='/Users/davidvezzani/reliacode/crystal_commerce /Users/davidvezzani/Dropbox/journal'
+    spath='/Users/davidvezzani/reliacode/crystal_commerce /Users/davidvezzani/Dropbox/journal /Users/davidvezzani/scripts'
     ;;
   'vim')
-    spath='/Users/davidvezzani/reliacode/crystal_commerce /Users/davidvezzani/Dropbox/journal'
+    spath='/Users/davidvezzani/reliacode/crystal_commerce /Users/davidvezzani/Dropbox/journal /Users/davidvezzani/scripts'
     dtype='vim'
     orderby='date'
+    ;;
+  esac
+fi
+
+if [ $# -gt 1 ]; then
+  case "$2" in
+  'by:date')
+    orderby='date'
+    ;;
+  'by:filename')
+    orderby='filename'
     ;;
   esac
 fi
@@ -52,14 +63,6 @@ echo "./journal-latest.sh core"
 echo "./journal-latest.sh cc"
 echo "./journal-latest.sh all"
 echo "./journal-latest.sh vim"
-echo ""
-echo "all journal: spath=/Users/davidvezzani/Dropbox/journal ./journal-latest.sh"
-echo "all core: spath=/Users/davidvezzani/reliacode/crystal_commerce/core ./journal-latest.sh"
-echo "all catalog: spath='/Users/davidvezzani/reliacode/crystal_commerce/hive-inventory /Users/davidvezzani/reliacode/crystal_commerce/hive-inventory' ./journal-latest.sh"
-echo "all hive: spath=/Users/davidvezzani/reliacode/crystal_commerce/hive ./journal-latest.sh"
-echo "all cc: spath=/Users/davidvezzani/reliacode/crystal_commerce ./journal-latest.sh"
-echo "all: spath='/Users/davidvezzani/reliacode/crystal_commerce /Users/davidvezzani/Dropbox/journal' ./journal-latest.sh"
-echo "all vim: spath='/Users/davidvezzani/reliacode/crystal_commerce /Users/davidvezzani/Dropbox/journal' ./journal-latest.sh"
 echo ""
 echo "spath: ${spath}"
 # echo "verbose: ${verbose}"
