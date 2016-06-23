@@ -71,7 +71,7 @@ if [ -z "$rangeDays" ]; then
   rangeDays=1
 fi
 
-echo "./journal-latest.sh journal"
+echo "./work-latest.sh journal"
 echo "( journal | hive | catalog | core | cc | all | vim | scripts )"
 echo ""
 echo "spath: ${spath}"
