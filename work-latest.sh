@@ -1,10 +1,14 @@
 #!/bin/bash
 
 while (( "$#" )); do
-  mtch=$(echo "$1" | sed 's/\(by\):.*/\1/g; s/\(range:days\{0,1\}\):.*/range:days/g')
+  mtch=$(echo "$1" | sed 's/\(by\):.*/\1/g; s/\(term\):.*/\1/g; s/\(range:days\{0,1\}\):.*/range:days/g')
   case $mtch in
     'by')
       orderby=$(echo "$1" | sed 's/by:\(.*\)/\1/g')
+      ;;
+
+    'term')
+      searchTerm=$(echo "$1" | sed 's/term:\(.*\)/\1/g')
       ;;
 
     'range:days')
@@ -58,6 +62,10 @@ fi
 #   verbose=false
 # fi
 
+if [ -z "$searchTerm" ]; then
+  searchTerm=''
+fi
+
 if [ -z "$orderby" ]; then
   orderby='filename'
 fi
@@ -71,7 +79,9 @@ if [ -z "$rangeDays" ]; then
   rangeDays=1
 fi
 
-echo "./work-latest.sh journal"
+echo "~/scripts/work-latest.sh journal"
+echo "alias: wl journal; same as '~/scripts/work-latest.sh'"
+echo "alias: wl-cache; same as 'cat ~/.wl-cache'"
 echo "( journal | hive | catalog | core | cc | all | vim | scripts )"
 echo ""
 echo "spath: ${spath}"
@@ -79,6 +89,7 @@ echo "spath: ${spath}"
 echo "orderby: ${orderby}"
 echo "dtype: ${dtype}"
 echo "rangeDays: ${rangeDays}"
+echo "searchTerm: ${searchTerm}"
 
 # if [ "$verbose" == "true" ]; then
 #   #filenameFilter='-exec stat -c "%n %y" {} ;'
@@ -121,7 +132,9 @@ done | sort)
 
 for file in $res01; do
   echo $file | sed 's/\(-[0-9]\{2\}\)T\([0-9]\{2\}\)\([0-9]\{2\}\)/\1 \2:\3 /g'
-done | column -t -s','
+done | column -t -s',' > ~/.wl-cache
+
+cat ~/.wl-cache | grep "$searchTerm"
 
 echo ""
 # ls -${ls_options} $spath | grep -v '.sw' | grep -v '^d' | tail -n10
