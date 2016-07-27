@@ -11,10 +11,14 @@ while (( "$#" )); do
       searchTerm=$(echo "$1" | sed 's/term:\(.*\)/\1/g')
       ;;
 
+    'list:files')
+      listFiles=1
+      ;;
+
     'range:days')
       rangeDays=$(echo "$1" | sed 's/^range:days\{0,1\}:\([0-9]*\)/\1/g')
 
-      echo ">> $rangeDays"
+      #echo ">> $rangeDays"
       if [ ! -z "$rangeDays" ] && [ $rangeDays -gt 5 ]; then
         rangeDays=1
       fi
@@ -79,6 +83,11 @@ if [ -z "$rangeDays" ]; then
   rangeDays=1
 fi
 
+if [ -z "$listFiles" ]; then
+  listFiles=0
+fi
+
+if [ "$listFiles" == "0" ]; then
 echo "~/scripts/work-latest.sh journal"
 echo "alias: wl journal; same as '~/scripts/work-latest.sh'"
 echo "alias: wl-cache; same as 'cat ~/.wl-cache'"
@@ -86,10 +95,12 @@ echo "( journal | hive | catalog | core | cc | all | vim | scripts )"
 echo ""
 echo "spath: ${spath}"
 # echo "verbose: ${verbose}"
-echo "orderby: ${orderby}"
+echo "by - ${orderby}"
 echo "dtype: ${dtype}"
-echo "rangeDays: ${rangeDays}"
-echo "searchTerm: ${searchTerm}"
+echo "range:days - ${rangeDays}"
+echo "term - ${searchTerm}"
+echo "list:files - ${listFiles}"
+fi
 
 # if [ "$verbose" == "true" ]; then
 #   #filenameFilter='-exec stat -c "%n %y" {} ;'
@@ -118,23 +129,30 @@ else
   # searchResults=$(find -H $spath ! -name '.*' ! -path '*/.*' -type f -mtime -$rangeDays)
 fi
 
-echo "cmd: ${cmd}"
-echo -e "===============\n"
+if [ "$listFiles" == "0" ]; then
+  echo "cmd: ${cmd}"
+  echo -e "===============\n"
 
-searchResults=$(eval "find $cmd")
+  searchResults=$(eval "find $cmd")
 
-#find -H $spath ! -name '.*' -maxdepth 5 -type f -mtime -1 $filenameFilter
-#for file in $(find -H $spath ! -name '.*' -type f -mtime -1 -exec basename {} \; | sort ); do
-res01=$(for file in $searchResults; do
-  details=$(stat -f'%Sm' -t '%Y-%m-%dT%H%M' $file)
-  echo $(lineFormat $file $details)
-done | sort)
+  #find -H $spath ! -name '.*' -maxdepth 5 -type f -mtime -1 $filenameFilter
+  #for file in $(find -H $spath ! -name '.*' -type f -mtime -1 -exec basename {} \; | sort ); do
+  res01=$(for file in $searchResults; do
+    details=$(stat -f'%Sm' -t '%Y-%m-%dT%H%M' $file)
+    echo $(lineFormat $file $details)
+  done | sort)
 
-for file in $res01; do
-  echo $file | sed 's/\(-[0-9]\{2\}\)T\([0-9]\{2\}\)\([0-9]\{2\}\)/\1 \2:\3 /g'
-done | column -t -s',' > ~/.wl-cache
+  for file in $res01; do
+    echo $file | sed 's/\(-[0-9]\{2\}\)T\([0-9]\{2\}\)\([0-9]\{2\}\)/\1 \2:\3 /g'
+  done | column -t -s',' > ~/.wl-cache
 
-cat ~/.wl-cache | grep "$searchTerm"
+  cat ~/.wl-cache | grep "$searchTerm"
+  echo ""
 
-echo ""
+else
+  searchResults=$(eval "find $cmd | xargs")
+  echo "$searchResults"
+fi
+
+
 # ls -${ls_options} $spath | grep -v '.sw' | grep -v '^d' | tail -n10
