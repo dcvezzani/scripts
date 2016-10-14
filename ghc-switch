@@ -1,0 +1,143 @@
+#!/usr/bin/env ruby
+
+#require 'httmultiparty'
+require 'trollop'
+
+class GHCSwitch
+
+  def initialize(opts={dryrun: false})
+    @dryrun = opts[:dryrun]
+  end
+
+  def execute(cmd, opts={chomp: true})
+    if(@dryrun and (opts.fetch(:dryrun, true)))
+      puts cmd
+    else
+      res = `#{cmd}`
+      res = res.chomp if opts[:chomp]
+      res
+    end
+  end
+
+  def install(ghc_version)
+    raise "Specify ghc_version to install" unless valid_ghc_version?(ghc_version)
+    cmd = <<-EOL
+    cd ~/Downloads
+    wget https://www.haskell.org/ghc/dist/#{ghc_version}/ghc-#{ghc_version}-x86_64-apple-darwin.tar.bz2
+    tar xjvf ghc-#{ghc_version}-x86_64-apple-darwin.tar.bz2
+    cd ghc-#{ghc_version}
+    ./configure --prefix=/usr/local/stow/ghc-#{ghc_version}
+    make install
+    EOL
+    execute cmd
+  end
+
+  def uninstall(ghc_version)
+    raise "Specify ghc_version to uninstall" unless valid_ghc_version?(ghc_version)
+    deactivate(current_version)
+    cmd = <<-EOL
+    cd ~/Downloads
+    rm -r ghc-#{ghc_version}
+    rm -r /usr/local/stow/ghc-#{ghc_version}
+    EOL
+    execute cmd
+
+    if installed_versions.length > 0
+      version = installed_versions.first
+      activate(version)
+    end
+  end
+
+  def activate(ghc_version)
+    raise "Specify ghc_version to activate" unless valid_ghc_version?(ghc_version)
+    deactivate(current_version)
+    cmd = <<-EOL
+    cd /usr/local/stow && stow ghc-#{ghc_version}
+    EOL
+    execute cmd
+  end
+
+  def valid_ghc_version?(ghc_version)
+    (ghc_version and ghc_version.match(/^[0-9\.]+$/))
+  end
+
+  def deactivate(ghc_version)
+    raise "Specify ghc_version to deactivate" unless valid_ghc_version?(ghc_version)
+    cmd = <<-EOL
+    cd /usr/local/stow && stow -D ghc-#{ghc_version}
+    EOL
+    execute cmd
+  end
+
+  def installed_versions
+    cmd = <<-EOL
+    ls /usr/local/stow | grep 'ghc-*'
+    EOL
+    installed_version_dirs = execute(cmd, {dryrun: false})
+
+    versions = installed_version_dirs.split(/[\s\n\r]+/)
+    cur_version = current_version
+    versions.map{|dir_name| 
+      version = dir_name.gsub(/ghc-(.+)/, '\1')
+      ((version == cur_version) ? "* #{version}" : "  #{version}")
+    }
+  end
+
+  def clean_artifacts
+    cur_version = current_version
+    raise "Unknown version: #{cur_version}" unless valid_ghc_version?(cur_version)
+
+    cmd = <<-EOL
+    for file in $(find /usr/local/stow/ghc-#{cur_version} -name '.DS_Store'); do rm $file; done
+    EOL
+    execute(cmd)
+  end
+
+  def current_version
+    cmd = <<-EOL
+    echo $(ls -l /usr/local/bin/ghc) | sed 's;.* -> ../stow/ghc-\\(.*\\)/bin/ghc.*;\\1;g'
+    EOL
+    execute(cmd, {chomp: true, dryrun: false})
+  end
+end
+
+p = Trollop::Parser.new do
+  opt :installed_versions, 'Show installed versions',                    short: 'w'#, default: ENV.fetch('SLACK_TOKEN', nil)
+  opt :current_version,    'Get current version of ghc',                 short: 'v'#, default: ENV.fetch('SLACK_TOKEN', nil)
+  opt :activate,           'Activate a ghc',             type: :string,  short: 'a'#, default: ENV.fetch('SLACK_TOKEN', nil)
+  opt :install,            'Install a ghc',              type: :string,  short: 'i'#, default: ''
+  opt :uninstall,          'Uninstall a ghc',            type: :string,  short: 'u'#, default: ''
+  opt :dryrun,             'Dry run; show commands',                     short: 'd'
+end
+
+opts = Trollop::with_standard_exception_handling p do
+  p.parse ARGV
+end
+
+#mutex = [:activate, :install, :uninstall, :current_version]
+
+action = if opts[:current_version];    :current_version
+      elsif opts[:installed_versions]; :installed_versions
+      elsif opts[:install];            :install
+      elsif opts[:activate];           :activate
+      elsif opts[:uninstall];          :uninstall
+end
+
+ghc_switch = GHCSwitch.new({dryrun: opts[:dryrun]})
+ghc_switch.clean_artifacts
+
+case(action)
+when :current_version
+  puts ghc_switch.current_version
+when :installed_versions
+  puts ghc_switch.installed_versions
+when :install
+  ghc_switch.install(opts[:install])
+when :activate
+  ghc_switch.activate(opts[:activate])
+  puts "GHC #{ghc_switch.current_version} is active"
+when :uninstall
+  ghc_switch.uninstall(opts[:uninstall])
+else
+  p.educate
+end

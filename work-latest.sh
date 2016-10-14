@@ -28,6 +28,9 @@ while (( "$#" )); do
       'journal')
         spath=/Users/davidvezzani/Dropbox/journal
         ;;
+      'wiki')
+        spath=/Users/davidvezzani/reliacode/crystal_commerce/core.wiki
+        ;;
       'scripts')
         spath=/Users/davidvezzani/scripts
         ;;
@@ -91,7 +94,7 @@ if [ "$listFiles" == "0" ]; then
 echo "~/scripts/work-latest.sh journal"
 echo "alias: wl journal; same as '~/scripts/work-latest.sh'"
 echo "alias: wl-cache; same as 'cat ~/.wl-cache'"
-echo "( journal | hive | catalog | core | cc | all | vim | scripts )"
+echo "( journal | hive | catalog | core | cc | all | vim | scripts | wiki )"
 echo ""
 echo "spath: ${spath}"
 # echo "verbose: ${verbose}"

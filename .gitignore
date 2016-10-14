@@ -4,3 +4,5 @@ iphone-sms-backup/
 .DS_Store
 *.bak
 *.wip
+
+.byebug_history
