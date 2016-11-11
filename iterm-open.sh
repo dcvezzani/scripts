@@ -11,7 +11,7 @@ fi
 if [ ! -z "$1" ]; then
 
   # open with vim
-  if echo "$1" | grep '.*\.\(md\|txt\)$' >/dev/null ; then
+  if echo "$1" | grep '.*\.\(md\|markdown\|txt\)$' >/dev/null ; then
     /usr/local/bin/mvim $1
 
   # open with ruby mine

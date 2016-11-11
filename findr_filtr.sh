@@ -63,7 +63,7 @@ function findr () {
   verbose=0
   debugging=0
   help=0
-  find_pattern="-name \"*.rb\""
+  find_pattern="-lname \"*.rb\""
 
   if [ -z "$1" ]; then
     help=1

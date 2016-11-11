@@ -125,10 +125,10 @@ function lineFormat(){
 
 
 if [ "$dtype" == "vim" ]; then
-  cmd="-H $spath -name '.*' ! -path '*/.*/*' -type f -mtime -$rangeDays"
+  cmd="-H $spath -lname '.*' ! -path '*/.*/*' -mtime -$rangeDays"
   # searchResults=$(find -H $spath -name '.*' ! -path '*/.*/*' -type f -mtime -$rangeDays)
 else
-  cmd="-H $spath ! -name '.*' ! -path '*/.*' -type f -mtime -$rangeDays"
+  cmd="-H $spath ! -lname '.*' ! -path '*/.*' -mtime -$rangeDays"
   # searchResults=$(find -H $spath ! -name '.*' ! -path '*/.*' -type f -mtime -$rangeDays)
 fi
 
