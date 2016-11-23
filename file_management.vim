@@ -17,14 +17,15 @@ function! SaveIt()
       
       if strlen("".newLine) > 0
 
-        if strlen("".newLine) > 30 
-          let newLine = strpart(''.newLine, 0, 30)
+        let maxFileNameLength = 40
+        if strlen("".newLine) > maxFileNameLength 
+          let newLine = strpart(''.newLine, 0, maxFileNameLength)
         endif
 
         "echo "".newLine
         "let newLine = substitute(getline("."), "^\*\\s*\\(.*\\)$", "\\1", "")
         let newLine = substitute("".newLine, "[^a-zA-Z0-9]\\+", "-", "g")
-        let newLine = substitute(newLine, "^-\+\|-\+$", "", "")
+        let newLine = substitute(newLine, "^-\\+\\|-\\+$", "", "")
         let dts = strftime('%Y%m%d')
         let newLine = '~/Dropbox/journal/current/'.dts.'-'.newLine.'.md'
 
@@ -32,6 +33,7 @@ function! SaveIt()
           "call setpos(origPos[0], origPos[1], origPos[2], origPos[3])
           let @z = 'o' | normal @z
         else
+          let @z = 'O' | normal @z
           call setline(line("."), newLine)
         endif
 
@@ -59,12 +61,8 @@ function! ToggleSaveIt()
 
   if vim_autosave == 'true'
     let $VIM_AUTOSAVE = 'false'
-    unmap rrm
-    unmap rm
   else
     let $VIM_AUTOSAVE = 'true'
-    nmap rrm :call delete(expand('%')) \| bdelete!<CR>
-    nmap rm :call delete(expand('%')) \| echo("file deleted")<CR>
   endif
 
   let vim_autosave=$VIM_AUTOSAVE
@@ -76,6 +74,7 @@ autocmd BufLeave,FocusLost * silent! call SaveIt()
 
 "nnoremap rm :call delete(expand('%')) \| bdelete!<CR>
 "nnoremap rm :call delete(expand('%'))<CR>
+nmap rrm :call delete(expand('%')) \| bdelete!<CR>
+nmap rm :call delete(expand('%')) \| echo("file deleted")<CR>
 "nmap rm :call delete(expand('%'))<CR>
-
 

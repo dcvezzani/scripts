@@ -2,10 +2,10 @@
 
 # if can't shut down iTerm to pick up new environment settings
 # simply reload, but try to be smart about it
-which livedown >/dev/null 2>&1
-if [ $? -ne 0 ]; then
-  source ~/.zshrc
-fi
+# which livedown >/dev/null 2>&1
+# if [ $? -ne 0 ]; then
+#   source ~/.zshrc
+# fi
 
 # filter file types; else uses default handler
 if [ ! -z "$1" ]; then
