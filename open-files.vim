@@ -48,7 +48,13 @@ function! OpenFile()
   let line_number = substitute(getline('.'), bufPattern, '\2', "")
 
   call setpos('.', origPos)
-  silent execute "!mvim +:".string(line_number).' '.file_resource
+
+  if( strlen(string(line_number)) != strlen(string(file_resource)) )
+    silent execute '!mvim +:'.string(line_number).' '.file_resource
+  else
+    silent execute '!mvim '.file_resource
+  endif
+
   "echo "!mvim +:".line_number.' '.file_resource
 endfunction
 
