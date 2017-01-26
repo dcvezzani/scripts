@@ -11,6 +11,11 @@ while (( "$#" )); do
       searchTerm=$(echo "$1" | sed 's/term:\(.*\)/\1/g')
       ;;
 
+    'list:files:xargs')
+      listFiles=1
+      cmdXargs=1
+      ;;
+
     'list:files')
       listFiles=1
       ;;
@@ -90,6 +95,10 @@ if [ -z "$listFiles" ]; then
   listFiles=0
 fi
 
+if [ -z "$cmdXargs" ]; then
+  cmdXargs=0
+fi
+
 if [ "$listFiles" == "0" ]; then
 echo "~/scripts/work-latest.sh journal"
 echo "alias: wl journal; same as '~/scripts/work-latest.sh'"
@@ -151,6 +160,10 @@ if [ "$listFiles" == "0" ]; then
 
   cat ~/.wl-cache | grep "$searchTerm"
   echo ""
+
+elif [ "$cmdXargs" == "0" ]; then
+  searchResults=$(eval "find $cmd")
+  echo "$searchResults"
 
 else
   searchResults=$(eval "find $cmd | xargs")

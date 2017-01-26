@@ -20,9 +20,11 @@ function! WikiFileName(...)
 
   " include content and link to github wiki page
   " use `gx` when cursor on url to open in browser
-  let cleanWfn = split($WFN, '') + ['https://github.com/crystalcommerce/core/wiki/'.@y.' /_edit', 'https://github.com/crystalcommerce/core/wiki/dave-v-authored-documents/_edit' ]
+  let cleanWfn = split($WFN, '') + ['https://github.com/crystalcommerce/core/wiki/'.@y.' /_edit', 'https://github.com/crystalcommerce/core/wiki/dave-v-authored-documents/_edit', 'rvm use 2.2.0; slackcat -c dev_ops_documentation -x "', 'Recent discovery', 'https://github.com/crystalcommerce/core/wiki/'.@y, '"']
+
   call append(".", cleanWfn)
-  call cursor(line('.') + len(cleanWfn), 0)
+  " minus 4 for the slackcat lines; focus on http of wiki link
+  call cursor(line('.') + (len(cleanWfn) - 4), 0)
 
   echo $WFN
 endfunction
