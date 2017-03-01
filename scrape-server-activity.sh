@@ -7,7 +7,7 @@ line_count=10000
 echo "" > $prefix.txt
 for idx in 01 02 03 04 05 06 07 08 09 10; do
   echo "# === $host_prefix$idx ==================" >> $prefix.txt
-  ssh $host_prefix$idx "tail -n $line_count core/current/admin/log/admin.log" >> $prefix.txt
+  ssh $host_prefix$idx "tail -n $line_count core/current/admin/log/production.log" >> $prefix.txt
   echo -e "\n\n" >> $prefix.txt
 done
 
