@@ -6,7 +6,7 @@ function! PrintBuffers()
   redir END
 
   let dts=substitute(system('date +\%Y\%m\%d'), '\n\+$', '', 'g')
-  let fname='~/fbuf-' . dts . '.md'
+  let fname='/Users/davidvezzani/Dropbox/journal/current/fbuf-' . dts . '.md'
   silent execute '!touch ' . fname
   
   execute 'redir >> ' . fname
