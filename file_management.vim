@@ -1,6 +1,7 @@
 " http://stackoverflow.com/questions/18752516/how-to-automatically-name-a-file-when-saving-in-vim
 function! SaveIt()
   let vim_autosave=$VIM_AUTOSAVE
+  let file_extension='md'
 
   if vim_autosave == 'true'
     let one_line = (line("$") < 2)
@@ -17,6 +18,11 @@ function! SaveIt()
       
       if strlen("".newLine) > 0
 
+        if match(newLine, "[^a-zA-Z0-9]\\+txt$") > -1
+          let file_extension='txt'
+          let newLine = substitute(newLine, "[^a-zA-Z0-9]\\+txt$", "", "")
+        endif
+      
         let maxFileNameLength = 40
         if strlen("".newLine) > maxFileNameLength 
           let newLine = strpart(''.newLine, 0, maxFileNameLength)
@@ -26,8 +32,9 @@ function! SaveIt()
         "let newLine = substitute(getline("."), "^\*\\s*\\(.*\\)$", "\\1", "")
         let newLine = substitute("".newLine, "[^a-zA-Z0-9]\\+", "-", "g")
         let newLine = substitute(newLine, "^-\\+\\|-\\+$", "", "")
+
         let dts = strftime('%Y%m%d')
-        let newLine = '~/Dropbox/journal/current/'.dts.'-'.newLine.'.md'
+        let newLine = '~/Dropbox/journal/current/'.dts.'-'.newLine.'.'.file_extension
 
         if one_line
           "call setpos(origPos[0], origPos[1], origPos[2], origPos[3])
@@ -46,7 +53,7 @@ function! SaveIt()
         exec 'w '.newLine
 
       else
-        exec 'w ~/Dropbox/journal/current/note_'.localtime().'.md'
+        exec 'w ~/Dropbox/journal/current/note_'.localtime().'.'.file_extension
       endif
     
     " if file already has a name, just save it
