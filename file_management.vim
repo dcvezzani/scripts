@@ -55,6 +55,8 @@ function! SaveIt()
       else
         exec 'w ~/Dropbox/journal/current/note_'.localtime().'.'.file_extension
       endif
+
+      call PrintBuffers()
     
     " if file already has a name, just save it
     " else
