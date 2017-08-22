@@ -31,31 +31,31 @@ while (( "$#" )); do
     *)
       case "$1" in
       'journal')
-        spath=/Users/davidvezzani/Dropbox/journal
+        spath="${JOURNAL_DIR}/current"
         ;;
       'wiki')
-        spath=/Users/davidvezzani/reliacode/crystal_commerce/core.wiki
+        spath=${HOME}/reliacode/crystal_commerce/core.wiki
         ;;
       'scripts')
-        spath=/Users/davidvezzani/scripts
+        spath=${HOME}/scripts
         ;;
       'hive')
-        spath=/Users/davidvezzani/reliacode/crystal_commerce/hive
+        spath=${HOME}/reliacode/crystal_commerce/hive
         ;;
       'catalog')
-        spath='/Users/davidvezzani/reliacode/crystal_commerce/hive-inventory /Users/davidvezzani/reliacode/crystal_commerce/hive-inventory'
+        spath='${HOME}/reliacode/crystal_commerce/hive-inventory ${HOME}/reliacode/crystal_commerce/hive-inventory'
         ;;
       'core')
-        spath=/Users/davidvezzani/reliacode/crystal_commerce/core
+        spath=${HOME}/reliacode/crystal_commerce/core
         ;;
       'cc')
-        spath=/Users/davidvezzani/reliacode/crystal_commerce
+        spath=${HOME}/reliacode/crystal_commerce
         ;;
       'all')
-        spath='/Users/davidvezzani/reliacode/crystal_commerce /Users/davidvezzani/Dropbox/journal /Users/davidvezzani/scripts'
+        spath='${HOME}/reliacode/crystal_commerce '"${JOURNAL_DIR}/current"' '"${HOME}/.."'/scripts'
         ;;
       'vim')
-        spath='/Users/davidvezzani/reliacode/crystal_commerce /Users/davidvezzani/Dropbox/journal /Users/davidvezzani/scripts'
+        spath='${HOME}/reliacode/crystal_commerce '"${JOURNAL_DIR}/current"' '"${HOME}/.."'/scripts'
         dtype='vim'
         orderby='date'
         ;;
@@ -67,7 +67,7 @@ while (( "$#" )); do
 done
 
 if [ -z "$spath" ]; then
-  spath=/Users/davidvezzani/Dropbox/journal/current
+  spath=${JOURNAL_DIR}/current
 fi
 
 # if [ -z "$verbose" ]; then

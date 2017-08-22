@@ -34,7 +34,7 @@ function! SaveIt()
         let newLine = substitute(newLine, "^-\\+\\|-\\+$", "", "")
 
         let dts = strftime('%Y%m%d')
-        let newLine = '~/Dropbox/journal/current/'.dts.'-'.newLine.'.'.file_extension
+        let newLine = "${JOURNAL_DIR}/current"'/'.dts.'-'.newLine.'.'.file_extension
 
         if one_line
           "call setpos(origPos[0], origPos[1], origPos[2], origPos[3])
@@ -53,7 +53,7 @@ function! SaveIt()
         exec 'w '.newLine
 
       else
-        exec 'w ~/Dropbox/journal/current/note_'.localtime().'.'.file_extension
+        exec 'w '"${JOURNAL_DIR}/current"'/note_'.localtime().'.'.file_extension
       endif
 
       call PrintBuffers()

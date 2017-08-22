@@ -16,11 +16,11 @@ function! WikiFileName(...)
   let @z = '^hx'
   normal @z
 
-  let $WFN = strftime("(%a, %d %b %Y)")."* [".@w."](".@y.")"
+  let $WFN = strftime("(%a, %d %b %Y)")."* [".@w."](".@y.")"
 
   " include content and link to github wiki page
   " use `gx` when cursor on url to open in browser
-  let cleanWfn = split($WFN, '') + ['https://github.com/crystalcommerce/core/wiki/'.@y.' /_edit', 'https://github.com/crystalcommerce/core/wiki/dave-v-authored-documents/_edit', 'rvm use 2.2.0; slackcat -c dev_ops_documentation -x "', 'Recent discovery', 'https://github.com/crystalcommerce/core/wiki/'.@y, '"']
+  let cleanWfn = split($WFN, '') + ['https://bitbucket.org/greenseedtech/storm/wiki/'.@y, 'https://bitbucket.org/greenseedtech/storm/wiki/edit/zonners-authored-documents', 'rvm use 2.2.0; slackcat -c dev_ops_documentation -x "', 'Recent discovery', 'https://bitbucket.org/greenseedtech/storm/wiki/wiki/'.@y, '"']
 
   call append(".", cleanWfn)
   " minus 4 for the slackcat lines; focus on http of wiki link
