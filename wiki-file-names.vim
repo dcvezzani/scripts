@@ -20,7 +20,7 @@ function! WikiFileName(...)
 
   " include content and link to github wiki page
   " use `gx` when cursor on url to open in browser
-  let cleanWfn = split($WFN, '') + ['https://bitbucket.org/greenseedtech/storm/wiki/'.@y, 'https://bitbucket.org/greenseedtech/storm/wiki/edit/zonners-authored-documents', 'rvm use 2.2.0; slackcat -c dev_ops_documentation -x "', 'Recent discovery', 'https://bitbucket.org/greenseedtech/storm/wiki/wiki/'.@y, '"']
+  let cleanWfn = split($WFN, '') + ['https://bitbucket.org/greenseedtech/storm/wiki/'.@y, 'https://bitbucket.org/greenseedtech/storm/wiki/edit/zonners-authored-documents', 'echo "Recent discovery', 'https://bitbucket.org/greenseedtech/storm/wiki/wiki/'.@y, '" | slackcat --channel storm_team --stream']
 
   call append(".", cleanWfn)
   " minus 4 for the slackcat lines; focus on http of wiki link
