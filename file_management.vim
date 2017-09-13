@@ -18,9 +18,15 @@ function! SaveIt()
       
       if strlen("".newLine) > 0
 
-        if match(newLine, "[^a-zA-Z0-9]\\+txt$") > -1
-          let file_extension='txt'
-          let newLine = substitute(newLine, "[^a-zA-Z0-9]\\+txt$", "", "")
+        " if match(newLine, "[^a-zA-Z0-9]\\+txt$") > -1
+				let reExtensionDefined = "\\.\\([a-zA-Z0-9]\\{2,5\\}\\)$"
+        let matchedItems = matchlist(newLine, reExtensionDefined)
+        if len(matchedItems) > 0
+					let chk_file_extension = get(matchedItems, 1)
+					if strlen(chk_file_extension) > 0
+						let file_extension = chk_file_extension
+						let newLine = substitute(newLine, "\\.[^\\.]*$", "", "")
+					endif
         endif
       
         let maxFileNameLength = 40
@@ -32,6 +38,7 @@ function! SaveIt()
         "let newLine = substitute(getline("."), "^\*\\s*\\(.*\\)$", "\\1", "")
         let newLine = substitute("".newLine, "[^a-zA-Z0-9]\\+", "-", "g")
         let newLine = substitute(newLine, "^-\\+\\|-\\+$", "", "")
+        let newLine = tolower(newLine)
 
         let dts = strftime('%Y%m%d')
         let newLine = "${JOURNAL_DIR}/current"'/'.dts.'-'.newLine.'.'.file_extension
