@@ -1,3 +1,10 @@
+"break up large image into multiple pages for printing
+"convert image.png -crop 32x32 parts-%02d.png
+"convert image.png -crop 1650x1275 parts-%02d.png
+"
+"works:
+"convert /Users/dcvezzani/greenseedtechnologies/storm/ui/state_machine_service_02.png -crop 1650x1275 /Users/dcvezzani/greenseedtechnologies/storm/ui/state_machine_service_02-%02d.png
+
 function! CleanBlock() range
   let origPos = getpos('.')
 
@@ -177,12 +184,11 @@ endfunction
 function! DefineStateTransitions(...)
 	let viewLines = []
 	let states = a:1
-	let allTransitions = []
 	let byTransitions = {}
 
 	let statesConsolidatedTransitions = {}
 	for state in keys(states)
-		let statesConsolidatedTransitions[state] = []
+		let statesConsolidatedTransitions[state] = {}
 		let events = get(states, state)
 		for event in keys(events)
 			let transitions = get(events, event)
@@ -190,35 +196,57 @@ function! DefineStateTransitions(...)
 			if(len(transitions) > 0)
 				for transition in transitions
 					let camelCaseTransition = SnakeToCamelCase(transition)
+
 					if ! has_key(byTransitions, camelCaseTransition)
-						let byTransitions[camelCaseTransition] = []
+						let byTransitions[camelCaseTransition] = {}
 					endif
 
-					call add(byTransitions[camelCaseTransition], state)
-					call add(statesConsolidatedTransitions[state], transition)
+					if ! has_key(byTransitions[camelCaseTransition], state)
+						let byTransitions[camelCaseTransition][state] = 0
+					endif
+					let byTransitions[camelCaseTransition][state] = byTransitions[camelCaseTransition][state] + 1
+					"call add(byTransitions[camelCaseTransition], state)
+
+					if ! has_key(statesConsolidatedTransitions[state], camelCaseTransition)
+						let statesConsolidatedTransitions[state][camelCaseTransition] = 0
+					endif
+					let statesConsolidatedTransitions[state][camelCaseTransition] = statesConsolidatedTransitions[state][camelCaseTransition] + 1
+					" call add(statesConsolidatedTransitions[state], camelCaseTransition)
 				endfor
 			endif
 		endfor
 	endfor
 
 	for state in keys(statesConsolidatedTransitions)
-		let transitions = uniq(sort(statesConsolidatedTransitions[state]))
-		let translatedTransitions = []
-		for transition in transitions
-			call add(translatedTransitions, SnakeToCamelCase(transition))
-		endfor
-		let translatedTransitions = uniq(sort(translatedTransitions))
-
 		let inTransitions = []
 		if has_key(byTransitions, state)
-			let inTransitions = byTransitions[state]
+			for inState in keys(byTransitions[state])
+				if byTransitions[state][inState] > 1
+					call add(inTransitions, inState . '[' . byTransitions[state][inState] . ']')
+				else
+					call add(inTransitions, inState)
+				endif
+			endfor
 		endif
-		let inTransitions = uniq(sort(inTransitions))
 
-		if( len(inTransitions) > 0 && len(translatedTransitions) > 0 )
-			call add(viewLines, state . ' [label="' . state . '\n\nOUT:\n' . join(translatedTransitions, '\n') . '\n\nIN:\n' . join(inTransitions, '\n') . '"];')
-		elseif( len(translatedTransitions) > 0 )
-			call add(viewLines, state . ' [label="' . state . '\n\nOUT:\n' . join(translatedTransitions, '\n') . '"];')
+		let outTransitions = []
+		if has_key(statesConsolidatedTransitions, state)
+			for outState in keys(statesConsolidatedTransitions[state])
+				if statesConsolidatedTransitions[state][outState] > 1
+					call add(outTransitions, outState . '[' . statesConsolidatedTransitions[state][outState] . ']')
+				else
+					call add(outTransitions, outState)
+				endif
+			endfor
+		endif
+
+		let inTransitions = sort(inTransitions)
+		let outTransitions = sort(outTransitions)
+
+		if( len(inTransitions) > 0 && len(outTransitions) > 0 )
+			call add(viewLines, state . ' [label="' . state . '\n\nOUT:\n' . join(outTransitions, '\n') . '\n\nIN:\n' . join(inTransitions, '\n') . '"];')
+		elseif( len(outTransitions) > 0 )
+			call add(viewLines, state . ' [label="' . state . '\n\nOUT:\n' . join(outTransitions, '\n') . '"];')
 		elseif( len(inTransitions) > 0 )
 			call add(viewLines, state . ' [label="' . state . '\n\nIN:\n' . join(inTransitions, '\n') . '"];')
 		else
