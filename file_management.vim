@@ -41,14 +41,22 @@ function! SaveIt()
         let newLine = tolower(newLine)
 
         let dts = strftime('%Y%m%d')
-        let newLine = "${JOURNAL_DIR}/current"'/'.dts.'-'.newLine.'.'.file_extension
+        let newLine = $JOURNAL_DIR.'/current/'.dts.'-'.newLine.'.'.file_extension
 
         if one_line
           "call setpos(origPos[0], origPos[1], origPos[2], origPos[3])
           let @z = 'o' | normal @z
+
         else
           let @z = 'O' | normal @z
+          call setline(line("."), '<div style="display:none">')
+          let @z = 'o' | normal @z
           call setline(line("."), newLine)
+          let @z = 'o' | normal @z
+          call setline(line("."), '</div>')
+          let @z = 'o' | normal @z
+          call setline(line("."), '')
+					let origPos = [origPos[0], (origPos[1]+4), 0, origPos[3]]
         endif
 
         " copy to clipboard if desired

@@ -1,0 +1,4 @@
+# so /Users/dcvezzani/scripts/asdf.xvim
+
+let @z = 'gg/delay in secondsjv/\n\n:s/$/, x/ggv:!column -t -s,$b'
+normal @z

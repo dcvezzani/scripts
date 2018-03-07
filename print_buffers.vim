@@ -6,7 +6,8 @@ function! PrintBuffers()
   redir END
 
   let dts=substitute(system('date +\%Y\%m\%d'), '\n\+$', '', 'g')
-  let fname="${JOURNAL_DIR}"'/current/fbuf-' . dts . '.md'
+	" let fname='/Users/dcvezzani/Documents/journal/current/fbuf-' . dts . '.md'
+  let fname=$JOURNAL_DIR.'/current/fbuf-' . dts . '.md'
   silent execute '!touch ' . fname
   
   execute 'redir >> ' . fname
