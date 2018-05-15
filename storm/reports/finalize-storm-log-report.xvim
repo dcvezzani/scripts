@@ -1,0 +1,12 @@
+" mvim -c 'source /Users/dcvezzani/scripts/finalize-storm-log-report.xvim' /Users/dcvezzani/fs-ls-delay-report-summary-prodstorm0-20171207.txt
+set filetype=md
+let cdate="2017-12-19"
+
+" let @q='ggjj:g/UTC, 2017-12-06/dggjjv/\n\n:!column -t -s,q=jjv/\n\n:sort/Missing eventsjjvG:g/2017-12-06/dgg'
+" let @q='ggjj:/UTC, '.cdate.'/!dggjjv/\n\n:!column -t -s,q=jjv/\n\n:sort/Missing eventsjjvG:/'.cdate.'/!dgg'
+" let @q='ggjj:/'.cdate.' [0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\} UTC/dggjjv/\n\n:!column -t -s,q=jjv/\n\n:sort/Missing eventsjjvG:/'.cdate.'/!dgg'
+" let @q='ggjjv/\n\n:v/2017-12-08 [0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\} UTC/dggjjv/\n\n:!column -t -s,q=jjv/\n\n:sort/Missing eventsjjvG:v/2017-12-08/dgg'
+
+let @q='ggjjjv/\n\n:v/UTC, '.cdate.'/dggjjv/\n\n:!column -t -s,q=jjv/\n\n:sort/Missing eventsjjv/\n\n:v/'.cdate.'/dgg'
+
+silent normal @q
