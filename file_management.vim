@@ -41,7 +41,7 @@ function! SaveIt()
         let newLine = tolower(newLine)
 
         let dts = strftime('%Y%m%d')
-        let newLine = "${JOURNAL_DIR}/current"'/'.dts.'-'.newLine.'.'.file_extension
+        let newLine = $JOURNAL_DIR.'/current/'.dts.'-'.newLine.'.'.file_extension
 
         if one_line
           "call setpos(origPos[0], origPos[1], origPos[2], origPos[3])
