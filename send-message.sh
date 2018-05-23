@@ -166,9 +166,9 @@ if [ "$email" != "" ]; then
   echo "$msg" | mutt -s "$subject" "$cc" "$email"
 
 	if [[ "$?" != "0" ]]; then
-		echo It looks like there were issues using mutt to send email.  
-		echo Check https://myaccount.google.com/u/1/lesssecureapps?pageId=none to see if you allow for less secure email clients
-		open https://myaccount.google.com/u/1/lesssecureapps?pageId=none
+		echo "It looks like there were issues using mutt to send email."
+		echo "Check https://myaccount.google.com/u/1/lesssecureapps?pageId=none to see if you allow for less secure email clients"
+		open "https://myaccount.google.com/u/1/lesssecureapps?pageId=none"
 	fi
 fi
 
