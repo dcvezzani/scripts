@@ -1,0 +1,7 @@
+<__COMPONENT_NAME__>
+    <dynamic-xml data-min="1" seq="1" name="__COMPONENT_NAME__" class="sortable" title="__COMPONENT_LABEL__" xpath="__COMPONENT_NAME__/__COMPONENT_NAME__-item">
+        <__COMPONENT_NAME__-item>
+        <!-- __COMPONENT_SECTION__ -->
+        </__COMPONENT_NAME__-item>
+    </dynamic-xml>
+</__COMPONENT_NAME__>

@@ -13,7 +13,7 @@ Change the save directory for screenshots (Shift-Cmd-4)
 
 Usage: ~/scripts/change-screenshot-save-dir.sh <dir>
 
-E.g.: ~/scripts/change-screenshot-save-dir.sh $HOME_DIR/Documents/journal/tmp
+E.g.: ~/scripts/mac-change-screenshot-save-dir.sh $HOME_DIR/Documents/journal/tmp
 "
   exit 2
 fi

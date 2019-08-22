@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<formTemplate name="__FORM_NAME__" workflow="true" schedule-publish="true" schedule-unpublish="true" xmlns="http://lds.org/code/lds-edit">
+  <title> __FORM_LABEL__ </title>
+    <file-prefix>__FORM_NAME__-</file-prefix>
+    <folder>__FORM_NAME__</folder>
+    <document-title show="true">area-name/node()</document-title>
+    <title-xpath>area-name/xs:string(.)</title-xpath>
+    <custom-page type="__FORM_NAME__"/>
+    <root-query>
+        <cts:element-attribute-value-query xmlns:cts="http://marklogic.com/cts">
+            <cts:element>__FORM_NAME__</cts:element>
+            <cts:attribute>id</cts:attribute>
+            <cts:text>$id</cts:text>
+            <cts:option>exact</cts:option>
+        </cts:element-attribute-value-query>
+    </root-query>
+    <structure>
+        <__FORM_NAME__ xmlns:its="http://www.w3.org/2005/11/its">
+            <attribute name="id">
+                <input type="variable" value="$id" xpath="@id" options="variable" data-correlation="exclude"/>
+            </attribute>
+            <attribute name="uri">
+                <input type="variable" value="$uri" xpath="@uri" options="variable" data-correlation="exclude"/>
+            </attribute>
+            <attribute name="type">
+                <input type="variable" value="$type" xpath="@type" options="variable" data-correlation="exclude"/>
+            </attribute>
+            <attribute name="locale">
+                <input type="variable" value="$locale" options="variable" data-correlation="exclude"/>
+            </attribute>
+            <attribute name="xml:lang">
+                <input type="variable" value="$lang" options="variable" data-correlation="exclude"/>
+            </attribute>
+            <attribute name="status">
+                <input type="variable" value="$status" options="variable" data-correlation="exclude"/>
+            </attribute>
+
+            <!-- __COMPONENT_SECTION__ -->
+
+        </__FORM_NAME__>
+    </structure>
+</formTemplate>
+

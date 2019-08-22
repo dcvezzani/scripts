@@ -54,9 +54,15 @@ function! SaveIt()
           call setline(line("."), newLine)
           let @z = 'o' | normal @z
           call setline(line("."), '</div>')
+          let @z = 'oA' | normal @z
+          call setline(line("."), '<style>')
+          let @z = 'o' | normal @z
+          call setline(line("."), '  ul, ol { list-style: inherit; }')
+          let @z = 'o' | normal @z
+          call setline(line("."), '</style>')
           let @z = 'o' | normal @z
           call setline(line("."), '')
-					let origPos = [origPos[0], (origPos[1]+4), 0, origPos[3]]
+					let origPos = [origPos[0], (origPos[1]+6), 0, origPos[3]]
         endif
 
         " copy to clipboard if desired

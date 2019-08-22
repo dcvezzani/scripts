@@ -11,7 +11,9 @@ name="$2"
 applyTemplate="$3"
 label=$(echo "$name" | perl -0pe 's<(^[A-Z]|(?![a-z])[A-Z])>< "-" . lc $1 >ge' | perl -0pe 's/^-//')
 # generatePath=/Users/dcvezzani/projects/v1Directory/fe/src/components
-generatePath=/Users/dcvezzani/projects/stockman/src/components
+# generatePath=/Users/dcvezzani/projects/stockman/src/components
+# generatePath=/Users/dcvezzani/projects/mark-logic-docs/src/components
+generatePath=/Users/dcvezzani/projects/mark-logic-docs/src/components
 
 
 sed "s#\$label#$label#g; s#\$name#$name#g; " ~/scripts/templates/template-component.vue > $generatePath/$name.vue

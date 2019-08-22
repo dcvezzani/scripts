@@ -1,0 +1,9 @@
+<__COMPONENT_NAME__>
+    <src its:translate="no">
+        <input group="__COMPONENT_NAME__" seq="1" type="__COMPONENT_NAME__" name="__COMPONENT_NAME__" title="__COMPONENT_LABEL__" xpath="__COMPONENT_NAME__/src/node()"/>
+    </src>
+    <alt>
+        <input group="__COMPONENT_NAME__" seq="1" type="text" name="alt" title="__COMPONENT_LABEL__ Alt Text" xpath="__COMPONENT_NAME__/alt/node()"/>
+    </alt>
+</__COMPONENT_NAME__>
+

@@ -6,12 +6,18 @@ if [ -z "$1" ]; then
 	exit
 fi
 
+targetFiles="$2"
+if [ -z "$targetFiles" ]; then
+  targetFiles="."
+fi
+
+
 if [[ "$1" =~ \~[0-9]*$ ]]; then 
   cmt=$(echo "$1" | sed 's/\([^\~]*\)\~\([0-9]*\)$/\1/g')
   idx=$(echo "$1" | sed 's/\([^\~]*\)\~\([0-9]*\)$/\2/g')
-  echo ">>> Comparing ${cmt}~$(($idx+1)) > ${cmt}~$(($idx))"
-  git diff "${cmt}~$(($idx+1))" "${cmt}~$(($idx))"
+  echo ">>> Comparing ${cmt}~$(($idx+1)) > ${cmt}~$(($idx)) -- $targetFiles"
+  git diff "${cmt}~$(($idx+1))" "${cmt}~$(($idx))" -- "$targetFiles"
 else
-  echo ">>> Comparing ${1}~1 $1"
-  git diff "${1}~1" "$1"
+  echo ">>> Comparing ${1}~1 $1 -- $targetFiles"
+  git diff "${1}~1" "$1" -- "$targetFiles"
 fi

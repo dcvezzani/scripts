@@ -41,6 +41,14 @@ function! OpenIt()
   "echo strParts[1]
 endfunction
 
+function! OpenIntelliJFile()
+  let origPos = getpos('.')
+  let filePattern = '^file:\(.*\)$'
+  let file_resource = substitute(getline('.'), filePattern, '\1', "")
+  silent execute ':e! '.file_resource
+  " silent execute '!mvim '.file_resource
+endfunction
+
 function! OpenFile()
   let origPos = getpos('.')
   let bufPattern = '^[^\"]*\"\([^\"]*\)\"[[:space:]]*line \([0-9][0-9]*\).*$'
@@ -87,4 +95,5 @@ nmap gX :call OpenIt()<CR>
 nmap cd :call CdToIt()<CR>
 nmap fO :call OpenFiles()<CR>
 nmap fo :call OpenFile()<CR>
+nmap f0 :call OpenIntelliJFile()<CR>
 

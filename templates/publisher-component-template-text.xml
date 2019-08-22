@@ -1,0 +1,4 @@
+<__COMPONENT_NAME__>
+    <input type="text" seq="1" id="__COMPONENT_NAME__" title="__COMPONENT_LABEL__" name="__COMPONENT_NAME__" xpath="__COMPONENT_NAME__/text()" data-correlation="exclude" class="required"/>
+</__COMPONENT_NAME__>
+

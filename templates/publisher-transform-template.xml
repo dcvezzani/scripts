@@ -1,0 +1,16 @@
+xquery version "1.0-ml";
+
+module namespace __TRANSFORM_NAME__-transform = "http://lds.org/code/church-history-adviser/__TRANSFORM_NAME__-transform";
+
+import module namespace th = "http://lds.org/code/church-history-adviser/transforms/helpers" at "/sites/church-history-adviser/modules/transformHelpers.xqy";
+
+declare function perform-transform(
+    $params-in as map:map,
+    $element as element(__TRANSFORM_NAME__)
+) as object-node()? {
+    object-node {
+        "componentName": "__TRANSFORM_NAME__",
+        __COMPONENT_ATTRS__
+    }
+};
+

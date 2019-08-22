@@ -1,0 +1,78 @@
+#!/bin/bash
+
+open_oxygen () { 
+  /Applications/Oxygen\ XML\ Developer/oxygenDeveloper.sh "$1" >/dev/null 2>&1 &
+}
+
+if [ "$1" == "" ]; then
+  echo "Usage: ~/scripts/oxygen http://admin:admin@localhost:10989/preview/family-history/content/english/page-10156323304399411548-eng.xml"
+  echo "Usage: ~/scripts/oxygen 10989 /preview/family-history/content/english/page-10156323304399411548-eng.xml"
+fi
+
+port=10989
+uri="$1"
+if [ ! "$2" == "" ]; then
+  port="$1"
+  uri="$2"
+fi
+
+case $port in
+chaw)
+  port=10481
+  ;;
+cha)
+  port=20184
+  ;;
+fh)
+  port=10989
+  ;;
+arp)
+  port=10132
+  ;;
+temples)
+  port=20104
+  ;;
+ldse)
+  port=9308
+  ;;
+si)
+  port=10944
+  ;;
+charities)
+  port=9861
+  ;;
+di)
+  port=20134
+  ;;
+mr)
+  port=10179
+  ;;
+mp)
+  port=10214
+  ;;
+rec)
+  port=10219
+  ;;
+rk)
+  port=20174
+  ;;
+pl)
+  port=10242
+  ;;
+esac
+
+uri=$(echo "$uri" | sed 's/​//g')
+
+fullUrl=$(chk=$(echo "$uri" | grep "http://") && echo "$?")
+fh=$(chk=$(echo "$uri" | grep "family-history") && echo "$?")
+
+if [ "$fullUrl" == "0" ]; then
+  open_oxygen "$uri"
+else
+  # if [ "$fh" == "0" ]; then
+  # fi
+  echo "http://admin:admin@localhost:${port}${uri}"
+  open_oxygen "http://admin:admin@localhost:${port}${uri}"
+fi
+
+
