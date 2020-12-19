@@ -10,6 +10,8 @@ if [ "$1" == "" ]; then
 fi
 
 port=10989
+host=localhost
+credentials="admin:admin"
 uri="$1"
 if [ ! "$2" == "" ]; then
   port="$1"
@@ -26,8 +28,18 @@ cha)
 fh)
   port=10989
   ;;
+tfh)
+  port=9989
+  host=l12869
+  credentials="deployment:deployment"
+  ;;
 arp)
   port=10132
+  ;;
+tarp)
+  port=8901
+  host=l16276
+  credentials="deployment:deployment"
   ;;
 temples)
   port=20104
@@ -37,6 +49,11 @@ ldse)
   ;;
 si)
   port=10944
+  ;;
+tsi)
+  port=9944
+  host=l12869
+  credentials="deployment:deployment"
   ;;
 charities)
   port=9861
@@ -71,8 +88,8 @@ if [ "$fullUrl" == "0" ]; then
 else
   # if [ "$fh" == "0" ]; then
   # fi
-  echo "http://admin:admin@localhost:${port}${uri}"
-  open_oxygen "http://admin:admin@localhost:${port}${uri}"
+  echo "http://${credentials}@${host}:${port}${uri}"
+  open_oxygen "http://${credentials}@${host}:${port}${uri}"
 fi
 
 

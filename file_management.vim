@@ -57,7 +57,7 @@ function! SaveIt()
           let @z = 'oA' | normal @z
           call setline(line("."), '<style>')
           let @z = 'o' | normal @z
-          call setline(line("."), '  ul, ol { list-style: inherit; }')
+          call setline(line("."), '  ul { list-style: inherit; }')
           let @z = 'o' | normal @z
           call setline(line("."), '</style>')
           let @z = 'o' | normal @z
