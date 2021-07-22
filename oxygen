@@ -76,7 +76,19 @@ rk)
 pl)
   port=10242
   ;;
+nrc)
+  port=8900
+  host=l16266
+  credentials="deployment:deployment"  
+  ;;
+nrd)
+  port=8901
+  host=l16266
+  credentials="deployment:deployment"  
+  ;;
 esac
+
+
 
 uri=$(echo "$uri" | sed 's/​//g')
 

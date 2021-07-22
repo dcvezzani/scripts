@@ -38,7 +38,7 @@ if [ ! "$VERBOSE" == "0" ]; then
 fi
 
 
-results=$(for file in $(cat /Users/dcvezzani/projects/github-projects.txt); do
+results=$(for file in $(cat /Users/dcvezzani/projects/github-projects.txt | grep -v '^-' | xargs); do
   # echo "checking $file..."
   # cd "$projectsPath"
   # gitLogResults=$(git -C "$projectsPath/$file" --no-pager log --author="${author}" --since="${targetDate} 00:00:00" --until="${nextDate} 00:00:00" --pretty=oneline --abbrev-commit)
@@ -59,6 +59,7 @@ results=$(for file in $(cat /Users/dcvezzani/projects/github-projects.txt); do
   fi
 done)
 
+echo "$inputDate"
 if [ "$PBCOPY" == "1" ]; then
   echo "$results" | grep -v "This is a combination" | grep -v "Merge" | pbcopy
 else
