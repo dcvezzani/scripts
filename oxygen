@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export JAVA_HOME=$(/usr/libexec/java_home -v1.8)
+
 open_oxygen () { 
   /Applications/Oxygen\ XML\ Developer/oxygenDeveloper.sh "$1" >/dev/null 2>&1 &
 }

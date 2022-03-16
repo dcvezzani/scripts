@@ -42,6 +42,7 @@ function! SaveIt()
 
         let dts = strftime('%Y%m%d')
         let newLine = $JOURNAL_DIR.'/current/'.dts.'-'.newLine.'.'.file_extension
+        let isMd = match(newLine, "\.md$")
 
         if one_line
           "call setpos(origPos[0], origPos[1], origPos[2], origPos[3])
@@ -52,6 +53,10 @@ function! SaveIt()
           call setline(line("."), '<div style="display:none">')
           let @z = 'o' | normal @z
           call setline(line("."), newLine)
+          if isMd > -1
+            let @z = 'o' | normal @z
+            call setline(line("."), 'To view formatted in Chrome browser, use extension: https://chrome.google.com/webstore/detail/markdown-viewer/ckkdlimhmcjmikdlpkmbgfkaikojcbjk')
+          endif
           let @z = 'o' | normal @z
           call setline(line("."), '</div>')
           let @z = 'oA' | normal @z

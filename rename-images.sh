@@ -10,7 +10,7 @@ fi
 
 cnt=$(find "$findPath" -name "${uuid}*" | wc -l | xargs)
 
-find "$findPath" -name "Screen*" | while read line
+find "$findPath" -type f \( -name "Screen*" -o -name "Pasted_Image_*" \)  | sort | while read line
 do
   cnt=$((cnt+1))
 
@@ -23,6 +23,15 @@ do
   mv "${line}" "${filepath}/${uuid}-${cntValue}.${extension}"
 done
 
-echo "$(ls "$findPath" | grep "^$uuid")" | pbcopy
 
-echo "$(ls "$findPath" | grep "^$uuid")"
+for file in $(ls "$findPath" | grep "^$uuid"); do
+  echo '![](images/'"$file"')'
+done | pbcopy
+
+# echo "$(ls "$findPath" | grep "^$uuid")" | pbcopy
+
+for file in $(ls "$findPath" | grep "^$uuid"); do
+  echo '![](images/'"$file"')'
+done
+
+# echo "$(ls "$findPath" | grep "^$uuid")"

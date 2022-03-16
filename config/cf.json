@@ -1,0 +1,163 @@
+{
+  "cha": {
+    "org": "CSP Church History",
+    "lanes": {
+      "test": {
+        "space": "history-test",
+        "fe": {
+          "app": "church-history-adviser-test"
+        },
+        "ws": {
+          "app": "church-history-adviser-web-ws-test"
+        }
+      },
+      "stage": {
+        "space": "history-stage",
+        "fe": {
+          "app": "church-history-adviser-stage"
+        },
+        "ws": {
+          "app": "church-history-adviser-web-ws-stage"
+        }
+      },
+      "prod": {}
+    }
+  },
+  "si": {
+    "org": "Communication Services",
+    "lanes": {
+      "test": {
+        "space": "seminary-and-institute-test",
+        "fe": {
+          "app": "si-test"
+        },
+        "ws": {
+          "app": "si-api-test"
+        }
+      },
+      "stage": {
+        "space": "seminary-and-institute-stage",
+        "fe": {
+          "app": "si-stage"
+        },
+        "ws": {
+          "app": "si-api-stage"
+        }
+      },
+      "prod": {}
+    }
+  },
+  "referrals": {
+    "org": "Communication Services",
+    "lanes": {
+      "test": {
+        "space": "missionary-test",
+        "fe": {
+          "app": "missionary-referral"
+        },
+        "ws": {
+          "app": "missionary-referral-web-ws-test"
+        }
+      },
+      "stage": {
+        "space": "missionary-stage",
+        "fe": {
+          "app": "missionary-referral"
+        },
+        "ws": {
+          "app": "missionary-referral-web-ws-stage"
+        }
+      },
+      "prod": {
+        "space": "missionary-prod",
+        "fe": {
+          "app": "missionary-referral"
+        },
+        "ws": {
+          "app": "missionary-referral-web-ws"
+        }
+      }
+    }
+  },
+  "arp": {
+    "org": "Communication Services",
+    "lanes": {
+      "test": {
+        "space": "welfare-test",
+        "fe": {
+          "app": "recovery-fe-test"
+        },
+        "ws": {}
+      },
+      "stage": {
+        "space": "welfare-stage",
+        "fe": {
+          "app": "recovery-fe-stage"
+        },
+        "ws": {}
+      },
+      "prod": {}
+    }
+  },
+  "temples": {
+    "org": "CSP - OCS",
+    "lanes": {
+      "test": {
+        "space": "test",
+        "fe": {
+          "app": "temples-fe-test"
+        },
+        "ws": {
+          "app": "temples-blt-test"
+        }
+      },
+      "stage": {
+        "space": "stage",
+        "fe": {
+          "app": "temples-fe-stage"
+        },
+        "ws": {
+          "app": "temples-blt-stage"
+        }
+      },
+      "prod": {}
+    }
+  },
+  "memcache": {
+    "org": "Team1",
+    "lanes": {
+      "test": {
+        "space": "test",
+        "ws": {
+          "app": "pth-cor-team-one-memcached-test"
+        }
+      },
+      "int": {
+        "space": "int",
+        "ws": {
+          "app": "pth-cor-team-one-memcached-int"
+        }
+      },
+      "prod": {}
+    }
+  },
+  "mc-referrals": {
+    "org": "Team1",
+    "lanes": {
+      "test": {
+        "space": "test",
+        "ws": {
+          "app": "missionary-referral-memcache-test"
+        }
+      },
+      "int": {
+        "space": "int",
+        "ws": {
+          "app": "missionary-referral-memcache-test"
+        }
+      },
+      "prod": {}
+    }
+  }
+}
+
