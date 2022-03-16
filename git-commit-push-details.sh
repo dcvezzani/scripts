@@ -30,11 +30,13 @@ pr=$(git ls-remote origin 'pull/*/head' | grep "$targetCommit" | awk '{print $2}
 # tag:
 tag=$(git describe --abbrev=0 --tags)
 
+# - commit: <a href="$commitLink">$commit</a>
+# - branch: <a href="$branchLink">$branch</a>
 
 output=$(cat << EOL
 $repo
-- commit: <a href="$commitLink">$commit</a>
-- branch: <a href="$branchLink">$branch</a>
+- commit: $commit
+- branch: $branch
 - most recent tag: $tag
 EOL
 
