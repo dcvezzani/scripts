@@ -36,7 +36,9 @@ tag=$(git describe --abbrev=0 --tags)
 output=$(cat << EOL
 $repo
 - commit: $commit
+  - $commitLink
 - branch: $branch
+  - $branchLink
 - most recent tag: $tag
 EOL
 
