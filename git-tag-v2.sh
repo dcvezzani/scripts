@@ -1,11 +1,6 @@
 #!/bin/bash
 
-# trap ctrl_c INT
-
-# function ctrl_c() {
-#   echo "** Trapped CTRL-C"
-#   return
-# }
+# === transform_version_line =========================
 
 function transform_version_line() {
   usage=$(cat << EOL
@@ -38,10 +33,12 @@ EOL
   echo "$newLine"
 }
 
+# === tag_repo_java_interactive =========================
+
 function tag_repo_java_interactive() {
   usage=$(cat << EOL
 Usage: tag_repo_java_interactive 'pom.xml' '<version>' '<.*' '1.7.5'
-Usage: tag_repo_java_interactive 'pom.xml' '<version>' '<.*' '1.7.5' 'y'
+Usage: tag_repo_java_interactive 'pom.xml' '<version>' '<.*' '1.7.5' dryrun
 EOL
 )
 
@@ -55,7 +52,8 @@ EOL
   if [ "$match_token" = "" ]; then echo "$usage"; return; fi
   if [ "$match_token_end" = "" ]; then echo "$usage"; return; fi
   if [ "$version" = "" ]; then echo "$usage"; return; fi
-  if [ "$dryrun" = "" ]; then local dryrun="n"; fi
+
+  if [ "$dryrun" = "dryrun" ]; then echo "Running in DRYRUN mode..."; fi
 
 # cat << EOL
 # filename: $filename
@@ -110,13 +108,15 @@ EOL
     done  } 3<&0
   fi
 
-  if [ "$dryrun" = "y" ]; then
+  if [ "$dryrun" = "dryrun" ]; then
     IFS=$'\n'; printf %s "${newLines[*]}"
     return
   fi
 
   IFS=$'\n'; printf %s "${newLines[*]}" > "$filename"
 }
+
+# === user_prompt =========================
 
 ans=''
 function user_prompt() {
@@ -144,60 +144,75 @@ EOL
   read ans
 }
 
-function tag_repo_java() {
-  local version="$1"
-  local dryrun="$2"
+# === dryrun_or_run =========================
 
-  if [ "$version" = "" ]; then
-    echo "Usage: tag_repo '1.7.5'"
-    return
-  fi
-
-  repoName=$(echo $(awk '{split($0, array, "\/"); print array[5]}' <<< $(git config --get remote.origin.url)) | perl -p -e 's/\..*$//')
-
-cmd=$(cat << EOL
-tag_repo_java_interactive 'pom.xml' '^.*<version>' '<.*' "$version"
-tag_repo_java_interactive 'devops/pipelines.yml' "^  XarFileName: \\'" "\\'.*" "${repoName}-${version}.xar"
-git diff --exit-code
+function dryrun_or_run() {
+  usage=$(cat << EOL
+Usage: dryrun_or_run "$cmd"
+Usage: dryrun_or_run "$cmd" dryrun
 EOL
 )
 
+  local cmd="$1"
+  local dryrun="$2"
+
+  if [ "$cmd" = "" ]; then echo "$usage" 1>&2; return; fi
+  
   if [ ! "$dryrun" = "dryrun" ]; then
-    echo -e "$cmd"
+    echo -e "$cmd" 1>&2
     eval "$cmd"
   else
-    echo -e "DRYRUN: \n$cmd"
+    echo -e "DRYRUN: \n$cmd" 1>&2
   fi
+}
 
-cmd=$(cat << EOL
-git add pom.xml devops/pipelines.yml
-git commit -m "Version $version"
+# === repo_name =========================
+
+function repo_name() {
+  printf $(awk '{split($0, array, "\/"); print array[5]}' <<< $(git config --get remote.origin.url)) | perl -p -e 's/\..*$//'
+}
+
+# === create_tag =========================
+
+function create_tag() {
+  usage=$(cat << EOL
+Usage: create_tag "$version"
+Usage: create_tag "$version" dryrun
 EOL
 )
   
-  (user_prompt 'Commit updates?' "$cmd")
+  local version="$1"
 
-  if [ ! "$dryrun" = "dryrun" ]; then
-    eval "$cmd"
-  else
-    echo -e "DRYRUN: \n$cmd"
-  fi
-
+  if [ "$version" = "" ]; then echo "$usage" 1>&2; return; fi
+  
+  repoName=$(repo_name)
   tagAnnotation="${repoName}-v${version}"
 cmd=$(cat << EOL
 git tag -a "$tagAnnotation" -m "Version ${version}"
 EOL
 )
 
-  (user_prompt 'Create tag?' "$cmd")
+  (user_prompt 'Create tag?' "$cmd") 1>&2
+  (dryrun_or_run "$cmd" "$dryrun") 1>&2
 
-  if [ ! "$dryrun" = "dryrun" ]; then
-    eval "$cmd"
-  else
-    echo -e "DRYRUN: \n$cmd"
-  fi
+  git tag | grep "$version" 1>&2
 
-  git tag | grep "$version"
+  printf "$tagAnnotation"
+}
+
+# === push_to_remote =========================
+
+function push_to_remote() {
+  usage=$(cat << EOL
+Usage: push_to_remote "$tagAnnotation"
+Usage: push_to_remote "$tagAnnotation" dryrun
+EOL
+)
+  
+  local tagAnnotation="$1"
+  local dryrun="$2"
+
+  if [ "$tagAnnotation" = "" ]; then echo "$usage" 1>&2; return; fi
   
   branch=$(git branch | grep -E '^\*' | awk '{print $2}')
   
@@ -207,82 +222,100 @@ git push origin $tagAnnotation
 EOL
 )
  
-  (user_prompt 'Push to remote?' "$cmd")
-
-  if [ ! "$dryrun" = "dryrun" ]; then
-    echo -e "$cmd"
-    eval "$cmd"
-  else
-    echo -e "DRYRUN: \n$cmd"
-  fi
-
-  echo "DONE"
+  (user_prompt 'Push to remote?' "$cmd") 1>&2
+  (dryrun_or_run "$cmd" "$dryrun") 1>&2
 }
 
-function tag_repo_node() {
-  local version="$1"
+# === commit_updates =========================
+
+function commit_updates() {
+  usage=$(cat << EOL
+Usage: commit_updates 1.7.5
+EOL
+)
+  
+  local cmd="$1"
   local dryrun="$2"
 
-  if [ "$version" = "" ]; then
-    echo "Usage: tag_repo '1.7.5'"
-    return
-  fi
+  if [ "$version" = "" ]; then echo "$usage" 1>&2; return; fi
 
-  repoName=$(echo $(awk '{split($0, array, "\/"); print array[5]}' <<< $(git config --get remote.origin.url)) | perl -p -e 's/\..*$//')
-
-  perl -p -i -e 's/("version": ")([^"]+)(.*)/${1}'"$version"'${3}/' package.json
-
-  git diff --exit-code package.json
-
-cmd=$(cat << EOL
-git add package.json
+local cmd=$(cat << EOL
+$cmd
 git commit -m "Version $version"
 EOL
 )
   
-  (user_prompt 'Commit updates?' "$cmd")
+  (user_prompt 'Commit updates?' "$cmd") 1>&2
+  (dryrun_or_run "$cmd" "$dryrun") 1>&2
+}
 
-  if [ ! "$dryrun" = "dryrun" ]; then
-    eval "$cmd"
-  else
-    echo -e "DRYRUN: \n$cmd"
-  fi
-  
-  tagAnnotation="${repoName}-v${version}"
-cmd=$(cat << EOL
-git tag -a "$tagAnnotation" -m "Version ${version}";
+# === tag_repo_java =========================
+
+function tag_repo_java() {
+  usage=$(cat << EOL
+Usage: tag_repo_java 1.7.5
+Usage: tag_repo_java 1.7.5 dryrun
 EOL
 )
   
-  (user_prompt 'Create tag?' "$cmd")
+  local version="$1"
+  local dryrun="$2"
 
-  if [ ! "$dryrun" = "dryrun" ]; then
-    eval "$cmd"
-  else
-    echo -e "DRYRUN: \n$cmd"
-  fi
+  if [ "$version" = "" ]; then echo "$usage"; return; fi
+  if [ "$dryrun" = "dryrun" ]; then echo "Running in DRYRUN mode..."; fi
   
-  git tag | grep "$version"
-  
-  branch=$(git branch | grep -E '^\*' | awk '{print $2}')
-  
+  repoName=$(repo_name)
+
 cmd=$(cat << EOL
-git push origin $branch
-git push origin $tagAnnotation
+tag_repo_java_interactive 'pom.xml' '^.*<version>' '<.*' "$version"
+tag_repo_java_interactive 'pom.xml' '^.*<name>' '<.*' "$repoName"
+tag_repo_java_interactive 'devops/pipelines.yml' "^  XarFileName: \\'" "\\'.*" "${repoName}-${version}.xar"
+git diff --exit-code pom.xml devops/pipelines.yml
 EOL
 )
-  
-  (user_prompt 'Push to remote?' "$cmd")
+  dryrun_or_run "$cmd" "$dryrun"
 
-  if [ ! "$dryrun" = "dryrun" ]; then
-    eval "$cmd"
-  else
-    echo -e "DRYRUN: \n$cmd"
-  fi
+cmd=$(cat << EOL
+git add pom.xml devops/pipelines.yml
+EOL
+)
+  commit_updates "$cmd" "$dryrun"
+  local tagAnnotation=$(create_tag "$version" "$dryrun")
+  push_to_remote "$tagAnnotation" "$dryrun"
+  
+  echo "DONE"
+}
+
+# === tag_repo_node =========================
+
+function tag_repo_node() {
+  usage=$(cat << EOL
+Usage: tag_repo_java 1.7.5
+Usage: tag_repo_java 1.7.5 dryrun
+EOL
+)
+
+  local version="$1"
+  local dryrun="$2"
+
+  if [ "$version" = "" ]; then echo "$usage"; return; fi
+  if [ "$dryrun" = "dryrun" ]; then echo "Running in DRYRUN mode..."; fi
+  
+cmd=$(cat << EOL
+perl -p -i -e 's/("version": ")([^"]+)(.*)/\${1}'"$version"'\${3}/' package.json
+git diff --exit-code package.json
+EOL
+)
+  dryrun_or_run "$cmd" "$dryrun"
+  
+  commit_updates "$cmd" "$dryrun"
+  local tagAnnotation=$(create_tag "$version" "$dryrun")
+  push_to_remote "$tagAnnotation" "$dryrun"
 
   echo "DONE"
 }
 
+# === utililities loaded welcome message =========================
 
 cat << EOL
 Git tagging tools loaded

@@ -20,7 +20,15 @@
           "app": "church-history-adviser-web-ws-stage"
         }
       },
-      "prod": {}
+      "prod": {
+        "space": "history-production",
+        "fe": {
+          "app": "church-history-adviser"
+        },
+        "ws": {
+          "app": "church-history-adviser-web-ws"
+        }
+      }
     }
   },
   "si": {
@@ -120,43 +128,47 @@
           "app": "temples-blt-stage"
         }
       },
-      "prod": {}
+      "prod": {
+        "space": "prod",
+        "fe": {
+          "app": "temples-fe-prod"
+        },
+        "ws": {
+          "app": "temples-blt-prod"
+        }
+      }
     }
   },
-  "memcache": {
-    "org": "Team1",
+  "thrasher": {
+    "org": "Communication Services",
     "lanes": {
       "test": {
-        "space": "test",
+        "space": "thrasher-test",
+        "fe": {
+          "app": "thrasher-test"
+        },
         "ws": {
-          "app": "pth-cor-team-one-memcached-test"
+          "app": "thrasher-web-ws-test"
         }
       },
-      "int": {
-        "space": "int",
+      "stage": {
+        "space": "thrasher-stage",
+        "fe": {
+          "app": "thrasher-stage"
+        },
         "ws": {
-          "app": "pth-cor-team-one-memcached-int"
+          "app": "thrasher-web-ws-stage"
         }
       },
-      "prod": {}
-    }
-  },
-  "mc-referrals": {
-    "org": "Team1",
-    "lanes": {
-      "test": {
-        "space": "test",
+      "prod": {
+        "space": "thrasher-prod",
+        "fe": {
+          "app": "thrasher"
+        },
         "ws": {
-          "app": "missionary-referral-memcache-test"
+          "app": "thrasher-web-ws"
         }
-      },
-      "int": {
-        "space": "int",
-        "ws": {
-          "app": "missionary-referral-memcache-test"
-        }
-      },
-      "prod": {}
+      }
     }
   }
 }
