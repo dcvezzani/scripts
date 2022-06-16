@@ -23,8 +23,9 @@ branch=$(git branch | grep -E '^\*' | awk '{print $2}')
 # pr:
 repo=$(git config --get remote.origin.url | perl -p -e 's/.*\/([^\.]+)\.git$/\1/')
 repoLink=$(git config --get remote.origin.url | perl -p -e 's/([^:]+:\/\/)([^@]+@)(.*)\.git$/${1}${3}/')
-commitLink="${repoLink}/commit/${commit}"
-branchLink="${repoLink}/tree/${branch}"
+repoBaseUrl=$(echo "$repoLink" | perl -p -e 's/\.git$//')
+commitLink="${repoBaseUrl}/commit/${commit}"
+branchLink="${repoBaseUrl}/tree/${branch}"
 pr=$(git ls-remote origin 'pull/*/head' | grep "$targetCommit" | awk '{print $2}' | perl -p -e 's/refs\/pull\/([^\/]+).*/https:\/\/github.com\/ICSEng\/'"$repo"'\/pull\/\1/')
 
 # tag:

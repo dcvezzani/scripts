@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function show_usage() {
-  echo 'Usage: ~/scripts/git-cli-utils.sh files (a|all|m|modified|s|staged) yarn pretty-file'
+  echo 'Usage: ~/scripts/git-cli-utils.sh files [pretty|ls|git-add] [a|all|m|modified|c|conflict|s|staged|u|untracked|t|targeted]'
   exit 1
 }
 
@@ -34,9 +34,13 @@ case "$action" in
   ls)
     resolvedCmd='ls'
     ;;
+
+  git-add)
+    resolvedCmd='git add'
+    ;;
 esac
 
-token=' *M'
+token='^ *[M\?]+'
 case "$context" in
   m | modified)
     token='^ M'
@@ -45,15 +49,62 @@ case "$context" in
   s | staged)
     token='^M'
     ;;
+
+  c | conflict)
+    token='^UU'
+    ;;
+
+  u | untracked)
+    token='^\?\?'
+    ;;
+
+  t | targeted)
+    token='targeted'
+    ;;
+
 esac
+shift
+
+pattern=${@:1:1}
+patternsLength=$#
+
+# cat << EOL
+# util: $util
+# action: $action
+# context: $context
+# resolvedCmd: $resolvedCmd
+# token: $token
+# pattern: $pattern
+# patternsLength: $patternsLength
+# EOL
 
 # git st | grep modified | perl -p -e 's/^[ 	]+(modified): +(.*)/\1/g'
 
+if [ "$token" = "targeted" ]; then
 cmd_1=$(cat << EOL
-git status --porcelain --untracked-files=all | perl -ne 'print if s/${token}[ 	]+(.)/\1/' 
+ls $@
 EOL
 )
+  
+else
+if [[ $patternsLength > 0 ]]; then
+  additionalTokens="| grep \"$pattern\""
+fi
+
+cmd_1=$(cat << EOL
+git status --porcelain --untracked-files=normal | perl -ne 'print if s/${token}[ 	]+(.)/\1/' ${additionalTokens}
+EOL
+)
+  
 # echo "CMD: $cmd_1"
+
+if [ "$action" = "ls" ]; then
+  (eval "$cmd_1")
+  exit 0
+fi
+
+fi
+
 payload=$(eval "$cmd_1")
 
 cat << EOL

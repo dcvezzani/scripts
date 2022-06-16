@@ -1,69 +1,161 @@
-inputDate="$1"
-inputYear="$2"
-# inputDate="8/1"
+#!/bin/zsh
 
-author='David Vezzani <dcvezzani@churchofjesuschrist.org>'
-# author='David C. Vezzani <David.Vezzani@churchofjesuschrist.org>'
+# ========================================
+# get_path
+function get_path() {
+local obj="$1"
+local _path="$2"
 
-if [ "$inputDate" == "" ]; then
-inputDate=$(date +"%m-%d")
+echo "$obj" | jq -r "$_path"
+};
+
+
+# ========================================
+function left_pad() {
+  local src="$1"
+  local len="$2"
+  local char="$3"
+  if [[ $ZSH_VERSION ]]; then
+    CMD=$(cat << EOL
+echo \${(l($len)($char))src}
+EOL
+)
+    # echo -e "$CMD"
+    eval "$CMD"
+  else
+    CMD=$(cat << EOL
+printf "%${char}${len}s" "$src"
+EOL
+)
+    # echo -e "$CMD"
+    eval "$CMD"
+  fi
+};
+
+
+# ========================================
+# get_date_range
+function get_date_range() {
+
+if [[ "$@" =~ '--help' ]]; then
+cat << EOL
+Usage: 
+get_date_range 3/15
+get_date_range 3/15 2022
+
+Returns: {targetDate, nextDate}
+EOL
+  return 0
 fi
 
-if [ "$inputYear" == "" ]; then
+local inputDate="$1"
+local inputYear="$2"
+
+if [[ "$inputDate" == "" ]]; then
+local inputDay=$(date +"%d")
+local inputMonth=$(date +"%m")
+else
+local inputDay=$(echo "$inputDate" | perl -pe 's/(^[^-\/]+)[-\/](.+)/$2/g')
+local inputMonth=$(echo "$inputDate" | perl -pe 's/(^[^-\/]+)[-\/](.+)/$1/g')
+fi
+
+local inputDay=$(left_pad $inputDay 2 0)
+local inputMonth=$(left_pad $inputMonth 2 0)
+local inputDate="${inputMonth}-${inputDay}"
+
+if [[ "$inputYear" == "" ]]; then
 inputYear=$(date +"%Y")
 fi
 
-checkForSingleDay=$(echo "$inputDate" | perl -p -e "s#\d+##g" | xargs | wc -m | xargs)
-if [ "$checkForSingleDay" == "0" ]; then
-  currentMonth=$(date +"%m")
-  inputDate=$(date -j -f "%Y/%m/%d %H:%M:%S" "${inputYear}/${currentMonth}/${inputDate} 00:00:00" +"%m-%d")
-fi
+# theMonth=$(printf "%02s" $(echo "$inputDate" | perl -p -e "s#(\d+)[\/-](\d+)#\1#g"))
+# targetDay=$(echo "$inputDate" | perl -p -e "s#(\d+)[\/-](\d+)#\2#g")
+# targetDay=$(printf "%02s" "$targetDay")
 
-if [ ! "$VERBOSE" == "0" ]; then
-  echo ">>> inputDate: '$inputDate'"
-fi
-
-projectsPath='/Users/dcvezzani/projects'
-theMonth=$(printf "%02s" $(echo "$inputDate" | perl -p -e "s#(\d+)[\/-](\d+)#\1#g"))
-targetDay=$(echo "$inputDate" | perl -p -e "s#(\d+)[\/-](\d+)#\2#g")
-targetDay=$(printf "%02s" "$targetDay")
-
-targetDate="${inputYear}-${theMonth}-${targetDay}"
+targetDate="${inputYear}-${inputMonth}-${inputDay}"
 targetDate2=$(echo "$targetDate 00:00:00" | perl -p -e "s#-#\/#g")
 nextDate=$(date -v +1d -j -f "%Y/%m/%d %H:%M:%S" "$targetDate2" +"%Y-%m-%d")
 
-if [ ! "$VERBOSE" == "0" ]; then
-  echo "${VERBOSE} Showing git commit activity from '${targetDate}' to '${nextDate}' ...\n"
-  echo "cmd: \ngit reflog --author=\"${author}\" --format='%s' --since=\"${targetDate} 00:00:00\" --until=\"${nextDate} 00:00:00\" | uniq\n"
+cat << EOL
+{"start":"$targetDate","stop":"$nextDate"}
+EOL
+};
+
+# ========================================
+# https://stackoverflow.com/questions/11283625/overwrite-last-line-on-terminal#answer-51858404
+overwrite() { echo -e "\r\033[1A\033[0K$@"; }
+
+# ========================================
+# get_work_activity_for
+function get_work_activity_for() {
+
+if [[ "$@" =~ '--help' ]]; then
+cat << EOL
+Usage: 
+get_work_activity_for 3/15
+get_work_activity_for 3/15 2022
+
+Returns: List of activities
+- Activity: E.g., "[thrasher-web-ws] 41ca991: removes typo"
+EOL
+  return 0
 fi
 
+author='David Vezzani <dcvezzani@churchofjesuschrist.org>'
 
-results=$(for file in $(cat /Users/dcvezzani/projects/github-projects.txt | grep -v '^-' | xargs); do
-  # echo "checking $file..."
-  # cd "$projectsPath"
-  # gitLogResults=$(git -C "$projectsPath/$file" --no-pager log --author="${author}" --since="${targetDate} 00:00:00" --until="${nextDate} 00:00:00" --pretty=oneline --abbrev-commit)
-  # gitLogResults=$(git reflog --date=iso --format='%C(auto)%h %<|(20)%gd %C(blue)%cr%C(reset) %gs (%s)' --since="${targetDate} 00:00:00" --until="${nextDate} 00:00:00")
-  # gitLogResults=$(git -C "$projectsPath/$file" --no-pager reflog --format='%s' --since="${targetDate} 00:00:00" --until="${nextDate} 00:00:00")
+dateRange=$(get_date_range "$@" | jq -c '.')
+targetDate=$(get_path $dateRange '.start')
+cat << EOL
+$targetDate
+EOL
+printf "." >&2
 
-  gitLogResults=$(git -C "$projectsPath/$file" --no-pager reflog --author="${author}" --format='%h: %s' --since="${targetDate} 00:00:00" --until="${nextDate} 00:00:00" | uniq)
+nextDate=$(get_path $dateRange '.stop')
+projectsPath='/Users/dcvezzani/projects'
+file='thrasher-fe'
+results=$(
+IFS=' ' && for file in $(cat /Users/dcvezzani/projects/github-projects.txt | grep -v '^-' | xargs); do
+  IFS=$'\n' entries=($(git -C "$projectsPath/$file" --no-pager reflog --author="${author}" --format='%h: %s' --since="${targetDate} 00:00:00" --until="${nextDate} 00:00:00" | uniq))
 
-  # Show more details when logging
-  # https://git-scm.com/docs/pretty-formats
-  # git reflog --date=iso --format='%C(auto)%h %<|(20)%gd %C(blue)%cr%C(reset) %C(green)%ce%C(reset) %gs (%s)' --since="2020-11-30 00:00:00" --until="2020-12-01 00:00:00" | grep "${authorEmail}"
+  unset hashTracker
+  declare -A hashTracker
+  for entry in "${entries[@]}"
+  do
+    hashForEntry=$(echo "$entry" | perl -pe 's/\"/\\\"/g; s/^([^:]+): *(.*)/\{"project":"'"$file"'","description":"$2"\}/' | shasum | perl -pe 's/ +-$//')
+    json=$(echo "$entry" | perl -pe 's/\"/\\\"/g; s/^([^:]+): *(.*)/\{\\"project\\":\\"'"$file"'\\",\\"commit\\":\\"$1\\",\\"description\\":\\"$2\\",\\"hash\\":\\"'"$hashForEntry"'\\"\}/')
+
+    CMD=$(cat << EOL
+if [[ ! "\${hashTracker[$hashForEntry]}" ]]; then
+hashTracker[$hashForEntry]="$json"
+fi
+EOL
+)
+    # echo -e "$CMD"
+    eval "$CMD"
+  done
   
-  gitLogResultLines=$(echo "$gitLogResults" | wc -l | xargs)
-  # echo "$gitLogResultLines"
-  if [ ! "$gitLogResultLines" == "1" ] || [ ! "$gitLogResults" == "" ]; then
-    gitLogResultsFormatted=$(echo "$gitLogResults" | perl -p -e "s#^(.*)\$#[$file] \1#g")
-    echo "$gitLogResultsFormatted"
-  fi
-done)
+  # echo -e "${hashTracker[@]}"
 
-echo "$inputDate"
-if [ "$PBCOPY" == "1" ]; then
-  echo "$results" | grep -v "This is a combination" | grep -v "Merge" | pbcopy
-else
-  echo "$results" | grep -v "This is a combination" | grep -v "Merge"
-fi
+  for key entry in ${(kv)hashTracker}; do
+    # echo -e "- $entry"
+    project=$(get_path "$entry" '.project')
+    description=$(get_path "$entry" '.description')
+    commit=$(get_path "$entry" '.commit')
+    cat << EOL
+- [$project] ${commit}: $description
+EOL
+  printf "." >&2
+  done
+done
+)
 
+# go to start of line, delete to end of line, go up one line
+echo -e "\r\033[0K\033[1A"
 
+cat << EOL
+
+$(echo -e "$results" | sort)
+
+EOL
+};
+
+get_work_activity_for "$@"

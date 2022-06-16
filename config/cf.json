@@ -8,7 +8,8 @@
           "app": "church-history-adviser-test"
         },
         "ws": {
-          "app": "church-history-adviser-web-ws-test"
+          "app": "church-history-adviser-web-ws-test",
+          "applicationManagementId": "82d3ebdf-51da-4a48-80a4-e724b1881229"
         }
       },
       "stage": {
@@ -17,7 +18,8 @@
           "app": "church-history-adviser-stage"
         },
         "ws": {
-          "app": "church-history-adviser-web-ws-stage"
+          "app": "church-history-adviser-web-ws-stage",
+          "applicationManagementId": "4e3cf658-29a2-409e-91ec-6b65ea79db4a"
         }
       },
       "prod": {
@@ -26,7 +28,8 @@
           "app": "church-history-adviser"
         },
         "ws": {
-          "app": "church-history-adviser-web-ws"
+          "app": "church-history-adviser-web-ws",
+          "applicationManagementId": "c36d80ac-5195-4b56-af0f-360feb4600cc"
         }
       }
     }
@@ -64,7 +67,8 @@
           "app": "missionary-referral"
         },
         "ws": {
-          "app": "missionary-referral-web-ws-test"
+          "app": "missionary-referral-web-ws-test",
+          "applicationManagementId": "4b7d245b-2c4b-49ca-a3d7-8fee5cf892cf"
         }
       },
       "stage": {
@@ -73,7 +77,8 @@
           "app": "missionary-referral"
         },
         "ws": {
-          "app": "missionary-referral-web-ws-stage"
+          "app": "missionary-referral-web-ws-stage",
+          "applicationManagementId": "82c280a1-3aca-4f6a-a74a-d33ae7e1e889"
         }
       },
       "prod": {
@@ -82,7 +87,40 @@
           "app": "missionary-referral"
         },
         "ws": {
-          "app": "missionary-referral-web-ws"
+          "app": "missionary-referral-web-ws",
+          "applicationManagementId": "2b3ab578-2f25-428d-9e86-864620273212"
+        }
+      }
+    }
+  },
+  "planning": {
+    "org": "Communication Services",
+    "lanes": {
+      "test": {
+        "space": "missionary-test",
+        "fe": {
+          "app": "missionary-planning-fe"
+        },
+        "ws": {
+          "app": "missionary-planning"
+        }
+      },
+      "stage": {
+        "space": "missionary-stage",
+        "fe": {
+          "app": "missionary-planning-fe"
+        },
+        "ws": {
+          "app": "missionary-planning"
+        }
+      },
+      "prod": {
+        "space": "missionary-prod",
+        "fe": {
+          "app": "missionary-planning-fe"
+        },
+        "ws": {
+          "app": "missionary-planning"
         }
       }
     }
@@ -116,7 +154,8 @@
           "app": "temples-fe-test"
         },
         "ws": {
-          "app": "temples-blt-test"
+          "app": "temples-blt-test",
+          "applicationManagementId": "dd9d6aef-e089-4a8d-90f2-4074fdf7539a"
         }
       },
       "stage": {
@@ -125,7 +164,8 @@
           "app": "temples-fe-stage"
         },
         "ws": {
-          "app": "temples-blt-stage"
+          "app": "temples-blt-stage",
+          "applicationManagementId": "898efad0-a61c-4407-a281-3aeb09c5de6e"
         }
       },
       "prod": {
@@ -134,7 +174,8 @@
           "app": "temples-fe-prod"
         },
         "ws": {
-          "app": "temples-blt-prod"
+          "app": "temples-blt-prod",
+          "applicationManagementId": "b3f80bf0-a007-4d1a-897d-89461f25db90"
         }
       }
     }
