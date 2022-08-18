@@ -34,6 +34,87 @@
       }
     }
   },
+  "records": {
+    "org": "CSP Church History",
+    "lanes": {
+      "dev": {
+        "space": "history-dev",
+        "fe": {
+          "app": "record-keeping-dev"
+        }
+      },
+      "test": {
+        "space": "history-test",
+        "fe": {
+          "app": "record-keeping-test"
+        }
+      },
+      "stage": {
+        "space": "history-stage",
+        "fe": {
+          "app": "record-keeping-stage"
+        }
+      },
+      "prod": {
+        "space": "history-production",
+        "fe": {
+          "app": "record-keeping"
+        }
+      }
+    }
+  },
+  "di": {
+    "org": "Communication Services",
+    "lanes": {
+      "test": {
+        "space": "welfare-test",
+        "fe": {
+          "app": "di-fe-test"
+        }
+      },
+      "stage": {
+        "space": "welfare-stage",
+        "fe": {
+          "app": "di-fe-stage"
+        }
+      },
+      "prod": {
+        "space": "welfare-prod",
+        "fe": {
+          "app": "di-fe-prod"
+        }
+      }
+    }
+  },
+  "roots": {
+    "org": "Communication Services",
+    "lanes": {
+      "dev": {
+        "space": "family-history-dev",
+        "fe": {
+          "app": "rootstech-dev"
+        }
+      },
+      "test": {
+        "space": "family-history-test",
+        "fe": {
+          "app": "rootstech-test"
+        }
+      },
+      "stage": {
+        "space": "family-history-stage",
+        "fe": {
+          "app": "rootstech-stage"
+        }
+      },
+      "prod": {
+        "space": "family-history-prod",
+        "fe": {
+          "app": "rootstech-prod"
+        }
+      }
+    }
+  },
   "si": {
     "org": "Communication Services",
     "lanes": {
@@ -55,7 +136,15 @@
           "app": "si-api-stage"
         }
       },
-      "prod": {}
+      "prod": {
+        "space": "seminary-and-institute-prod",
+        "fe": {
+          "app": "si-prod"
+        },
+        "ws": {
+          "app": "si-api-prod"
+        }
+      }
     }
   },
   "referrals": {
@@ -96,10 +185,19 @@
   "planning": {
     "org": "Communication Services",
     "lanes": {
+      "dev": {
+        "space": "missionary-dev",
+        "fe": {
+          "app": "missionary-planning-fe-dev"
+        },
+        "ws": {
+          "app": "missionary-planning"
+        }
+      },
       "test": {
         "space": "missionary-test",
         "fe": {
-          "app": "missionary-planning-fe"
+          "app": "missionary-planning-fe-test"
         },
         "ws": {
           "app": "missionary-planning"
@@ -108,7 +206,7 @@
       "stage": {
         "space": "missionary-stage",
         "fe": {
-          "app": "missionary-planning-fe"
+          "app": "missionary-planning-fe-stage"
         },
         "ws": {
           "app": "missionary-planning"
@@ -142,7 +240,13 @@
         },
         "ws": {}
       },
-      "prod": {}
+      "prod": {
+        "space": "welfare-prod",
+        "fe": {
+          "app": "recovery-fe"
+        },
+        "ws": {}
+      }
     }
   },
   "temples": {

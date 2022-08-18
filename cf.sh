@@ -32,7 +32,7 @@ local _app=""
 
 case "$target" in
 
-  referrals | si | arp | cha | temples | memcache | thrasher | planning)
+  referrals | si | arp | cha | temples | memcache | thrasher | planning | di | roots | records)
     _org=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.org')
     _space=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.space')
     _app=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.'"$tier"'.app')

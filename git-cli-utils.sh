@@ -40,22 +40,22 @@ case "$action" in
     ;;
 esac
 
-token='^ *[M\?]+'
+# token='^ *[M\?]+'
 case "$context" in
   m | modified)
-    token='^ M'
+    token='^( M)'
     ;;
 
   s | staged)
-    token='^M'
+    token='^(M|A)'
     ;;
 
   c | conflict)
-    token='^UU'
+    token='^(UU)'
     ;;
 
   u | untracked)
-    token='^\?\?'
+    token='^(\?\?)'
     ;;
 
   t | targeted)
@@ -92,7 +92,7 @@ if [[ $patternsLength > 0 ]]; then
 fi
 
 cmd_1=$(cat << EOL
-git status --porcelain --untracked-files=normal | perl -ne 'print if s/${token}[ 	]+(.)/\1/' ${additionalTokens}
+git status --porcelain --untracked-files=normal | perl -ne 'print if s/${token}[ 	]+(.*)/\2/' ${additionalTokens}
 EOL
 )
   
