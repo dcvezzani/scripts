@@ -63,6 +63,8 @@ function! OpenFile()
     silent execute '!mvim '.file_resource
   endif
 
+  echo ''.file_resource
+
   "echo "!mvim +:".line_number.' '.file_resource
 endfunction
 

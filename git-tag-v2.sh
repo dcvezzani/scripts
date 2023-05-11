@@ -334,7 +334,8 @@ _tag_repo_java "$cmd" "$version" "$dryrun"
 
 # === npm_install =========================
 
-npm_install=$(printf "npm i --legacy-peer-deps")
+# npm_install=$(printf "npm i --legacy-peer-deps")
+npm_install=$(printf "npm i")
 
 # === tag_repo_node =========================
 
@@ -352,9 +353,11 @@ EOL
   if [ "$dryrun" = "dryrun" ]; then echo "Running in DRYRUN mode..."; fi
   
 cmd=$(cat << EOL
-$npm_install
 perl -p -i -e 's/("version": ")([^"]+)(.*)/\${1}'"$version"'\${3}/' package.json
+$npm_install
 git diff --exit-code package.json
+echo 'package-lock.json'
+git diff --exit-code package-lock.json | head -n10 | grep version
 EOL
 )
   dryrun_or_run "$cmd" "$dryrun"

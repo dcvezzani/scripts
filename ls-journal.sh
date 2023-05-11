@@ -7,7 +7,11 @@ function _filter() {
 }
 
 if [[ ! -z "$1" ]]; then
-  _filter | xargs grep -rl "$1"
+  if [[ $INTERNAL == "true" ]]; then
+    _filter | xargs grep -rl "$1"
+  else
+    _filter | grep "$1"
+  fi
 else
   _filter
 fi

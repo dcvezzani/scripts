@@ -3,7 +3,7 @@
 usage=$(cat << EOL
 Usage: 
 
-SWAGGER_VERSION="4.10.3" API_PATH="src/api" ~/scripts/install-swagger-ui.sh
+SWAGGER_VERSION="4.18.1" API_PATH="./swagger-docs" ~/scripts/install-swagger-ui.sh
 
 - CMS: API_PATH="src/main/xquery/sites/missionary-referral/api"; directory is automatically mapped to routes
 - WS (nodejs): API_PATH="src/api"; update node express routes to include swagger

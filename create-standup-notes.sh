@@ -1,8 +1,27 @@
 #!/bin/bash
 
+input_target_date="$1"
+
+if [[ $input_target_date == 'yesterday' ]]; then
+  input_target_date=$(date -v -1d -jf '%Y-%m-%d' $(date '+%Y-%m-%d') "+%Y-%m-%d")
+fi
+
+if [[ $input_target_date == 'tomorrow' ]]; then
+  input_target_date=$(date -v +1d -jf '%Y-%m-%d' $(date '+%Y-%m-%d') "+%Y-%m-%d")
+fi
+
+if [[ $input_target_date == 'last-friday' ]]; then
+  input_target_date=$(date -v -Sat -v -1d -jf '%Y-%m-%d' $(date '+%Y-%m-%d') "+%Y-%m-%d")
+fi
+
+if [[ -z $input_target_date ]]; then
+  input_target_date=$(date '+%Y-%m-%d')
+fi
+
 journalPath="/Users/dcvezzani/Dropbox/journal/current"
-filename=$(echo "standup-$(date +%F-%a | perl -ne 'print lc').md")
-datestamp=$(date "+%F (%a)")
+filename=$(echo "standup-$(date -jf "%Y-%m-%d" "$input_target_date" "+%F-%a" | perl -ne 'print lc').md")
+datestamp=$(date -jf "%Y-%m-%d" "$input_target_date" "+%F (%a)")
+# datestamp=$(date "+%F (%a)")
 
 if [[ -e "$journalPath/$filename" ]]; then
   echo "File already exists!  Not overwriting; just opening."

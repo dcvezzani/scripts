@@ -5,31 +5,34 @@
       "test": {
         "space": "history-test",
         "fe": {
-          "app": "church-history-adviser-test"
+          "app": "church-history-adviser-test",
+          "appGuid": "e5f10890-d321-45de-80f7-07d3986eda0d"
         },
         "ws": {
           "app": "church-history-adviser-web-ws-test",
-          "applicationManagementId": "82d3ebdf-51da-4a48-80a4-e724b1881229"
+          "appGuid": "82d3ebdf-51da-4a48-80a4-e724b1881229"
         }
       },
       "stage": {
         "space": "history-stage",
         "fe": {
-          "app": "church-history-adviser-stage"
+          "app": "church-history-adviser-stage",
+          "appGuid": "04672fd0-0f0e-4a29-93e1-183c9cc5e973"
         },
         "ws": {
           "app": "church-history-adviser-web-ws-stage",
-          "applicationManagementId": "4e3cf658-29a2-409e-91ec-6b65ea79db4a"
+          "appGuid": "4e3cf658-29a2-409e-91ec-6b65ea79db4a"
         }
       },
       "prod": {
         "space": "history-production",
         "fe": {
-          "app": "church-history-adviser"
+          "app": "church-history-adviser",
+          "appGuid": "14ff11b1-e5e3-4d5f-9101-180fda8feb9c"
         },
         "ws": {
           "app": "church-history-adviser-web-ws",
-          "applicationManagementId": "c36d80ac-5195-4b56-af0f-360feb4600cc"
+          "appGuid": "c36d80ac-5195-4b56-af0f-360feb4600cc"
         }
       }
     }
@@ -40,25 +43,29 @@
       "dev": {
         "space": "history-dev",
         "fe": {
-          "app": "record-keeping-dev"
+          "app": "record-keeping-dev",
+          "appGuid": "xxx"
         }
       },
       "test": {
         "space": "history-test",
         "fe": {
-          "app": "record-keeping-test"
+          "app": "record-keeping-test",
+          "appGuid": "768f5ea3-fea6-4eed-abbf-97dcf2f26d08"
         }
       },
       "stage": {
         "space": "history-stage",
         "fe": {
-          "app": "record-keeping-stage"
+          "app": "record-keeping-stage",
+          "appGuid": "c7ee0f4f-2f1b-4e9b-aeb3-238847871e50"
         }
       },
       "prod": {
         "space": "history-production",
         "fe": {
-          "app": "record-keeping"
+          "app": "record-keeping",
+          "appGuid": "acbc93d4-25fa-4deb-993e-bfa2d9b89fff"
         }
       }
     }
@@ -69,19 +76,22 @@
       "test": {
         "space": "welfare-test",
         "fe": {
-          "app": "di-fe-test"
+          "app": "di-fe-test",
+          "appGuid": "07d8bb9d-a6f1-4998-a087-bdc0c9335126"
         }
       },
       "stage": {
         "space": "welfare-stage",
         "fe": {
-          "app": "di-fe-stage"
+          "app": "di-fe-stage",
+          "appGuid": "ccdd12d7-7345-4fb8-83c8-f25eb3565afa"
         }
       },
       "prod": {
         "space": "welfare-prod",
         "fe": {
-          "app": "di-fe-prod"
+          "app": "di-fe-prod",
+          "appGuid": "1986b126-fd40-48b2-ad00-9485264d3c71"
         }
       }
     }
@@ -92,25 +102,29 @@
       "dev": {
         "space": "family-history-dev",
         "fe": {
-          "app": "rootstech-dev"
+          "app": "rootstech-dev",
+          "appGuid": "xxx"
         }
       },
       "test": {
         "space": "family-history-test",
         "fe": {
-          "app": "rootstech-test"
+          "app": "rootstech-test",
+          "appGuid": "xxx"
         }
       },
       "stage": {
         "space": "family-history-stage",
         "fe": {
-          "app": "rootstech-stage"
+          "app": "rootstech-stage",
+          "appGuid": "xxx"
         }
       },
       "prod": {
         "space": "family-history-prod",
         "fe": {
-          "app": "rootstech-prod"
+          "app": "rootstech-prod",
+          "appGuid": "xxx"
         }
       }
     }
@@ -121,28 +135,34 @@
       "test": {
         "space": "seminary-and-institute-test",
         "fe": {
-          "app": "si-test"
+          "app": "si-test",
+          "appGuid": "cb5fc22c-d680-4c6a-be4f-9f1e544ec191"
         },
         "ws": {
-          "app": "si-api-test"
+          "app": "si-api-test",
+          "appGuid": "4a615280-d437-4af1-a000-6cdfbda5bf71"
         }
       },
       "stage": {
         "space": "seminary-and-institute-stage",
         "fe": {
-          "app": "si-stage"
+          "app": "si-stage",
+          "appGuid": "097b7fc8-b540-4de2-9eb9-135087f2a000"
         },
         "ws": {
-          "app": "si-api-stage"
+          "app": "si-api-stage",
+          "appGuid": "04bd62b8-dffa-4d79-9ed4-cdbf34fc8506"
         }
       },
       "prod": {
         "space": "seminary-and-institute-prod",
         "fe": {
-          "app": "si-prod"
+          "app": "si",
+          "appGuid": "1870d043-e4bd-4fe1-a4ab-278706bdc22b"
         },
         "ws": {
-          "app": "si-api-prod"
+          "app": "si-api",
+          "appGuid": "57f38e9b-329c-4b47-97db-6fe02f2422f7"
         }
       }
     }
@@ -153,31 +173,34 @@
       "test": {
         "space": "missionary-test",
         "fe": {
-          "app": "missionary-referral"
+          "app": "missionary-referral",
+          "appGuid": "5afc0037-50cb-4f09-afab-3b146d8979e4"
         },
         "ws": {
           "app": "missionary-referral-web-ws-test",
-          "applicationManagementId": "4b7d245b-2c4b-49ca-a3d7-8fee5cf892cf"
+          "appGuid": "4b7d245b-2c4b-49ca-a3d7-8fee5cf892cf"
         }
       },
       "stage": {
         "space": "missionary-stage",
         "fe": {
-          "app": "missionary-referral"
+          "app": "missionary-referral",
+          "appGuid": "84bf6920-0de4-4cc8-a01f-9eb6f8474dce"
         },
         "ws": {
           "app": "missionary-referral-web-ws-stage",
-          "applicationManagementId": "82c280a1-3aca-4f6a-a74a-d33ae7e1e889"
+          "appGuid": "82c280a1-3aca-4f6a-a74a-d33ae7e1e889"
         }
       },
       "prod": {
         "space": "missionary-prod",
         "fe": {
-          "app": "missionary-referral"
+          "app": "missionary-referral",
+          "appGuid": "bbcdb371-e0bf-4281-bc63-820eebb748bc"
         },
         "ws": {
           "app": "missionary-referral-web-ws",
-          "applicationManagementId": "2b3ab578-2f25-428d-9e86-864620273212"
+          "appGuid": "2b3ab578-2f25-428d-9e86-864620273212"
         }
       }
     }
@@ -188,37 +211,45 @@
       "dev": {
         "space": "missionary-dev",
         "fe": {
-          "app": "missionary-planning-fe-dev"
+          "app": "missionary-planning-fe-dev",
+          "appGuid": "xxx"
         },
         "ws": {
-          "app": "missionary-planning"
+          "app": "missionary-planning",
+          "appGuid": "xxx"
         }
       },
       "test": {
         "space": "missionary-test",
         "fe": {
-          "app": "missionary-planning-fe-test"
+          "app": "missionary-planning-fe-test",
+          "appGuid": "6bace3cd-2cdc-4ef9-b72a-b5f571c765ea"
         },
         "ws": {
-          "app": "missionary-planning"
+          "app": "missionary-planning",
+          "appGuid": "b36f71df-db05-4f5e-8cf8-0222694f261d"
         }
       },
       "stage": {
         "space": "missionary-stage",
         "fe": {
-          "app": "missionary-planning-fe-stage"
+          "app": "missionary-planning-fe-stage",
+          "appGuid": "0937a900-15b5-400d-9328-dafca7f41dd5"
         },
         "ws": {
-          "app": "missionary-planning"
+          "app": "missionary-planning",
+          "appGuid": "d1869f20-1a97-4175-a2ac-95a734354438"
         }
       },
       "prod": {
         "space": "missionary-prod",
         "fe": {
-          "app": "missionary-planning-fe"
+          "app": "missionary-planning-fe",
+          "appGuid": "e9dd2541-0f84-4cc5-98cb-b0e32841dc70"
         },
         "ws": {
-          "app": "missionary-planning"
+          "app": "missionary-planning",
+          "appGuid": "50bdd9c7-1b6a-4fa1-8a00-f0a8c4f2c810"
         }
       }
     }
@@ -229,21 +260,24 @@
       "test": {
         "space": "welfare-test",
         "fe": {
-          "app": "recovery-fe-test"
+          "app": "recovery-fe-test",
+          "appGuid": "6aa472f3-64b2-4aca-b141-a39ba18530f3"
         },
         "ws": {}
       },
       "stage": {
         "space": "welfare-stage",
         "fe": {
-          "app": "recovery-fe-stage"
+          "app": "recovery-fe-stage",
+          "appGuid": "d56cbf61-4ea4-465b-84d0-0e01d781b086"
         },
         "ws": {}
       },
       "prod": {
         "space": "welfare-prod",
         "fe": {
-          "app": "recovery-fe"
+          "app": "recovery-fe",
+          "appGuid": "bcb11ce8-de74-4fca-9fe8-f498e306bdcd"
         },
         "ws": {}
       }
@@ -252,34 +286,48 @@
   "temples": {
     "org": "CSP - OCS",
     "lanes": {
+      "dev": {
+        "space": "dev",
+        "fe": {
+          "app": "temples-fe-dev",
+          "appGuid": "xxx"
+        },
+        "ws": {
+          "app": "temples-blt-dev",
+          "appGuid": "xxx"
+        }
+      },
       "test": {
         "space": "test",
         "fe": {
-          "app": "temples-fe-test"
+          "app": "temples-fe-test",
+          "appGuid": "8f1de267-72c3-4b62-bbb7-09117310b600"
         },
         "ws": {
           "app": "temples-blt-test",
-          "applicationManagementId": "dd9d6aef-e089-4a8d-90f2-4074fdf7539a"
+          "appGuid": "dd9d6aef-e089-4a8d-90f2-4074fdf7539a"
         }
       },
       "stage": {
         "space": "stage",
         "fe": {
-          "app": "temples-fe-stage"
+          "app": "temples-fe-stage",
+          "appGuid": "0928d4ca-3f61-45d6-951e-5a33a9970df3"
         },
         "ws": {
           "app": "temples-blt-stage",
-          "applicationManagementId": "898efad0-a61c-4407-a281-3aeb09c5de6e"
+          "appGuid": "898efad0-a61c-4407-a281-3aeb09c5de6e"
         }
       },
       "prod": {
         "space": "prod",
         "fe": {
-          "app": "temples-fe-prod"
+          "app": "temples-fe-prod",
+          "appGuid": "0594ec35-03ab-4239-82da-4e00f7e78d5c"
         },
         "ws": {
           "app": "temples-blt-prod",
-          "applicationManagementId": "b3f80bf0-a007-4d1a-897d-89461f25db90"
+          "appGuid": "b3f80bf0-a007-4d1a-897d-89461f25db90"
         }
       }
     }
@@ -290,28 +338,34 @@
       "test": {
         "space": "thrasher-test",
         "fe": {
-          "app": "thrasher-test"
+          "app": "thrasher-test",
+          "appGuid": "88899c24-2700-42f0-a043-1515a02755de"
         },
         "ws": {
-          "app": "thrasher-web-ws-test"
+          "app": "thrasher-web-ws-test",
+          "appGuid": "da9ea07f-38c5-49e0-a184-01561a5861fc"
         }
       },
       "stage": {
         "space": "thrasher-stage",
         "fe": {
-          "app": "thrasher-stage"
+          "app": "thrasher-stage",
+          "appGuid": "12be9173-d795-494a-95bf-589508a341f5"
         },
         "ws": {
-          "app": "thrasher-web-ws-stage"
+          "app": "thrasher-web-ws-stage",
+          "appGuid": "cb4cec99-34aa-4b69-9c7d-ad9961098a05"
         }
       },
       "prod": {
         "space": "thrasher-prod",
         "fe": {
-          "app": "thrasher"
+          "app": "thrasher",
+          "appGuid": "6d2035ff-92cc-4f2d-847c-ed06fce03ffe"
         },
         "ws": {
-          "app": "thrasher-web-ws"
+          "app": "thrasher-web-ws",
+          "appGuid": "cd002841-a40e-4cd7-9235-d2ca9af7273f"
         }
       }
     }

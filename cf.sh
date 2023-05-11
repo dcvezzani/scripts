@@ -17,6 +17,38 @@ cf login --sso -a api.pvu.cf.churchofjesuschrist.org -u dcvezzani
 }
 
 # =======================================
+function cfbrowse () {
+  if [ "$2" = "" ]; then
+    echo "Usage: cfbrowse cha test fe"
+    return
+  fi
+
+  local tier="$3"
+  local navToSpace="false"
+  if [ "$tier" = "" ]; then
+    local tier="fe"
+    local navToSpace="true"
+  fi
+  
+  local json=$(cftarget $1 $2 $tier 2>&1)
+
+  if [[ "$json" != "" ]]; then
+    if [[ $navToSpace == "true" ]]; then
+      local spaceUrl=$(echo "$json" | jq -r '{"spaceUrl": "https://ui.pvu.cf.churchofjesuschrist.org/"} * . | .spaceUrl')
+      echo "Opening '${spaceUrl}'..."
+      open $spaceUrl
+
+    else
+      local appUrl=$(echo "$json" | jq -r '{"appUrl": "https://ui.pvu.cf.churchofjesuschrist.org/"} * . | .appUrl')
+      echo "Opening '${appUrl}'..."
+      open $appUrl
+    fi
+  else
+    echo "Unable to open appUrl for '${json}'..."
+  fi
+}
+
+# =======================================
 function cfresolve () {
 target="$1"
 lane="$2"
@@ -33,15 +65,15 @@ local _app=""
 case "$target" in
 
   referrals | si | arp | cha | temples | memcache | thrasher | planning | di | roots | records)
-    _org=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.org')
-    _space=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.space')
-    _app=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.'"$tier"'.app')
-    _appAmId=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.'"$tier"'.applicationManagementId')
-    _url="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps?orgId=$(url_encode "$_org")&spaceId=${_space}"
-    # _appUrl="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps/${_appAmId}?orgId=$(url_encode "$_org")&spaceId=${_space}#appsection"
+    local _org=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.org')
+    local _space=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.space')
+    local _app=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.'"$tier"'.app')
+    local _appGuid=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.'"$tier"'.appGuid')
+    local _spaceUrl="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps?orgId=$(url_encode "$_org")&spaceId=${_space}"
+    # _appUrl="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps/${_appGuid}?orgId=$(url_encode "$_org")&spaceId=${_space}#appsection"
 
-    if [ ! "$_appAmId" = "null" ]; then
-    _appUrl="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps/${_appAmId}?$(url_encode "orgId=${_org}&spaceId=${_space}#appsection")"
+    if [ ! "$_appGuid" = "null" ]; then
+    local _appUrl="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps/${_appGuid}?$(url_encode "orgId=${_org}&spaceId=${_space}#appsection")"
     fi
     ;;
 
@@ -51,10 +83,10 @@ case "$target" in
     ;;
 esac
 
-payload=("\"org\":\"$_org\",\"space\":\"$_space\",\"target\":\"$_app\",\"url\":\"$_url\"")
-if [ ! "$_appAmId" = "null" ]; then
-  payload+=(\"appUrl\":\"$_appUrl\")
-fi
+local payload=("\"org\":\"$_org\",\"space\":\"$_space\",\"target\":\"$_app\",\"spaceUrl\":\"$_spaceUrl\",\"guid\":\"$_appGuid\",\"appUrl\":\"$_appUrl\"")
+# if [ ! "$_appGuid" = "null" ]; then
+#   payload+=(\"appUrl\":\"$_appUrl\")
+# fi
 
 echo "{$(IFS=,; printf '%s' "${payload[*]}")}"
 }
@@ -134,6 +166,12 @@ function cftarget () {
     return
   fi
 
+  # local appName=$(echo "$cfconfig" | jq -r '.target')
+  # local appGuid=$(cf app "$appName" --guid)
+  # echo $appGuid
+
+  # echo "$cfconfig" | jq '. * {"guid": "'"$appGuid"'"}' >&2
+  # echo "$cfconfig" | jq '.' >&2
   echo "$cfconfig"
 }
 

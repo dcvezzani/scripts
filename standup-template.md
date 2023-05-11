@@ -1,36 +1,54 @@
-## standup {date}
+# standup {date}
 
-### legend
-- ◐ yesterday
-- ◑ today
-- ● both
+## reports
 
-### reports
+### todd
+#### yesterday
 
-#### todd
-- ◐ 
-- ◐ 
-- ◐ 
+#### today
 
-#### adam
+### steve
+#### yesterday
 
-#### dave
+#### today
 
-#### jon
+### adam
+#### yesterday
 
-#### dj
+#### today
 
-#### nick
+### jon
+#### yesterday
 
-#### jim
+#### today
 
-### other
+### dave
+#### yesterday
 
-#### parking lot
+#### today
 
-#### road blockers
+### dj
+#### yesterday
 
-#### concerns
+#### today
 
-#### announcements
+### nick
+#### yesterday
+
+#### today
+
+### jim
+#### yesterday
+
+#### today
+
+## other
+
+### parking lot
+
+### road blockers
+
+### concerns
+
+### announcements
 
