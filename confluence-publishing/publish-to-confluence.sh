@@ -15,6 +15,7 @@ fi
 
 BASE_URL='https://confluence.churchofjesuschrist.org'
 PROTOCOL=$(echo "$BASE_URL" | perl -p -e 's/^(https?:).*/$1/')
+contributorHash='536c9265557235c73bf97eaca00bfc50'
 
 # Usage
 if [[ -z $filename ]]; then
@@ -105,26 +106,38 @@ curl 'https://confluence.churchofjesuschrist.org/pages/createpage.action?spaceKe
   -H 'sec-ch-ua: "Chromium";v="112", "Google Chrome";v="112", "Not:A-Brand";v="99"' \\
   -H 'sec-ch-ua-mobile: ?0' \\
   -H 'sec-ch-ua-platform: "macOS"' \\
-  --compressed | /Users/dcvezzani/scripts/confluence-publishing/parse-pre-create-document.js '${BASE_URL}' | jq -r '.contentId'
+  --compressed --output ~/scripts/confluence-publishing/data/pre-create.html
+
+sleep 1
+
+draftId=\$(cat ~/scripts/confluence-publishing/data/pre-create.html | grep 'ajs-draft-id' | perl -p -e 's/^.*content="([^"]+).*/\$1/')
+draftShareId=\$(cat ~/scripts/confluence-publishing/data/pre-create.html | grep 'ajs-draft-share-id' | perl -p -e 's/^.*content="([^"]+).*/\$1/')
+atlToken=\$(cat ~/scripts/confluence-publishing/data/pre-create.html | grep 'ajs-atl-token' | perl -p -e 's/^.*content="([^"]+).*/\$1/')
+
+cat << EOL2 >&2
+draftId=\$draftId
+draftShareId=\$draftShareId
+atlToken=\$atlToken
+EOL2
 EOL
 )
 
 if [[ $DEBUG == "true" || $DEBUG_TARGET == "pre-create" ]]; then
 echo "$CMD" 1>&2
 else
-eval "$CMD"
+eval "$CMD" >/dev/null 2>&1
 fi
 }
 
-getContentId() {
-local contentId=$(preCreateDocument)
+# getContentId() {
+# local contentId=$(preCreateDocument)
 
-cat << EOL >&2
-contentId: $contentId
-EOL
+# cat << EOL >&2
+# contentId: $contentId
+# EOL
   
-echo -n "$contentId"
-}
+# echo -n "$contentId"
+# }
 
 viewIndex() {
 local title="$1"
@@ -148,7 +161,7 @@ curl 'https://confluence.churchofjesuschrist.org/pages/viewpage.action?pageId=${
   -H 'Connection: keep-alive' \\
   -H 'Cookie: JSESSIONID=${JSESSIONID}' \\
   -H 'Pragma: no-cache' \\
-  -H 'Referer: https://confluence.churchofjesuschrist.org/display/PCP/Asdf' \\
+  -H 'Referer: https://confluence.churchofjesuschrist.org/display/${space}${referrerPath}' \\
   -H 'Sec-Fetch-Dest: document' \\
   -H 'Sec-Fetch-Mode: navigate' \\
   -H 'Sec-Fetch-Site: same-origin' \\
@@ -219,17 +232,83 @@ fi
 echo "$documentUrl"
 }
 
+serializeDocument() {
+local destFileName="$1"
+local title="$2"
+local filename="$3"
+local draftId=$4
+
+CMD=$(cat << EOL
+cat ~/scripts/confluence-publishing/data/create-data.template.txt | perl -p -e 's/\\$\\{title\\}/${title}/g; s/\\$\\{spaceKey\\}/${space}/g; s/\\$\\{draftId\\}/${draftId}/g; s/\\$\\{pageId\\}/${pageId}/g; s/\\$\\{content\\}/\\n__content__\\n/g; ' > $destFileName
+EOL
+)
+eval "$CMD"
+
+# now make a temp file 
+TMP_FILE=$(mktemp -q /tmp/bar.XXXXXX || exit 1)
+echo "Creating temp file: $TMP_FILE"
+
+cat "$filename" | perl -n -e 'print unless /^#+ *'"$title"'/' > "$TMP_FILE"
+perl -p -i -e 's/\n/<br \/>/g; s/\"/\\\"/g; s/^(<br \/>)+//g' "$TMP_FILE"
+
+sed -i '' '/__content__/r'"$TMP_FILE" "$destFileName"
+perl -n -i -e 'print unless /^__content__$/' "$destFileName"
+perl -p -i -e 's/\n//g; ' "$destFileName"
+
+# Set trap to clean up file
+# trap 'rm "$TMP_FILE"' EXIT
+if [[ -f $TMP_FILE ]]; then rm "$TMP_FILE"; fi
+}
+
+# space=PCP
+# filename="/Users/dcvezzani/Dropbox/journal/current/20230509-please-disable-any-of-these-tasks-for-th.md"
+# draftId=draft1234
+# draftShareId="draft-share-id"
+# serializeDocument ~/scripts/confluence-publishing/data/tmp.txt xxx "$filename" "draft1234"
+# DEBUG=true createDocument xxx  "$filename" "$draftId" "$draftShareId" 
+
 createDocument() {
 local title="$1"
-local body="$2"
-local contentId=$3
+local filename="$2"
+local draftId=$3
+local draftShareId="$4"
+
+local destFileName=$(mktemp -q /tmp/bar.XXXXXX || exit 1)
+
+# echo "Creating temp file: $destFileName"
+serializeDocument "$destFileName" "$title" "$filename" >/dev/null $draftId 2>&1
 
 # Copied over from inspector, copy curl
 # - double escaped double quotes for values inside JSON object "value" property (two layers down)
 # - removed '$' in front of value for --data-raw
 # - only JSESSIONID is needed in Cookie header
-local CMD=$(cat << EOL
-curl 'https://confluence.churchofjesuschrist.org/rest/api/content?status=draft' \\
+# local CMD=$(cat << EOL
+# curl 'https://confluence.churchofjesuschrist.org/rest/api/content?status=draft' \\
+#   -H 'Accept: application/json, text/javascript, */*; q=0.01' \\
+#   -H 'Accept-Language: en-US,en;q=0.9,pt;q=0.8,es;q=0.7' \\
+#   -H 'Cache-Control: no-cache' \\
+#   -H 'Connection: keep-alive' \\
+#   -H 'Content-Type: application/json; charset=UTF-8' \\
+#   -H 'Cookie: JSESSIONID=${JSESSIONID}' \\
+#   -H 'Origin: https://confluence.churchofjesuschrist.org' \\
+#   -H 'Pragma: no-cache' \\
+#   -H 'Referer: https://confluence.churchofjesuschrist.org/pages/createpage.action?spaceKey=${space}&fromPageId=${pageId}' \\
+#   -H 'Sec-Fetch-Dest: empty' \\
+#   -H 'Sec-Fetch-Mode: cors' \\
+#   -H 'Sec-Fetch-Site: same-origin' \\
+#   -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36' \\
+#   -H 'X-Requested-With: XMLHttpRequest' \\
+#   -H 'sec-ch-ua: "Chromium";v="112", "Google Chrome";v="112", "Not:A-Brand";v="99"' \\
+#   -H 'sec-ch-ua-mobile: ?0' \\
+#   -H 'sec-ch-ua-platform: "macOS"' \\
+#   --data-raw '{"status":"current","title":"${title}","space":{"key":"${space}"},"body":{"editor":{"value":"<table class=\\\\"wysiwyg-macro\\\\" style=\\\\"background-image: url(\\'https://confluence.churchofjesuschrist.org/plugins/servlet/confluence/placeholder/macro-heading?definition=e21hcmtkb3dufQ&amp;locale=en_US&amp;version=2\\'); background-repeat: no-repeat;\\\\" data-macro-name=\\\\"markdown\\\\" data-macro-schema-version=\\\\"1\\\\" data-macro-body-type=\\\\"PLAIN_TEXT\\\\" data-mce-resize=\\\\"false\\\\"><tbody><tr><td class=\\\\"wysiwyg-macro-body\\\\"><pre>${body}</pre></td></tr></tbody></table>","representation":"editor","content":{"id":"${contentId}"}}},"id":"${contentId}","type":"page","ancestors":[{"id":"${pageId}","type":"page"}]}' \\
+#   --compressed
+# EOL
+# )
+
+CMD=$(cat << EOL
+curl 'https://confluence.churchofjesuschrist.org/rest/api/content/${draftId}?status=draft' \\
+  -X 'PUT' \\
   -H 'Accept: application/json, text/javascript, */*; q=0.01' \\
   -H 'Accept-Language: en-US,en;q=0.9,pt;q=0.8,es;q=0.7' \\
   -H 'Cache-Control: no-cache' \\
@@ -238,99 +317,147 @@ curl 'https://confluence.churchofjesuschrist.org/rest/api/content?status=draft' 
   -H 'Cookie: JSESSIONID=${JSESSIONID}' \\
   -H 'Origin: https://confluence.churchofjesuschrist.org' \\
   -H 'Pragma: no-cache' \\
-  -H 'Referer: https://confluence.churchofjesuschrist.org/pages/createpage.action?spaceKey=${space}&fromPageId=${pageId}' \\
+  -H 'Referer: https://confluence.churchofjesuschrist.org/pages/resumedraft.action?draftId=${draftId}&draftShareId=${draftShareId}&' \\
   -H 'Sec-Fetch-Dest: empty' \\
   -H 'Sec-Fetch-Mode: cors' \\
   -H 'Sec-Fetch-Site: same-origin' \\
-  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36' \\
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36' \\
   -H 'X-Requested-With: XMLHttpRequest' \\
-  -H 'sec-ch-ua: "Chromium";v="112", "Google Chrome";v="112", "Not:A-Brand";v="99"' \\
+  -H 'sec-ch-ua: "Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"' \\
   -H 'sec-ch-ua-mobile: ?0' \\
   -H 'sec-ch-ua-platform: "macOS"' \\
-  --data-raw '{"status":"current","title":"${title}","space":{"key":"${space}"},"body":{"editor":{"value":"<table class=\\\\"wysiwyg-macro\\\\" style=\\\\"background-image: url(\\'https://confluence.churchofjesuschrist.org/plugins/servlet/confluence/placeholder/macro-heading?definition=e21hcmtkb3dufQ&amp;locale=en_US&amp;version=2\\'); background-repeat: no-repeat;\\\\" data-macro-name=\\\\"markdown\\\\" data-macro-schema-version=\\\\"1\\\\" data-macro-body-type=\\\\"PLAIN_TEXT\\\\" data-mce-resize=\\\\"false\\\\"><tbody><tr><td class=\\\\"wysiwyg-macro-body\\\\"><pre>${body}</pre></td></tr></tbody></table>","representation":"editor","content":{"id":"${contentId}"}}},"id":"${contentId}","type":"page","ancestors":[{"id":"${pageId}","type":"page"}]}' \\
-  --compressed
+  --data-binary "@$destFileName" \\
+  --compressed  
 EOL
 )
 
+sleep 1
+
 # Include '$' before '...'; it causes escape sequences to be interpreted
 # Also including escaped apostrophe and double quotes now that HEREDOC command has been compiled
-CMD=$(echo "$CMD" | perl -p -e 's/--data-raw /--data-raw \$/; s/__dbl_quotes__/\\\\\"/g; s/__single_quote__/\\'"'"'/g; s/__escaped_seq__/\\\\\\\\/g;')
+# CMD=$(echo "$CMD" | perl -p -e 's/--data-raw /--data-raw \$/; s/__dbl_quotes__/\\\\\"/g; s/__single_quote__/\\'"'"'/g; s/__escaped_seq__/\\\\\\\\/g;')
 
 if [[ $DEBUG == "true" || $DEBUG_TARGET == "create" ]]; then
 echo "$CMD" 1>&2
 else
 eval "$CMD"
 fi
+
+local silentRun=$(cat << EOL
+cp "$destFileName" ~/scripts/confluence-publishing/data/create-data.txt
+if [[ -f $destFileName ]]; then rm "$destFileName"; fi
+EOL
+)
+eval "$silentRun"
 }
 
-prepareBody() {
-local body="$1"
+# prepareBody() {
+# local body="$1"
 
-# Get body of standup notes
-declare -a processedLines=()
-local i=0
-local inblock=false
-local titleFound=false
+# # Get body of standup notes
+# declare -a processedLines=()
+# local i=0
+# local inblock=false
+# local titleFound=false
 
-# reading file in row mode, insert each line into array
-while IFS= read -r line; do
-  local chk=$(echo "$line" | grep -E '^```')
+# # reading file in row mode, insert each line into array
+# while IFS= read -r line; do
+#   local chk=$(echo "$line" | grep -E '^```')
 
-  if [[ $? == 0 ]]; then
-    if [[ $inblock == "true" ]]; then inblock=false; else inblock=true; fi
-  fi
+#   if [[ $? == 0 ]]; then
+#     if [[ $inblock == "true" ]]; then inblock=false; else inblock=true; fi
+#   fi
 
-  if [[ $inblock == "true" ]]; then
-    local line=$(echo "$line" | perl -p -e 's/</&lt;/g')
-  fi
+#   if [[ $inblock == "true" ]]; then
+#     local line=$(echo "$line" | perl -p -e 's/</&lt;/g')
+#   fi
 
-  if [[ $titleFound == "false" ]]; then
-    local chk=$(echo $line | grep -E '^#+ ')
-    if [[ $? == 0 ]]; then
-      printf '%s' 'T' 1>&2
-      local titleFound=true
-    else
-      printf '%s' '-' 1>&2
-    fi
-  else
-      printf '%s' '.' 1>&2
-    processedLines[i]=$line
-  fi
+#   if [[ $titleFound == "false" ]]; then
+#     local chk=$(echo $line | grep -E '^#+ ')
+#     if [[ $? == 0 ]]; then
+#       printf '%s' 'T' 1>&2
+#       local titleFound=true
+#     else
+#       printf '%s' '-' 1>&2
+#     fi
+#   else
+#       printf '%s' '.' 1>&2
+#     processedLines[i]=$line
+#   fi
   
-  let "i++"
+#   let "i++"
 
-done < "$filename"
-echo 1>&2
+# done < "$filename"
+# echo 1>&2
 
-# return body
-printf '%s\n' "${processedLines[@]}" | perl -p -e 's/\"/__dbl_quotes__/g; s/'"'"'/__single_quote__/g; s/(\\)([nstbdwWD])/__escaped_seq__$2/g; s/^[\r\n]+// if 1 .. 1; s/\n/<br \/>/g'
-}
+# # return body
+# printf '%s\n' "${processedLines[@]}" | perl -p -e 's/\"/__dbl_quotes__/g; s/'"'"'/__single_quote__/g; s/(\\)([nstbdwWD])/__escaped_seq__$2/g; s/^[\r\n]+// if 1 .. 1; s/\n/<br \/>/g'
+# }
 
 publishDocument() {
 local title="$1"
-local body=$(prepareBody "$2")
-local contentId=$(getContentId)
+local filename="$2"
+# local body=$(prepareBody "$2")
+# local contentId=$(getContentId)
+preCreateDocument
 
-createDocument "$title" "$body" $contentId
+local draftId=$(cat ~/scripts/confluence-publishing/data/pre-create.html | grep 'ajs-draft-id' | perl -p -e 's/^.*content="([^"]+).*/$1/')
+local draftShareId=$(cat ~/scripts/confluence-publishing/data/pre-create.html | grep 'ajs-draft-share-id' | perl -p -e 's/^.*content="([^"]+).*/$1/')
+local atlToken=$(cat ~/scripts/confluence-publishing/data/pre-create.html | grep 'ajs-atl-token' | perl -p -e 's/^.*content="([^"]+).*/$1/')
+
+if [[ ! -z $DEBUG ]]; then
+cat << EOL >&2
+title=$title
+filename=$filename
+draftId=$draftId
+draftShareId=$draftShareId
+atlToken=$atlToken
+EOL
+fi
+
+createDocument "$title" "$filename" $draftId "$draftShareId"
 }
 
+# space=PCP
+# filename="/Users/dcvezzani/Dropbox/journal/current/20230509-please-disable-any-of-these-tasks-for-th.md"
+# draftId=draft1234
+# draftShareId="draft-share-id"
+
+# filename=index
+# filename=2023-05-01
+# filename=2394823948
+# filename="https://confluence.churchofjesuschrist.org/pages/some-page"
+# filename=''
+# filename=/Users/dcvezzani/Dropbox/journal/current/20230509-please-disable-any-of-these-tasks-for-th.md
+
+# BASE_URL='https://confluence.churchofjesuschrist.org'
+# PROTOCOL=$(echo "$BASE_URL" | perl -p -e 's/^(https?:).*/$1/')
+# DEBUG_TARGET=index
+
+# (
+# cat << EOL
+# filenameIsUrl=$filenameIsUrl
+# filename=$filename
+# title=$title
+# EOL
+# }
+# process
+# )
 process() {
 if [[ $filename == "index" ]]; then
   viewIndex
   exit 1
 fi
-
-
   
 # Check to see if provided filename is a url, relative or full
-if [[ $filename =~ ^https?:\/\/|^\/\/ ]]; then
+if [[ $filename =~ ^https?:\/\/\|^\/\/ ]]; then
   filenameIsUrl=true
   if [[ $filename =~ ^\/\/ ]]; then
     filename="${PROTOCOL}${filename}"
   fi
 
 # Check to see if provided filename is a number
-elif [[ $filename =~ ^\d+$ ]]; then
+elif [[ $filename =~ ^[0-9]+$ ]]; then
   filenameIsUrl=true
   filename="${BASE_URL}/pages/viewpage.action?pageId=${filename}"
 
@@ -346,7 +473,7 @@ Unable to publish since file does not exist: "$filename"
 EOL
   exit 1
 fi
-  
+
 # Extract title from document
 # - looks for first line that begins with '#'
 local title=$(cat "$filename" | perl -ne 'print if /^#+ / && ++$count == 1' | perl -p -e 's/^#+ *//; s/^/ /; s/\s(\w+)/ \u$1/g; s/^ //')
@@ -373,7 +500,7 @@ fi
 # If file does not exist, create it
 # - else open the file in browser for editing
 if [[ $documentUrl == 'null' ]]; then
-  publishedUrl=$(publishDocument "$title" "$body" | ~/scripts/confluence-publishing/get-url.sh | jq -r '.url')
+  publishedUrl=$(publishDocument "$title" "$filename" | ~/scripts/confluence-publishing/get-url.sh | jq -r '.url')
   echo "${publishedUrl} - Document has published for $page, '$title'" >&2
 else
   editingUrl=$(editDocument "$title")
@@ -383,6 +510,11 @@ fi
 }
 
 process
+# publishDocument "dcv test" /Users/dcvezzani/Dropbox/journal/current/20230511-dcv-test.md
+# /Users/dcvezzani/scripts/confluence-publishing
+# /Users/dcvezzani/scripts/confluence-publishing/publish-to-confluence.sh dev /Users/dcvezzani/Dropbox/journal/current/20230511-dcv-test.md
+
+
 # viewIndex 'Standup 2023-04-26 (Wed)'
 
 # Archive

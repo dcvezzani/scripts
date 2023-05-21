@@ -28,8 +28,11 @@ function! PublishToConfluence(...)
   " Clean up output so that only the url remains
   " - should be the last line
   let lines = split(@z, '\n')
-  echo lines[len(lines)-1]
-  " call setline('.', lines)
+  let lastLine = trim(lines[len(lines)-1])
+  echo lastLine
+  call cursor(1, 0)
+  call append(line(0), [ '<div style="display: none; ">', lastLine, '</div>', '' ] )
+  
 endfunction
 
 function! OpenInConfluence(pageType)
