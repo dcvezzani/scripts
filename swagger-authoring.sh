@@ -4,13 +4,6 @@ cat << EOL
                   "$1": {
                     "value": {
                       "permissions": [
-                        "edup.perm.Administrator",
-                        "edup.perm.CalledPersonnel",
-                        "edup.perm.EmployeeTeachers",
-                        "edup.perm.Parent",
-                        "edup.perm.PriesthoodLeader",
-                        "edup.perm.Public",
-                        "edup.perm.Student"
                       ]
                     }
                   }
@@ -48,7 +41,7 @@ EOL
 }
 
 ### ================
-schemaArray() {
+schemaStringArray() {
 cat << EOL
               "$1": {
                 "type": "array",
@@ -63,6 +56,34 @@ cat << EOL
               }
 EOL
 }
+
+### ================
+schemaObjectArray() {
+local children=$(cat < /dev/stdin)
+# local children=$(
+# while read -t 1 line; do
+#     echo "$line"
+# done
+# )
+
+cat << EOL
+      "$1": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+  $children
+          }
+        },
+        "example": [
+          {},
+          {},
+          {}
+        ]
+      }
+EOL
+}
+
 
 ### ================
 schemaCurlyBraces() {
@@ -222,7 +243,7 @@ fi
 cat << EOL
       "$method": {
         "tags": $tags,
-        "description": "Description of /$1",
+        "description": "Description of $1",
         "parameters": [
 $(parameterRef 'lang'),
 $(parameterRef 'context'),
@@ -240,12 +261,17 @@ pathName="$1"
 shift
 
 cat << EOL
-    "/$pathName": {
+    "$pathName": {
 $(
-while [[ $1 != '' ]]; do
-routeMethodBlock $pathName $1
-shift
-done
+if [[ $1 == '' ]]; then
+  routeMethodBlock $pathName get
+else
+  while [[ $1 != '' ]]; do
+  routeMethodBlock $pathName $1
+  echo "$1"
+  shift
+  done
+fi
 )    
     }
 EOL

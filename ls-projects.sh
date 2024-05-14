@@ -22,9 +22,14 @@ EOL
 return
 fi
 
-local list=$(find -L ~/projects -type d -maxdepth 1 \( -name "*-fe" -o -name "*-cms" -o -name "*-ws" -o -name "latter-day-saint-charities" \) ! -name '*-web-ws' ! -name 'oauth*' ! -name 'ch-records*' ! -name 'church-history-adviser-fe' ! -name 'di-fe';
-find -L ~/projects/@churchofjesuschrist -type d -maxdepth 1 \( -name "idm-oauth" -o -name "team-one-config" -o -name "team-one-logging" \)
-) 
+if [[ $CORE == 'true' ]]; then
+  local list=$(find -L ~/projects -type d -maxdepth 1 \( -name "*-fe" -o -name "*-cms" -o -name "*-ws" \) ! -name '*-web-ws' ! -name 'oauth*' ! -name 'ch-records*' ! -name 'church-history-adviser-fe' ! -name 'di-fe' ! -name 'family-history*' ! -name 'prayer-scheduler-fe' ! -name 'pth-*' ! -name 'refugees*' ! -name 'rootstech*' ! -name 'family*' ! -name 'self-service*' ! -name 'team-standup*' ;
+  ) 
+else
+  local list=$(find -L ~/projects -type d -maxdepth 1 \( -name "*-fe" -o -name "*-cms" -o -name "*-ws" -o -name "latter-day-saint-charities" \) ! -name '*-web-ws' ! -name 'oauth*' ! -name 'ch-records*' ! -name 'church-history-adviser-fe' ! -name 'di-fe';
+  find -L ~/projects/@churchofjesuschrist -type d -maxdepth 1 \( -name "idm-oauth" -o -name "team-one-config" -o -name "team-one-logging" \)
+  ) 
+fi
 
 if [ ! "$filter" = "" ]; then
   local _filter="$filter"

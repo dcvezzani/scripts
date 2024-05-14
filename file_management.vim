@@ -82,7 +82,7 @@ function! SaveIt()
         exec 'w '"${JOURNAL_DIR}/current"'/note_'.localtime().'.'.file_extension
       endif
 
-      call PrintBuffers()
+      call PrintBuffers('false')
     
     " if file already has a name, just save it
     " else

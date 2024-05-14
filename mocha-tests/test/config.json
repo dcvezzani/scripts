@@ -1,0 +1,10 @@
+{
+  "monitor": true,
+  "local": {
+    "FE_BASE_URL": "https://thrasher-local.churchofjesuschrist.org",
+    "WS_BASE_URL": "https://thrasher-local.churchofjesuschrist.org",
+    "xWS_BASE_URL": "https://thrasher-web-ws-test.pvu.cf.churchofjesuschrist.org",
+    "xCMS_BASE_URL": "https://content-local.churchofjesuschrist.org/thrasher"
+  }
+}
+

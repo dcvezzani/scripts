@@ -17,6 +17,7 @@ const reduce = (line) => {
 let config = {}
 const filename = `${BASE_PATH}/.confluence.json`
 let jsessionid = null
+let mrhsession = null
 
 input.on('data', data => {
   if (Object.keys(config).length === 0) {
@@ -27,7 +28,9 @@ input.on('data', data => {
       process.exit(1)
     }
 
-    if (!jsessionid) jsessionid = data
+    const userInput = JSON.parse(data)
+    if (!jsessionid) jsessionid = userInput?.jsessionid
+    if (!mrhsession) mrhsession = userInput?.mrhsession
 
     // reduce(line)
   }
@@ -36,6 +39,8 @@ input.on('data', data => {
 input.on('end', () => {
   try {
     config.JSESSIONID = jsessionid
+    config.MRHSession = mrhsession
+
     require('fs').writeFileSync(filename, JSON.stringify(config, null, 2))
     console.log(JSON.stringify(config))
   } catch(err) {

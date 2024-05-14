@@ -114,14 +114,14 @@ projectsPath='/Users/dcvezzani/projects'
 file='thrasher-fe'
 results=$(
 IFS=' ' && for file in $(cat /Users/dcvezzani/projects/github-projects.txt | grep -v '^-' | xargs); do
-  IFS=$'\n' entries=($(git -C "$projectsPath/$file" --no-pager reflog --author="${author}" --format='%h: %s' --since="${targetDate} 00:00:00" --until="${nextDate} 00:00:00" | uniq))
+  IFS=$'\n' entries=($(git -C "$projectsPath/$file" --no-pager reflog --author="${author}" --format='%ci; %h; %s' --since="${targetDate} 00:00:00" --until="${nextDate} 00:00:00" | sort -u))
 
   unset hashTracker
   declare -A hashTracker
   for entry in "${entries[@]}"
   do
-    hashForEntry=$(echo "$entry" | perl -pe 's/\"/\\\"/g; s/^([^:]+): *(.*)/\{"project":"'"$file"'","description":"$2"\}/' | shasum | perl -pe 's/ +-$//')
-    json=$(echo "$entry" | perl -pe 's/\"/\\\"/g; s/^([^:]+): *(.*)/\{\\"project\\":\\"'"$file"'\\",\\"commit\\":\\"$1\\",\\"description\\":\\"$2\\",\\"hash\\":\\"'"$hashForEntry"'\\"\}/')
+    hashForEntry=$(echo "$entry" | perl -pe 's/\"/\\\"/g; s/^([^;]+); ([^;]+); *(.*)/\{"project":"'"$file"'","description":"$3"\}/' | shasum | perl -pe 's/ +-$//')
+    json=$(echo "$entry" | perl -pe 's/\"/\\\"/g; s/^([^;]+); ([^;]+); *(.*)/\{\\"project\\":\\"'"$file"'\\",\\"timestamp\\":\\"$1\\",\\"commit\\":\\"$2\\",\\"description\\":\\"$3\\",\\"hash\\":\\"'"$hashForEntry"'\\"\}/')
 
     CMD=$(cat << EOL
 if [[ ! "\${hashTracker[$hashForEntry]}" ]]; then
@@ -140,8 +140,9 @@ EOL
     project=$(get_path "$entry" '.project')
     description=$(get_path "$entry" '.description')
     commit=$(get_path "$entry" '.commit')
+    timestamp=$(get_path "$entry" '.timestamp')
     cat << EOL
-- [$project] ${commit}: $description
+- [$project] ${commit}: $timestamp: $description
 EOL
   printf "." >&2
   done

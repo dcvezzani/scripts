@@ -39,4 +39,6 @@ input.on('error', e => {
 
 
 
-
+/*
+cat /Users/dcvezzani/scripts/confluence-publishing/data/index.html | /Users/dcvezzani/scripts/confluence-publishing/parse-view-index.js 'https://confluence.churchofjesuschrist.org' 'Standup 2023-05-30 (Tue)'
+ * */

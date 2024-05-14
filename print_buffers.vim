@@ -9,6 +9,8 @@ function! PrintBuffers(copyToClipBoard)
   let dts=substitute(system('date +\%F-\%a | perl -ne "print lc"'), '\n\+$', '', 'g')
   let fname=$JOURNAL_DIR.'/current/fbuf-' . dts . '.md'
   silent execute '!touch ' . fname
+
+  let newLine = @z[0:0]
   
   execute 'redir >> ' . fname
     let blk = substitute(''.@z, '^\n\+', '', 'g')
@@ -16,7 +18,8 @@ function! PrintBuffers(copyToClipBoard)
   redir END
 
   if(a:copyToClipBoard == 'true')
-    let @* = blk
+    "let @* = blk
+    let @* = '```'.newLine.blk.'```'.newLine.newLine
   endif
 endfunction
 

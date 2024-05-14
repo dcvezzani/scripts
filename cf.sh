@@ -49,6 +49,12 @@ function cfbrowse () {
 }
 
 # =======================================
+function appGuid () {
+local _app="$1"
+cf app $_app --guid
+}
+
+# =======================================
 function cfresolve () {
 target="$1"
 lane="$2"
@@ -72,6 +78,14 @@ case "$target" in
     local _spaceUrl="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps?orgId=$(url_encode "$_org")&spaceId=${_space}"
     # _appUrl="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps/${_appGuid}?orgId=$(url_encode "$_org")&spaceId=${_space}#appsection"
 
+    # local getAppGuid=$(appGuid "$_app")
+    # local changeDetected="false"
+    # echo "$_appGuid"
+    # if [[ "$getAppGuid" != "$_appGuid" ]]; then
+    #   local _appGuid="$getAppGuid"
+    #   local changeDetected="true"
+    # fi
+
     if [ ! "$_appGuid" = "null" ]; then
     local _appUrl="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps/${_appGuid}?$(url_encode "orgId=${_org}&spaceId=${_space}#appsection")"
     fi
@@ -83,7 +97,7 @@ case "$target" in
     ;;
 esac
 
-local payload=("\"org\":\"$_org\",\"space\":\"$_space\",\"target\":\"$_app\",\"spaceUrl\":\"$_spaceUrl\",\"guid\":\"$_appGuid\",\"appUrl\":\"$_appUrl\"")
+local payload=("\"org\":\"$_org\",\"space\":\"$_space\",\"target\":\"$_app\",\"spaceUrl\":\"$_spaceUrl\",\"guid\":\"$_appGuid\",\"appUrl\":\"$_appUrl\",\"changeDetected\":\"$changeDetected\"")
 # if [ ! "$_appGuid" = "null" ]; then
 #   payload+=(\"appUrl\":\"$_appUrl\")
 # fi

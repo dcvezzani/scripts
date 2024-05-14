@@ -4,6 +4,7 @@
 # treat the file content as Markdown when publishing to Confluence.
 
 JSESSIONID="$JSESSIONID"
+MRHSession="$MRHSession"
 page="$1"
 filename="$2"
 
@@ -20,11 +21,14 @@ contributorHash='536c9265557235c73bf97eaca00bfc50'
 # Usage
 if [[ -z $filename ]]; then
 cat << EOL
-Usage ~/scripts/confluence-publishing/publish-to-confluence.sh <page> <filename>
+Usage 
+JSESSIONID=<jsessionid> MRHSession=<mrhsession> ~/scripts/confluence-publishing/publish-to-confluence.sh <page> <filename>
+~/scripts/confluence-publishing/publish-to-confluence.sh <page> <filename>
 
 E.g., 
-~/scripts/confluence-publishing/publish-to-confluence.sh developers-blog asdf.md
-~/scripts/confluence-publishing/publish-to-confluence.sh standup asdf.md
+JSESSIONID=927B43173D67A995B151A55AB06326A8 MRHSession=b0006a351b7df6f219cbf122c055bc73 ~/scripts/confluence-publishing/publish-to-confluence.sh developers-blog asdf.md
+JSESSIONID=927B43173D67A995B151A55AB06326A8 MRHSession=b0006a351b7df6f219cbf122c055bc73 ~/scripts/confluence-publishing/publish-to-confluence.sh standup asdf.md
+VIEW_ONLY=true ~/scripts/confluence-publishing/publish-to-confluence.sh stand 157944661
 EOL
 fi
 
@@ -32,10 +36,16 @@ if [[ -z $JSESSIONID ]]; then
   JSESSIONID=$(cat ~/.confluence.json | jq -r '.JSESSIONID')
 fi
 
+if [[ -z $MRHSession ]]; then
+  MRHSession=$(cat ~/.confluence.json | jq -r '.MRHSession')
+fi
+
 # Missing JSESSIONID
-if [[ -z $JSESSIONID ]]; then
+if ( [[ -z $JSESSIONID ]] || [[ -z $MRHSession ]] ); then
 cat << EOL
-Unable to find value for JSESSIONID.  
+Unable to find value for JSESSIONID or MRHSession.  
+
+${Cookie};
 
 Make sure you have created ~/.confluence.json and provide the necessary values:
 
@@ -47,7 +57,8 @@ Make sure you have created ~/.confluence.json and provide the necessary values:
   "developers-blog": {
     "pageId": "35653536"
   },
-  "JSESSIONID": ""
+  "JSESSIONID": "xxx",
+  "MRHSession": "xxx"
 }
 
 Try updating config:
@@ -63,27 +74,18 @@ pageId=$(cat ~/.confluence.json | jq -r '.["'"$page"'"].pageId')
 # These values should always be the same for Team One standup documents
 referrerPath="/Developers+Blog"
 
-# Verify a JESSIONID was provided
-if [[ -z $JSESSIONID ]]; then
+Cookie="JSESSIONID=${JSESSIONID}; MRHSession=${MRHSession}"
+
 cat << EOL
-Usage: ~/scripts/confluence-publishing/publish-standup-notes.sh <jsessionid> [<yyyy-mm-dd>]
-aka:   publish-standup <jsessionid> [<yyyy-mm-dd>]
-
-Note: get JSESSIONID Session cookie from browser after signing in and provide
-  as argument
-
-E.g., 
-~/scripts/confluence-publishing/publish-standup.sh 8AB227BF6E3993AC033BECB62452B864
-~/scripts/confluence-publishing/publish-standup.sh 8AB227BF6E3993AC033BECB62452B864 2023-04-18
+JSESSIONID: $JSESSIONID
+MRHSession: $MRHSession
+Cookie: $Cookie
+space: $space
+pageId: $pageId
+referrerPath: $referrerPath
 EOL
-  exit 1
 
-fi
-
-# If a target date isn't provided, use the current date
-if [[ -z $input_target_date ]]; then
-  input_target_date=$(date '+%Y-%m-%d')
-fi
+# exit 1
 
 preCreateDocument() {
 # Get content id representing document that will be authored
@@ -94,7 +96,7 @@ curl 'https://confluence.churchofjesuschrist.org/pages/createpage.action?spaceKe
   -H 'Accept-Language: en-US,en;q=0.9,pt;q=0.8,es;q=0.7' \\
   -H 'Cache-Control: no-cache' \\
   -H 'Connection: keep-alive' \\
-  -H 'Cookie: JSESSIONID=${JSESSIONID}' \\
+  -H 'Cookie: ${Cookie}' \\
   -H 'Pragma: no-cache' \\
   -H 'Referer: https://confluence.churchofjesuschrist.org/display/${space}${referrerPath}' \\
   -H 'Sec-Fetch-Dest: document' \\
@@ -122,8 +124,9 @@ EOL2
 EOL
 )
 
-if [[ $DEBUG == "true" || $DEBUG_TARGET == "pre-create" ]]; then
+if [[ $DEBUG_TARGET == "pre-create" ]]; then
 echo "$CMD" 1>&2
+exit 1
 else
 eval "$CMD" >/dev/null 2>&1
 fi
@@ -159,7 +162,7 @@ curl 'https://confluence.churchofjesuschrist.org/pages/viewpage.action?pageId=${
   -H 'Accept-Language: en-US,en;q=0.9,pt;q=0.8,es;q=0.7' \\
   -H 'Cache-Control: no-cache' \\
   -H 'Connection: keep-alive' \\
-  -H 'Cookie: JSESSIONID=${JSESSIONID}' \\
+  -H 'Cookie: ${Cookie}' \\
   -H 'Pragma: no-cache' \\
   -H 'Referer: https://confluence.churchofjesuschrist.org/display/${space}${referrerPath}' \\
   -H 'Sec-Fetch-Dest: document' \\
@@ -175,8 +178,9 @@ ${lastLine}
 EOL
 )
 
-if [[ $DEBUG == "true" || $DEBUG_TARGET == "index" ]]; then
+if [[ $DEBUG_TARGET == "index" ]]; then
 echo "$CMD" 1>&2
+exit 1
 else
 eval "$CMD"
 fi
@@ -197,7 +201,7 @@ curl '${documentUrl}' \\
   -H 'Accept-Language: en-US,en;q=0.9,pt;q=0.8,es;q=0.7' \\
   -H 'Cache-Control: no-cache' \\
   -H 'Connection: keep-alive' \\
-  -H 'Cookie: JSESSIONID=${JSESSIONID}' \\
+  -H 'Cookie: ${Cookie}' \\
   -H 'Pragma: no-cache' \\
   -H 'Referer: https://confluence.churchofjesuschrist.org/pages/viewpage.action?pageId=${pageId}' \\
   -H 'Sec-Fetch-Dest: document' \\
@@ -213,8 +217,9 @@ curl '${documentUrl}' \\
 EOL
 )
 
-if [[ $DEBUG == "true" || $DEBUG_TARGET == "edit" ]]; then
+if [[ $DEBUG_TARGET == "edit" ]]; then
 echo "$CMD" 1>&2
+exit 1
 else
 eval "$CMD"
 fi
@@ -253,7 +258,10 @@ perl -p -i -e 's/\n/<br \/>/g; s/\"/\\\"/g; s/^(<br \/>)+//g' "$TMP_FILE"
 
 sed -i '' '/__content__/r'"$TMP_FILE" "$destFileName"
 perl -n -i -e 'print unless /^__content__$/' "$destFileName"
-perl -p -i -e 's/\n//g; ' "$destFileName"
+# remove new lines; remove unescaped backslashes
+# - <br/> replace \n
+# - curl uses backslash to treat the next line as a continuation of the current
+perl -p -i -e 's/\n//g; s/\\<br/\\\\<br/g; ' "$destFileName"
 
 # Set trap to clean up file
 # trap 'rm "$TMP_FILE"' EXIT
@@ -314,7 +322,7 @@ curl 'https://confluence.churchofjesuschrist.org/rest/api/content/${draftId}?sta
   -H 'Cache-Control: no-cache' \\
   -H 'Connection: keep-alive' \\
   -H 'Content-Type: application/json; charset=UTF-8' \\
-  -H 'Cookie: JSESSIONID=${JSESSIONID}' \\
+  -H 'Cookie: ${Cookie}' \\
   -H 'Origin: https://confluence.churchofjesuschrist.org' \\
   -H 'Pragma: no-cache' \\
   -H 'Referer: https://confluence.churchofjesuschrist.org/pages/resumedraft.action?draftId=${draftId}&draftShareId=${draftShareId}&' \\
@@ -339,6 +347,7 @@ sleep 1
 
 if [[ $DEBUG == "true" || $DEBUG_TARGET == "create" ]]; then
 echo "$CMD" 1>&2
+exit 1
 else
 eval "$CMD"
 fi
@@ -479,6 +488,7 @@ fi
 local title=$(cat "$filename" | perl -ne 'print if /^#+ / && ++$count == 1' | perl -p -e 's/^#+ *//; s/^/ /; s/\s(\w+)/ \u$1/g; s/^ //')
 
 if [[ $VIEW_ONLY == "true" ]]; then
+  echo ">>>xxx"
   viewDocument "$title" | xargs open 
   exit 1
 fi

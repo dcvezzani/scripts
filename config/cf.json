@@ -147,7 +147,7 @@
         "space": "seminary-and-institute-stage",
         "fe": {
           "app": "si-stage",
-          "appGuid": "097b7fc8-b540-4de2-9eb9-135087f2a000"
+          "appGuid": "ab0f7406-f8cf-4ce7-a8e0-ec2f212c5a21"
         },
         "ws": {
           "app": "si-api-stage",
@@ -301,7 +301,7 @@
         "space": "test",
         "fe": {
           "app": "temples-fe-test",
-          "appGuid": "8f1de267-72c3-4b62-bbb7-09117310b600"
+          "appGuid": "5a417c9d-37f7-4c97-a49c-5fa67cf4d57e"
         },
         "ws": {
           "app": "temples-blt-test",
@@ -316,7 +316,7 @@
         },
         "ws": {
           "app": "temples-blt-stage",
-          "appGuid": "898efad0-a61c-4407-a281-3aeb09c5de6e"
+          "appGuid": "cb5add82-22d8-48d3-b31f-8845cc6a97dd"
         }
       },
       "prod": {

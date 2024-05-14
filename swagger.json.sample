@@ -1,0 +1,211 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "{Application Name} FE API",
+    "description": "Front end endpoints for {Application Name}",
+    "termsOfService": "http://swagger.io/terms/",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://{Application Name Lowercase}-local.churchofjesuschrist.org",
+      "description": "Published context"
+    },
+    {
+      "url": "https://{Application Name Lowercase}-preview-local.churchofjesuschrist.org/",
+      "description": "Preview context"
+    },
+    {
+      "url": "https://{Application Name Lowercase}-test.churchofjesuschrist.org/",
+      "description": "Published context"
+    },
+    {
+      "url": "https://{Application Name Lowercase}-preview-test.churchofjesuschrist.org/",
+      "description": "Preview context"
+    },
+    {
+      "url": "https://{Application Name Lowercase}-stage.churchofjesuschrist.org/",
+      "description": "Published context"
+    },
+    {
+      "url": "https://{Application Name Lowercase}-preview-stage.churchofjesuschrist.org/",
+      "description": "Preview context"
+    },
+    {
+      "url": "https://{Application Name Lowercase}.churchofjesuschrist.org/",
+      "description": "Published context"
+    },
+    {
+      "url": "https://{Application Name Lowercase}-preview.churchofjesuschrist.org/",
+      "description": "Preview context"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Rendering",
+      "description": "Endpoints that handle end user requests to render a page.  Handlers typically have logic branches to hand control over to Next.js and React for server side and other rendering needs."
+    },
+    {
+      "name": "Ajax",
+      "description": "Endpoints used to request additional content after the page has initially loaded"
+    },
+    {
+      "name": "Internal-Use",
+      "description": "Endpoints used by development and qa team members for development and testing purposes"
+    },
+    {
+      "name": "Internal-Rendering",
+      "description": "Endpoints that should only be called internally by Next.js and React for their own internal rendering purposes"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "security": [
+          "basicAuth": []
+        ],
+        "tags": [
+          "Rendering"
+        ],
+        "description": "Description of / route",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/lang"
+          },
+          {
+            "$ref": "#/components/parameters/json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "$ref": "#/components/schemas/htmlResponse"
+                },
+                "examples": {
+                  "example-01-html": {
+                    "description": "Html rendered using JSON from WS service calls",
+                    "value": "<html>...</html>"
+                  },
+                  "example-01-html-headers-preview": {
+                    "description": "Requests to the preview context should never cache",
+                    "value": {
+                      "Cache-Control": "no-cache, no-store"
+                    }
+                  },
+                  "example-01-html-headers-published": {
+                    "description": "Requests to the published context should always cache. {Application Name} does not include any role-based rendering.",
+                    "value": {
+                      "Cache-Control": "max-age=21600"
+                    }
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/jsonResponse"
+                },
+                "examples": {
+                  "example-02-json": {
+                    "description": "JSON from WS service calls; no Next.js/React server side rendering takes place.  This response type is triggered by using 'json=true' in the query parameters.",
+                    "value": {}
+                  },
+                  "example-02-json-headers": {
+                    "description": "Requests using 'json=*' (query parameter) should never cache",
+                    "value": {
+                      "Content-Type": "application/json",
+                      "Cache-Control": "no-cache, no-store"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "400error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "400 Bad Request"
+          }
+        }
+      },
+      "500error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Backend Broke"
+          }
+        }
+      },
+      "jsonResponse": {
+        "title": "JSON Schema",
+        "type": "object"
+      },
+      "htmlResponse": {
+        "title": "Html Schema",
+        "type": "string"
+      },
+    },
+    "responses": {
+      "200": {
+        "description": "Success if content exists it will be sent back",
+        "content": {}
+      },
+      "400": {
+        "description": "Content not found",
+        "content": {}
+      }
+    },
+    "parameters": {
+      "lang": {
+        "name": "lang",
+        "in": "query",
+        "description": "Description for lang",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "uri": {
+        "name": "uri",
+        "in": "query",
+        "description": "Description for uri",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "json": {
+        "name": "json",
+        "in": "query",
+        "description": "Return JSON of payload used by Next.js and React.  Skip rendering html using Next.js and React.  Do not include this query param to ensure that html is returned in the response.  <ul> <li>true: return the json used by Next.js/React to render page</li> <li>data: used by second step in Next.js/React rendering by the ajax call to fetch server side properties</li> <li>(remove entirely): render page as html using Next.js/React</li> </ul> ",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+    }
+  }
+}
+

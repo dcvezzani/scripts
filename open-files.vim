@@ -51,16 +51,36 @@ endfunction
 
 function! OpenFile()
   let origPos = getpos('.')
-  let bufPattern = '^[^\"]*\"\([^\"]*\)\"[[:space:]]*line \([0-9][0-9]*\).*$'
-  let file_resource = substitute(getline('.'), bufPattern, '\1', "")
-  let line_number = substitute(getline('.'), bufPattern, '\2', "")
+  let [bufnum, lnum, col, off] = origPos
+  call setpos('.', [bufnum, lnum-1, 0, off])
 
+  let bufPattern = '^[^\"]*\"\([^\"]*\)\"[[:space:]]*line \([0-9][0-9]*\).*$'
+  let [lnum2, col2] = searchpos(bufPattern, 'n')
+
+  if (lnum == lnum2)
+    let file_resource = substitute(getline('.'), bufPattern, '\1', "")
+    let line_number = substitute(getline('.'), bufPattern, '\2', "")
+    
+  else
+    " let bufPattern = '^[^\/\.]*\([^[:space:]]\+\).*$'
+    let bufPattern = '\([^[:space:]]\+\/\)\+[^[:space:]]\+'
+
+    " let file_resource = substitute(getline('.'), bufPattern, '\1', "")
+    let file_resource = matchstr(getline('.'), bufPattern)
+    let line_number = 0
+  endif
+  echo 'lnum: '.lnum.', lnum2: '.lnum2.', line_number: '.line_number
+
+  let file_resource = substitute(file_resource, '\~', '\$HOME', "")
+  
   call setpos('.', origPos)
 
   if( strlen(string(line_number)) != strlen(string(file_resource)) )
-    silent execute '!mvim +:'.string(line_number).' '.file_resource
+    "silent execute '!mvim +:'.string(line_number).' '.file_resource
+    echo '!mvim +:'.string(line_number).' '.file_resource
   else
-    silent execute '!mvim '.file_resource
+    "silent execute '!mvim '.file_resource
+    echo '!mvim '.file_resource
   endif
 
   echo ''.file_resource
@@ -75,27 +95,91 @@ function! OpenFiles()
   
   let line_count = line('$')
   let origPos = getpos('.')
-  let line = origPos[1]
+  let [bufnum, lnum, col, off] = origPos
+
   "let @b = '$bdir/'
-  while ((getline(line) !~ '^\s*$') && (line < line_count))
+  while ((getline(lnum) !~ '^\s*$') && (lnum < line_count))
+    call setpos('.', [bufnum, lnum-1, 0, 0])
+
     let bufPattern = '^[^\"]*\"\([^\"]*\)\"[[:space:]]*line \([0-9][0-9]*\).*$'
-    let file_resource = substitute(getline(line), bufPattern, '\1', "")
+    let [lnum2, col2] = searchpos(bufPattern, 'n')
+    call setpos('.', [bufnum, lnum, 0, 0])
+    
+    if (lnum == lnum2)
+      let file_resource = substitute(getline('.'), bufPattern, '\1', "")
+    else
+      " let bufPattern = '^[^\/\.]*\([^[:space:]]\+\).*$'
+      let bufPattern = '\([^[:space:]]\+\/\)\+[^[:space:]]\+'
+      
+      " let file_resource = substitute(getline('.'), bufPattern, '\1', "")
+      let file_resource = matchstr(getline('.'), bufPattern)
+    endif
+
+    " echo lnum.', '.lnum2
+    " echo file_resource
 
     if(strlen(file_resource) > 0)
       call add(file_names, file_resource)
     endif
     
     let cnt = cnt + 1
-    let line = line + 1
+    let lnum = lnum + 1
   endwhile
 
   call setpos('.', origPos)
   silent execute "!mvim -p " . join(file_names, " ")
 endfunction
 
+function! SourceFiles()
+  echo ""
+  let cnt = 1
+  let file_names = []
+  
+  let line_count = line('$')
+  let origPos = getpos('.')
+  let [bufnum, lnum, col, off] = origPos
+
+  "let @b = '$bdir/'
+  while ((getline(lnum) !~ '^\s*$') && (lnum < line_count))
+    call setpos('.', [bufnum, lnum-1, 0, 0])
+
+    let bufPattern = '^[^\"]*\"\([^\"]*\)\"[[:space:]]*line \([0-9][0-9]*\).*$'
+    let [lnum2, col2] = searchpos(bufPattern, 'n')
+    call setpos('.', [bufnum, lnum, 0, 0])
+    
+    if (lnum == lnum2)
+      let file_resource = substitute(getline('.'), bufPattern, '\1', "")
+    else
+      " let bufPattern = '^[^\/\.]*\([^[:space:]]\+\).*$'
+      let bufPattern = '\([^[:space:]]\+\/\)\+[^[:space:]]\+'
+      
+      " let file_resource = substitute(getline('.'), bufPattern, '\1', "")
+      let file_resource = matchstr(getline('.'), bufPattern)
+    endif
+
+    " echo lnum.', '.lnum2
+    " echo file_resource
+
+    if(strlen(file_resource) > 0)
+      call add(file_names, file_resource)
+    endif
+    
+    let cnt = cnt + 1
+    let lnum = lnum + 1
+
+    silent execute "source " . file_resource 
+  endwhile
+
+  call setpos('.', origPos)
+  echo file_names
+endfunction
+
 nmap gX :call OpenIt()<CR>
 nmap cd :call CdToIt()<CR>
 nmap fO :call OpenFiles()<CR>
+nmap fS :call SourceFiles()<CR>
 nmap fo :call OpenFile()<CR>
 nmap f0 :call OpenIntelliJFile()<CR>
+
+
 
