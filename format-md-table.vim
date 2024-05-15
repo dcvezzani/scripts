@@ -48,13 +48,16 @@ function! ReformatTable() range
   let @w = GetVisualSelection(visualmode())
   " let @z = 'gvdO' | normal @z
   let @z = 'gvdk' | normal @z
-  execute 'r! ~/scripts/format-md-table.js '.shellescape(@w, 1)
+  " execute 'r! ~/scripts/format-md-table.js '.shellescape(@w, 1)
+  execute 'r! ~/scripts/cat-to-file.sh '.shellescape(@w, 1).' ~/scripts/format-md-table.js 2>/dev/null'
 endfunction
 
 function! SerializeTable() range
   let @w = GetVisualSelection(visualmode())
   let @z = 'gvdk' | normal @z
-  execute 'r! ~/scripts/serialize-md-table.js '.shellescape(@w, 1)
+  " execute 'r! ~/scripts/serialize-md-table.js '.shellescape(@w, 1)
+  execute 'r! ~/scripts/cat-to-file.sh '.shellescape(@w, 1).' ~/scripts/serialize-md-table.js 2>/dev/null'
+  
 endfunction
 
 function! ClearMdRows() range

@@ -1,5 +1,9 @@
 #!/Users/dcvezzani/.nvm/versions/node/v20.11.0/bin/node
 
+const split = require('split');
+const input = process.stdin.pipe(split());
+const output = process.stdout;
+
 const RE = {
   pipeChar: /\|/, 
   serializedNewline: /\n/,
@@ -9,10 +13,10 @@ const RE = {
   variableReference: /\$\{([^\}]+)\}/,
   defaultColumnSeparator: /\s*,\s*/,
   anythingExceptPipe: /[^|]/g,
-  headerDivider: /^[,-]+$/,
-  justCommas: /^,+$/,
-  explicitComma: /,/g,
-  commaPlaceholder: /__comma__/g,
+  headerDivider: /^[\|-]+$/,
+  justColumnSeparators: /^\|+$/,
+  explicitPipe: /','/g,
+  pipePlaceholder: /__pipe__/g,
 }
 
 const state = {
@@ -22,8 +26,8 @@ const state = {
   columnLineBreak: RE.linkBreak,
   columnWidths: [],
   re: {},
-  commaPlaceholder: '__comma__',
-  escapedComma: "','",
+  pipePlaceholder: '__pipe__',
+  escapedPipe: '\|',
 }
 
 const parseVariableDefinition = (line) => {
@@ -38,10 +42,6 @@ const serializeVariables = () => {
   }).join("\n")
 }
 
-// const split = require('split');
-// const input = process.stdin.pipe(split());
-// const output = process.stdout;
-
 const reduce = (line) => {
   if (line.startsWith('$')) {
     const prop = parseVariableDefinition(line)
@@ -51,13 +51,13 @@ const reduce = (line) => {
   
   if ((line || '').trim().length === 0) return
 
-  line = line.replaceAll(RE.explicitComma, state.escapedComma)
+  line = line.replaceAll(RE.explicitPipe, state.escapedPipe)
 
-  let newLine = line.replaceAll(/ *\| */g, ',')
-  .replace(/^,/, '')
-  .replace(/,$/, '')
+  let newLine = line.replaceAll(/ *\| */g, '|')
+  .replace(/^\|/, '')
+  .replace(/\|$/, '')
 
-  if (RE.headerDivider.test(newLine) && !RE.justCommas.test(newLine)) return
+  if (RE.headerDivider.test(newLine) && !RE.justColumnSeparators.test(newLine)) return
 
   newLine = Object.keys(state.variables).reduce((line, key) => {
     let value = state.variables[key]
@@ -74,29 +74,32 @@ const reduce = (line) => {
 }
 
 
-// input.on('data', line => {
-//   reduce(line)
-// });
+input.on('data', line => {
+  reduce(line)
+});
 
-// input.on('end', () => {
-//   console.log(serializeVariables())
-//   console.log()
-//   console.log(state.lines.join("\n"))
-// });
+input.on('end', () => {
 
-// input.on('error', e => {
-//   console.error(e)
-// });
+  if (Object.keys(state.variables || {}).length > 0) {
+    console.log(serializeVariables())
+    console.log()
+  }
+  console.log(state.lines.join("\n"))
+});
 
-const lines = (process.argv[2] || '').trim().split("\n")
+input.on('error', e => {
+  console.error(e)
+});
 
-lines.forEach(line => reduce(line))
+// const lines = (process.argv[2] || '').trim().split("\n")
 
-// process.stderr.write(`Variables: \n${JSON.stringify(state.variables, null, 2)}\n\n`)
+// lines.forEach(line => reduce(line))
 
-console.log(serializeVariables())
-console.log()
-console.log(state.lines.join("\n"))
+// // process.stderr.write(`Variables: \n${JSON.stringify(state.variables, null, 2)}\n\n`)
+
+// console.log(serializeVariables())
+// console.log()
+// console.log(state.lines.join("\n"))
 
 /*
 */

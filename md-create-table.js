@@ -7,11 +7,11 @@ const output = process.stdout;
 const RE = {
   variableDefinition: /^\$([^=]+)=(.*)$/,
   variableReference: /\$\{([^\}]+)\}/,
-  defaultColumnSeparator: /\s*,\s*/,
+  defaultColumnSeparator: /\s*[\|]\s*/,
   columnLineBreak: / *\/\/ *| *<br\/>\(- +\)*/g,
   anythingExceptPipe: /[^|]/g,
-  explicitComma: /','/g,
-  commaPlaceholder: /__comma__/g,
+  explicitPipe: /','/g,
+  pipePlaceholder: /__pipe__/g,
 }
 
 const state = {
@@ -21,7 +21,7 @@ const state = {
   columnDivider: RE.defaultColumnSeparator,
   columnLineBreak: RE.linkBreak,
   columnWidths: [],
-  commaPlaceholder: '__comma__',
+  pipePlaceholder: '__pipe__',
 }
 
 const serializeVariables = () => {
@@ -62,10 +62,10 @@ const calculateColumnWidths = () => {
   state.columnWidths = Array(headerColumnNames?.length || 0).fill(0)
 
   state.lines = state.lines.map(line => {
-    line = line.replaceAll(RE.explicitComma, state.commaPlaceholder)
+    line = line.replaceAll(RE.explicitPipe, state.pipePlaceholder)
     let columnValues = (line || '').split(state.columnDivider)
     columnValues = columnValues.map((columnValue, index) => {
-      columnValue = columnValue.replaceAll(RE.commaPlaceholder, ',')
+      columnValue = columnValue.replaceAll(RE.pipePlaceholder, '|')
       if (RE.columnLineBreak.test(columnValue)) {
         // console.log(">>>dcv (md-create-table.js, , columnValue:56)", columnValue)
         const leader = (!columnValue.startsWith('- ')) ? '- ' : ''
@@ -132,8 +132,11 @@ input.on('end', () => {
 
   // process.stderr.write(`Variables: \n${JSON.stringify(state.variables, null, 2)}\n\n`)
   // console.log(state.columnWidths)
-  console.log(serializeVariables())
-  console.log()
+
+  if (Object.keys(state.variables || {}).length > 0) {
+    console.log(serializeVariables())
+    console.log()
+  }
   console.log(state.lines.join("\n"))
 })
 

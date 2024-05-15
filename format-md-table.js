@@ -2,15 +2,31 @@
 
 // console.log(process.argv)
 
+const split = require('split');
+const input = process.stdin.pipe(split());
+const output = process.stdout;
 
 const RE = {
   pipeChar: /\|/, 
   serializedNewline: /\n/,
   serializedTab: /\t/g,
   columnLineBreak: / *\/\/ *| *<br\/>\(- +\)*/g,
+  variableDefinition: /^\$([^=]+)=(.*)$/,
+  variableReference: /\$\{([^\}]+)\}/,
 }
 
-const lines = (process.argv[2] || '').trim().split("\n")
+const state = {
+  lines: [],
+  variables: {},
+  originalVariables: {},
+  // columnDivider: RE.defaultColumnSeparator,
+  // columnLineBreak: RE.linkBreak,
+  // columnWidths: [],
+  // commaPlaceholder: '__comma__',
+}
+
+
+// const lines = (process.argv[2] || '').trim().split("\n")
 
 // const lines = ('| Resource                                | ave res time | focus |\n' + 
 //   '|-----------------------------------------|------------|---------|\n' +
@@ -22,47 +38,141 @@ const lines = (process.argv[2] || '').trim().split("\n")
 //   '| /temples/photo-gallery\t                |  19 s         |         |\n' +
 //   '| /temples/auth/login                     |  628 ms          |         |\n').trim().split(RE.serializedNewline)
 
-const header = lines.shift()
-while((lines[lines.length-1] || '').trim().length === 0) lines.pop()
+const serializeVariables = () => {
+  return Object.entries(state.originalVariables).map(([key, value]) => {
+    return `$${key}=${value}` 
+  }).join("\n")
+}
 
-const headerDivider = lines.shift().split(RE.pipeChar)
-headerDivider.shift()
-headerDivider.pop()
+const parseVariableDefinition = (line) => {
+  let [_, name, originalValue] = line.match(RE.variableDefinition) || []
+  let value = originalValue
+  if (RE.variableReference.test(value)) value = transformResolveVariables(value)
+  return {name, value, originalValue}
+}
 
-const newHeaderDividerLine = `|${Array.from({ length: headerDivider.length }).map(entry => '').join("|")}|`
+const parseVariableReference = (line) => {
+  const [_, name] = line.match(RE.variableReference) || []
+  return name
+}
 
-const stats = headerDivider.map(column => column.length-2)
+const transformResolveVariables = (line) => {
+  let cnt = 0
+  while (RE.variableReference.test(line) && cnt < 10) {
+    const name = parseVariableReference(line)
+    const value = state.variables[name]
+    const reVariableName = new RegExp(`\\$\\{${name}\\}`, 'g')
+    if (value) line = line.replaceAll(reVariableName, value)
+    cnt++
+  }
 
-const transformedLinesSizing = [header, newHeaderDividerLine, ...lines].map(line => {
-  const lineParts = line.split(RE.pipeChar)
-  lineParts.shift()
-  lineParts.pop()
+  return line
+}
 
-  const transformedLine = lineParts.map((linePart, index) => {
-    let cleanLine = linePart.replaceAll(RE.serializedTab, '').trim()
-    if (RE.columnLineBreak.test(cleanLine)) {
-      const leader = (!cleanLine.startsWith('- ')) ? '- ' : ''
-      cleanLine = leader + cleanLine.replaceAll(RE.columnLineBreak, '<br/>- ')
-    }
-    
-    if (cleanLine.length > stats?.[index]) stats[index] = cleanLine.length
-    return cleanLine
+const transform = () => {
+  const lines = state.lines
+
+  const header = lines.shift()
+  while((lines[lines.length-1] || '').trim().length === 0) lines.pop()
+
+  const headerDivider = lines.shift().split(RE.pipeChar)
+  headerDivider.shift()
+  headerDivider.pop()
+
+  const newHeaderDividerLine = `|${Array.from({ length: headerDivider.length }).map(entry => '').join("|")}|`
+
+  const stats = headerDivider.map(column => column.length-2)
+
+  const transformedLinesSizing = [header, newHeaderDividerLine, ...lines].map(line => {
+    const lineParts = line.split(RE.pipeChar)
+    lineParts.shift()
+    lineParts.pop()
+
+    const transformedLine = lineParts.map((linePart, index) => {
+      let cleanLine = linePart.replaceAll(RE.serializedTab, '').trim()
+      cleanLine = transformResolveVariables(cleanLine)
+
+      if (RE.columnLineBreak.test(cleanLine)) {
+        const leader = (!cleanLine.startsWith('- ')) ? '- ' : ''
+        cleanLine = leader + cleanLine.replaceAll(RE.columnLineBreak, '<br/>- ')
+      }
+      
+      if (cleanLine.length > stats?.[index]) stats[index] = cleanLine.length
+      return cleanLine
+    })
+    return transformedLine
   })
-  return transformedLine
+
+  const transformedLines = transformedLinesSizing.map(lineParts => {
+    const transformedLine = lineParts.map((linePart, index) => {
+      return linePart.padEnd(stats[index], ' ')
+    })
+    return `| ${transformedLine.join(" | ")} |`
+    // return `[${headerDivider[0].length}] ` + line.replaceAll(/\\t/g, '').trim() // .slice(0, headerDivider[0].length).padEnd(headerDivider[0].length, ' ').slice(0, headerDivider[0].length-1)
+  })
+
+  transformedLines[1] = transformedLines[1].replaceAll(/ /g, '-')
+
+  state.lines = transformedLines
+}
+
+input.on('data', line => {
+  if (line.startsWith('$')) {
+    const prop = parseVariableDefinition(line)
+    state.variables[prop.name] = prop.value
+    state.originalVariables[prop.name] = prop.originalValue
+    return
+  }
+
+  if ((line || '').trim().length === 0) return
+  
+  state.lines.push(line)
+});
+
+input.on('end', () => {
+  transform()
+
+  if (Object.keys(state.originalVariables || {}).length > 0) {
+    console.log(serializeVariables())
+    console.log()
+  }
+
+  console.log(state.lines.join("\n"))
 })
 
-const transformedLines = transformedLinesSizing.map(lineParts => {
-  const transformedLine = lineParts.map((linePart, index) => {
-    return linePart.padEnd(stats[index], ' ')
-  })
-  return `| ${transformedLine.join(" | ")} |`
-  // return `[${headerDivider[0].length}] ` + line.replaceAll(/\\t/g, '').trim() // .slice(0, headerDivider[0].length).padEnd(headerDivider[0].length, ' ').slice(0, headerDivider[0].length-1)
+input.on('error', error => {
+  console.error('Error', error)
 })
+  
+/*
 
-transformedLines[1] = transformedLines[1].replaceAll(/ /g, '-')
-console.log(`${transformedLines.join("\n")}`)
+cat << 'EOL' | /Users/dcvezzani/scripts/format-md-table.js
+$source=.vim/bundle/md-vim/after/ftplugin/md.vim
+
+| command | mode | description                                        | instructions                                                                                                                                                                                       | notes | source                                   |
+|---------|------|----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|------------------------------------------|
+| qc      | v    | surround selected text in code block       |                                                                                                                                                                                                    |       | .vim/bundle/md-vim/after/ftplugin/md.vim |
+| qk      | v    | create link                                        | - highlighted text should become the visible link<br/>- clipboard should contain the resource being linked<br/>- if clipboard content starts with http, resource should automatically be populated |       | .vim/bundle/md-vim/after/ftplugin/md.vim |
+| qb      | v    | make text bold                                     |                                                                                                                                                                                                    |       | .vim/bundle/md-vim/after/ftplugin/md.vim |
+| qfc     | v,n  | capitalize first letter for each word in selection | [📊 fig 1](#-fig-1-create-title-from-selection)                                                                                                                                                    |       | .vim/bundle/md-vim/after/ftplugin/md.vim |
+EOL
 
 
+
+
+cat << 'EOL' | /Users/dcvezzani/scripts/format-md-table.js
+$source=.vim/bundle/md-vim/after/ftplugin/md.vim
+
+| command | mode | description                                        | instructions                                                                                                                                                                                       | notes | source                                   |
+|---------|------|----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|------------------------------------------|
+| qc      | v    | surround selected text in code block       |                                                                                                                                                                                                    |       | .vim/bundle/md-vim/after/ftplugin/md.vim |
+| qk      | v    | create link                                        | - highlighted text should become the visible link<br/>- clipboard should contain the resource being linked<br/>- if clipboard content starts with http, resource should automatically be populated |       | .vim/bundle/md-vim/after/ftplugin/md.vim |
+| qb      | v    | make text bold                                     |                                                                                                                                                                                                    |       | .vim/bundle/md-vim/after/ftplugin/md.vim |
+| qfc     | v    | capitalize first letter for each word in selection |                                                                                                                                                                                                    |       | .vim/bundle/md-vim/after/ftplugin/md.vim |
+EOL
+
+
+*/
 
 /*
 const split = require('split');
