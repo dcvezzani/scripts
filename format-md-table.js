@@ -10,14 +10,17 @@ const RE = {
   pipeChar: /\|/, 
   serializedNewline: /\n/,
   serializedTab: /\t/g,
-  columnLineBreak: / *\/\/ *| *<br\/>\(- +\)*/g,
+  // columnLineBreak: / *\/\/ *| *<br\/>\(- +\)*/g,
+  columnLineBreak: / *;; *| *<br\/>\(- +\)*/g,
   variableDefinition: /^\$([^=]+)=(.*)$/,
   variableReference: /\$\{([^\}]+)\}/,
 }
 
 const state = {
   lines: [],
-  variables: {},
+  variables: {
+    columnLineBreakEnabled: "true",
+  },
   originalVariables: {},
   // columnDivider: RE.defaultColumnSeparator,
   // columnLineBreak: RE.linkBreak,
@@ -92,7 +95,7 @@ const transform = () => {
       let cleanLine = linePart.replaceAll(RE.serializedTab, '').trim()
       cleanLine = transformResolveVariables(cleanLine)
 
-      if (RE.columnLineBreak.test(cleanLine)) {
+      if (state.variables.columnLineBreakEnabled === "true" && RE.columnLineBreak.test(cleanLine)) {
         const leader = (!cleanLine.startsWith('- ')) ? '- ' : ''
         cleanLine = leader + cleanLine.replaceAll(RE.columnLineBreak, '<br/>- ')
       }

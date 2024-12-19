@@ -2,7 +2,13 @@
 
 # findPath='/Users/dcvezzani/DropBox/journal/images'
 findPath=$(defaults read com.apple.screencapture location)
-uuid=$(uuidgen | tr "[:upper:]" "[:lower:]")
+
+function uuid() {
+  python3 -c "import uuid; print(uuid.uuid1())"
+}
+
+# uuid=$(uuidgen | tr "[:upper:]" "[:lower:]")
+uuid=$(uuid | tr "[:upper:]" "[:lower:]")
 
 if [ ! "$1" = "" ]; then
   uuid=$(echo "$1" | sed 's/  */-/g')
@@ -33,5 +39,3 @@ done | pbcopy
 for file in $(ls "$findPath" | grep "^$uuid"); do
   echo '![](images/'"$file"')'
 done
-
-# echo "$(ls "$findPath" | grep "^$uuid")"

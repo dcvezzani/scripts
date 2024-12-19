@@ -2,6 +2,7 @@
   "dependencies": {
     "jsdom": "^21.1.1",
     "livedown": "^2.1.1",
+    "node-fetch": "^3.3.2",
     "split": "^1.0.1",
     "wrap-text": "^1.0.9",
     "xml2js": "^0.4.23"

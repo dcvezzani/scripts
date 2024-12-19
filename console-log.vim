@@ -44,7 +44,7 @@ function! ConsoleLog() range
   let currentFilename = expand('%:t')
   let currentPos = getpos(".") " [bufnum, lnum, col, off]
 
-  let systemCommandResults = system('cat ' . fullPathname . ' | /Users/dcvezzani/scripts/parse-code-to-json.js | /Users/dcvezzani/scripts/parse-code-to-json-identify-code-blocks.js | /Users/dcvezzani/scripts/parse-code-to-json-identify-code-block-for-line.js ' . currentPos[1] . ' | /Users/dcvezzani/scripts/parse-code-to-json-identify-code-block-format-tags.sh')
+  let systemCommandResults = system('cat ' . fullPathname . ' | ~/scripts/parse-code-to-json.js | ~/scripts/parse-code-to-json-identify-code-blocks.js | ~/scripts/parse-code-to-json-identify-code-block-for-line.js ' . currentPos[1] . ' | ~/scripts/parse-code-to-json-identify-code-block-format-tags.sh')
   
   if (selectionChangedDifferentLine)
     let consoleLog = 'console.log(">>>dcv ('.currentFilename.', '.systemCommandResults.', '.selectedTermInfo.':'.string(currentPos[1]+1).')", '.selectedTermInfo.')'
@@ -61,7 +61,7 @@ function! ConsoleLog() range
     call setpos(".", [currentPos[0], currentPos[1]+1, len(consoleLog), currentPos[3]])
   endif
 
-  " echo 'cat ' . fullPathname . ' | /Users/dcvezzani/scripts/parse-code-to-json.js | /Users/dcvezzani/scripts/parse-code-to-json-identify-code-blocks.js | /Users/dcvezzani/scripts/parse-code-to-json-identify-code-block-for-line.js ' . currentPos[1] . ' | /Users/dcvezzani/scripts/parse-code-to-json-identify-code-block-format-tags.sh'
+  " echo 'cat ' . fullPathname . ' | ~/scripts/parse-code-to-json.js | ~/scripts/parse-code-to-json-identify-code-blocks.js | ~/scripts/parse-code-to-json-identify-code-block-for-line.js ' . currentPos[1] . ' | ~/scripts/parse-code-to-json-identify-code-block-format-tags.sh'
   
   " echo selectedTermInfo
   

@@ -8,13 +8,13 @@
 # fi
 
 # filter file types; else uses default handler
-if [ ! -z "$1" ]; then
 
-  mvim=/usr/local/bin/mvim
+ITERM_EDITOR=/Applications/MacVim.app/Contents/bin/mvim
+if [ ! -z "$1" ]; then
 
   # open with vim
   if echo "$1" | grep '.*\.\(md\|markdown\|txt\)$' >/dev/null ; then
-    zsh -i -c "$mvim $1"
+    zsh -i -c "$ITERM_EDITOR $1"
 
   elif echo "$1" | grep '.*\.\(erl\|js\|ts\|c\|json\|hrl\)$' >/dev/null ; then
     if [ ! -z "$2" ]; then

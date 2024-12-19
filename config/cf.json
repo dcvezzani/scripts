@@ -6,7 +6,8 @@
         "space": "history-test",
         "fe": {
           "app": "church-history-adviser-test",
-          "appGuid": "e5f10890-d321-45de-80f7-07d3986eda0d"
+          "appGuid": "e5f10890-d321-45de-80f7-07d3986eda0d",
+          "memcached": "church-history-specialist-fe-memcached-test"
         },
         "ws": {
           "app": "church-history-adviser-web-ws-test",
@@ -17,7 +18,8 @@
         "space": "history-stage",
         "fe": {
           "app": "church-history-adviser-stage",
-          "appGuid": "04672fd0-0f0e-4a29-93e1-183c9cc5e973"
+          "appGuid": "04672fd0-0f0e-4a29-93e1-183c9cc5e973",
+          "memcached": "church-history-specialist-fe-memcached-stage"
         },
         "ws": {
           "app": "church-history-adviser-web-ws-stage",
@@ -28,7 +30,8 @@
         "space": "history-production",
         "fe": {
           "app": "church-history-adviser",
-          "appGuid": "14ff11b1-e5e3-4d5f-9101-180fda8feb9c"
+          "appGuid": "14ff11b1-e5e3-4d5f-9101-180fda8feb9c",
+          "memcached": "church-history-specialist-fe-memcached-prod"
         },
         "ws": {
           "app": "church-history-adviser-web-ws",
@@ -157,8 +160,9 @@
       "prod": {
         "space": "seminary-and-institute-prod",
         "fe": {
-          "app": "si",
-          "appGuid": "1870d043-e4bd-4fe1-a4ab-278706bdc22b"
+          "app": "si-fe",
+          "appGuid": "0870ff12-41ae-4038-8db9-85a1471805b2",
+          "memcached": "seminary-and-institute-fe-memcached-prod"
         },
         "ws": {
           "app": "si-api",

@@ -52,7 +52,7 @@ endfunction
 function! OpenFile()
   let origPos = getpos('.')
   let [bufnum, lnum, col, off] = origPos
-  call setpos('.', [bufnum, lnum-1, 0, off])
+  call setpos('.', [bufnum, lnum, 0, off])
 
   let bufPattern = '^[^\"]*\"\([^\"]*\)\"[[:space:]]*line \([0-9][0-9]*\).*$'
   let [lnum2, col2] = searchpos(bufPattern, 'n')
@@ -69,18 +69,18 @@ function! OpenFile()
     let file_resource = matchstr(getline('.'), bufPattern)
     let line_number = 0
   endif
-  echo 'lnum: '.lnum.', lnum2: '.lnum2.', line_number: '.line_number
+  "echo 'lnum: '.lnum.', lnum2: '.lnum2.', line_number: '.line_number
 
   let file_resource = substitute(file_resource, '\~', '\$HOME', "")
   
   call setpos('.', origPos)
 
   if( strlen(string(line_number)) != strlen(string(file_resource)) )
-    "silent execute '!mvim +:'.string(line_number).' '.file_resource
-    echo '!mvim +:'.string(line_number).' '.file_resource
+    silent execute '!mvim +:'.string(line_number).' '.file_resource
+    "echo '!mvim +:'.string(line_number).' '.file_resource
   else
-    "silent execute '!mvim '.file_resource
-    echo '!mvim '.file_resource
+    silent execute '!mvim '.file_resource
+    "echo '!mvim '.file_resource
   endif
 
   echo ''.file_resource
@@ -179,7 +179,7 @@ nmap cd :call CdToIt()<CR>
 nmap fO :call OpenFiles()<CR>
 nmap fS :call SourceFiles()<CR>
 nmap fo :call OpenFile()<CR>
-nmap f0 :call OpenIntelliJFile()<CR>
+"nmap f0 :call OpenIntelliJFile()<CR>
 
 
 

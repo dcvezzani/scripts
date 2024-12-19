@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEFAULT_PR_REVIEWERS='adamandreason,jtthor,tberbert,skoeven'
+DEFAULT_PR_REVIEWERS='adamandreason,jtthor,tberbert'
 
 # === current_branch =========================
 

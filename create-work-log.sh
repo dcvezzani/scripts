@@ -2,8 +2,10 @@
 
 target_date="$1"
 
+yesterday_date=$(date -v -1d -jf '%Y-%m-%d' $(date '+%Y-%m-%d') "+%Y-%m-%d")
+
 if [[ $target_date == 'yesterday' ]]; then
-  target_date=$(date -v -1d -jf '%Y-%m-%d' $(date '+%Y-%m-%d') "+%Y-%m-%d")
+  target_date="$yesterday_date"
 fi
 
 if [[ $target_date == 'tomorrow' ]]; then
@@ -38,16 +40,19 @@ filename=$(echo "work-log-$(target_date +%F-%a | perl -ne 'print lc').md")
 datestamp=$(target_date "+%F (%a)")
 
 workNotesFilename=$(DONT_OPEN=true "$(dirname -- "$0")/create-work-notes.sh" "$target_date")
+yesterdayWorkNotesFilename=$(DONT_OPEN=true "$(dirname -- "$0")/create-work-notes.sh" "$yesterday_date")
 obufFilename=$(DONT_OPEN=true TARGET_DATE="$target_date" "$(dirname -- "$0")/obuf.sh")
 DONT_OPEN=true TARGET_DATE="$target_date" ~/scripts/obuf.sh
 
+startingPosition=16
+
 if [[ -e "$journalPath/$filename" ]]; then
   echo "work-log already exists!  Not overwriting"
-  mvim -c "startinsert" -c "let curPos = getpos('.')" -c "call setpos('.', [curPos[0], 9, strlen(getline('.')), curPos[3]])" -p "$journalPath/$filename" "$workNotesFilename" "$obufFilename"
+  mvim -c "startinsert" -c "let curPos = getpos('.')" -c "call setpos('.', [curPos[0], ${startingPosition}, strlen(getline('.')), curPos[3]])" -p "$workNotesFilename" "$yesterdayWorkNotesFilename" "$journalPath/$filename" "$obufFilename"
   exit 0
 fi
 
 cat /Users/dcvezzani/scripts/work-log.md | perl -pe 's#\{date\}#'"$datestamp"'#' > "$journalPath/$filename"
-mvim -c "startinsert" -c "let curPos = getpos('.')" -c "call setpos('.', [curPos[0], 9, strlen(getline('.')), curPos[3]])" -p "$journalPath/$filename" "$workNotesFilename" "$obufFilename"
+mvim -c "startinsert" -c "let curPos = getpos('.')" -c "call setpos('.', [curPos[0], ${startingPosition}, strlen(getline('.')), curPos[3]])" -p "$workNotesFilename" "$yesterdayWorkNotesFilename" "$journalPath/$filename" "$obufFilename"
 
 # let curPos = getpos('.')call setpos('.', [curPos[0], curPos[1]+1, curPos[2], curPos[3]])

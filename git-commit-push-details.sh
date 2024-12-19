@@ -26,7 +26,14 @@ repoLink=$(git config --get remote.origin.url | perl -p -e 's/([^:]+:\/\/)([^@]+
 repoBaseUrl=$(echo "$repoLink" | perl -p -e 's/\.git$//')
 commitLink="${repoBaseUrl}/commit/${commit}"
 branchLink="${repoBaseUrl}/tree/${branch}"
-pr=$(git ls-remote origin 'pull/*/head' | grep "$targetCommit" | awk '{print $2}' | perl -p -e 's/refs\/pull\/([^\/]+).*/https:\/\/github.com\/ICSEng\/'"$repo"'\/pull\/\1/')
+# pr=$(git ls-remote origin 'pull/*/head' | grep "$targetCommit" | awk '{print $2}' | perl -p -e 's/refs\/pull\/([^\/]+).*/https:\/\/github.com\/ICSEng\/'"$repo"'\/pull\/\1/')
+
+getPr() {
+  # see fig 1 for details of payload
+  local inputPayload=$(gh pr view)
+  printf "${inputPayload}" | grep -E '^url:' | perl -p -e 's/^[^:]+:\s+(.*)/$1/'
+}
+pr=$(getPr)
 
 # tag:
 tag=$(git describe --abbrev=0 --tags)
@@ -56,3 +63,27 @@ Copied to clipboard:
 $output
 EOL
 
+
+
+cat << 'EOL' >/dev/null 2>&1
+
+### fig 1
+==============================================
+title:	ARPWEB-310 (FE) -
+state:	OPEN
+author:	dcvezzani-church
+labels:
+assignees:
+reviewers:	adamandreason (Commented), skoeven (Requested), tberbert (Requested)
+projects:
+milestone:
+number:	88
+url:	https://github.com/ICSEng/recovery-fe/pull/88
+additions:	5804
+deletions:	421
+auto-merge:	disabled
+--
+migrate to artifactory cloud
+
+
+EOL

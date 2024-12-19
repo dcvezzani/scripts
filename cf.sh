@@ -76,6 +76,7 @@ case "$target" in
     local _app=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.'"$tier"'.app')
     local _appGuid=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.'"$tier"'.appGuid')
     local _spaceUrl="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps?orgId=$(url_encode "$_org")&spaceId=${_space}"
+    local _memcached=$(cat /Users/dcvezzani/scripts/config/cf.json | jq -r '.'"$target"'.lanes.'"$lane"'.'"$tier"'.memcached')
     # _appUrl="https://ui.pvu.cf.churchofjesuschrist.org/#/Apps/${_appGuid}?orgId=$(url_encode "$_org")&spaceId=${_space}#appsection"
 
     # local getAppGuid=$(appGuid "$_app")
@@ -97,7 +98,7 @@ case "$target" in
     ;;
 esac
 
-local payload=("\"org\":\"$_org\",\"space\":\"$_space\",\"target\":\"$_app\",\"spaceUrl\":\"$_spaceUrl\",\"guid\":\"$_appGuid\",\"appUrl\":\"$_appUrl\",\"changeDetected\":\"$changeDetected\"")
+local payload=("\"org\":\"$_org\",\"space\":\"$_space\",\"target\":\"$_app\",\"spaceUrl\":\"$_spaceUrl\",\"guid\":\"$_appGuid\",\"appUrl\":\"$_appUrl\",\"memcached\":\"$_memcached\",\"changeDetected\":\"$changeDetected\"")
 # if [ ! "$_appGuid" = "null" ]; then
 #   payload+=(\"appUrl\":\"$_appUrl\")
 # fi
@@ -335,7 +336,6 @@ else
 fi
 };
 
-
 # =======================================
 cat << EOL
 cfcli util has been loaded
@@ -345,3 +345,6 @@ Other functions:
 $(remove_memcached_service)
 $(restart_app)
 EOL
+
+echo ""; source /Users/dcvezzani/scripts/oauth-memcached-get-access-token.sh
+
