@@ -1,0 +1,9 @@
+{
+	"xdestinationFilepath": "/Users/dcvezzani/projects/markdown-renderer/markdown/20250421-tab-choir-migration-script/images",
+	"xdestinationFilepath": "/Users/dcvezzani/projects/markdown-renderer/markdown/20250516-tab-choir-migration-issues/images",
+	"xdestinationFilepath": "/Users/dcvezzani/projects/temples-marklogic/docs/images",
+	"xoutputFormat": "![](images/${file})",
+	"xoutputFormat": "\"images/${file}\","
+}
+
+

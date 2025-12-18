@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# findPath='/Users/dcvezzani/DropBox/journal/images'
-findPath=$(defaults read com.apple.screencapture location)
+# Get the path of the executing file
+script_path=$(dirname "$(readlink -f "$0")")
+
+# sourceFilepath='/Users/dcvezzani/DropBox/journal/images'
+sourceFilepath=$(defaults read com.apple.screencapture location)
 
 function uuid() {
   python3 -c "import uuid; print(uuid.uuid1())"
@@ -10,13 +13,20 @@ function uuid() {
 # uuid=$(uuidgen | tr "[:upper:]" "[:lower:]")
 uuid=$(uuid | tr "[:upper:]" "[:lower:]")
 
-if [ ! "$1" = "" ]; then
+if [[ ! "$1" == "" ]]; then
   uuid=$(echo "$1" | sed 's/  */-/g')
 fi
 
-cnt=$(find "$findPath" -name "${uuid}*" | wc -l | xargs)
+cnt=$(find "$sourceFilepath" -name "${uuid}*" | wc -l | xargs)
 
-find "$findPath" -type f \( -name "Screen*" -o -name "Pasted_Image_*" \)  | sort | while read line
+destinationFilepath=$(cat "${script_path}/rename-images.json" | jq -r '.destinationFilepath')
+outputFormat=$(cat "${script_path}/rename-images.json" | jq -r '.outputFormat')
+
+if [[ -z $destinationFilepath ]] || [[ "null" == $destinationFilepath ]]; then
+	destinationFilepath="$sourceFilepath"
+fi
+
+find -L "$sourceFilepath" -type f \( -name "Screen*" -o -name "Pasted_Image_*" \)  | sort | while read line
 do
   cnt=$((cnt+1))
 
@@ -26,16 +36,15 @@ do
   filepath="${line%\/*}"
   cntValue=$(printf "%02d" $cnt)
 
-  mv "${line}" "${filepath}/${uuid}-${cntValue}.${extension}"
+  mv "${line}" "${destinationFilepath}/${uuid}-${cntValue}.${extension}"
 done
 
+if [[ -z $outputFormat ]] || [[ "null" == $outputFormat ]]; then
+	outputFormat='![](images/${file})'
+fi
 
-for file in $(ls "$findPath" | grep "^$uuid"); do
-  echo '![](images/'"$file"')'
+for file in $(ls "$destinationFilepath" | grep "^$uuid"); do
+  echo "$outputFormat" | perl -p -e 's/\$\{file\}/'"$file"'/g'
 done | pbcopy
 
-# echo "$(ls "$findPath" | grep "^$uuid")" | pbcopy
-
-for file in $(ls "$findPath" | grep "^$uuid"); do
-  echo '![](images/'"$file"')'
-done
+pbpaste

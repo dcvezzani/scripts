@@ -1,5 +1,7 @@
+let s:MAX_FILE_NAME_LENGTH = 100
+
 " http://stackoverflow.com/questions/18752516/how-to-automatically-name-a-file-when-saving-in-vim
-function! SaveIt()
+function! SaveFile()
   let vim_autosave=$VIM_AUTOSAVE
   let file_extension='md'
 
@@ -29,9 +31,8 @@ function! SaveIt()
 					endif
         endif
       
-        let maxFileNameLength = 40
-        if strlen("".newLine) > maxFileNameLength 
-          let newLine = strpart(''.newLine, 0, maxFileNameLength)
+        if strlen("".newLine) > s:MAX_FILE_NAME_LENGTH 
+          let newLine = strpart(''.newLine, 0, s:MAX_FILE_NAME_LENGTH)
         endif
 
         "echo "".newLine
@@ -44,35 +45,9 @@ function! SaveIt()
         let newLine = $JOURNAL_DIR.'/current/'.dts.'-'.newLine.'.'.file_extension
         let isMd = match(newLine, "\.md$")
 
-        if one_line
-          "call setpos(origPos[0], origPos[1], origPos[2], origPos[3])
-          let @z = 'o' | normal @z
-
-        else
-          let @z = 'O' | normal @z
-          call setline(line("."), '<div style="display:none">')
-          let @z = 'o' | normal @z
-          call setline(line("."), newLine)
-          if isMd > -1
-            let @z = 'o' | normal @z
-            call setline(line("."), 'To view formatted in Chrome browser, use extension: https://chrome.google.com/webstore/detail/markdown-viewer/ckkdlimhmcjmikdlpkmbgfkaikojcbjk')
-          endif
-          let @z = 'o' | normal @z
-          call setline(line("."), '</div>')
-          let @z = 'oA' | normal @z
-          call setline(line("."), '<style>')
-          let @z = 'o' | normal @z
-          call setline(line("."), '  ul { list-style: inherit; }')
-          let @z = 'o' | normal @z
-          call setline(line("."), '</style>')
-          let @z = 'o' | normal @z
-          call setline(line("."), '')
-					let origPos = [origPos[0], (origPos[1]+6), 0, origPos[3]]
-        endif
-
         " copy to clipboard if desired
-        let @+ = newLine
-        echo "".newLine
+        " let @+ = newLine
+        " echo "".newLine
 
         " go back to original position
         call setpos('.', origPos)
@@ -91,7 +66,7 @@ function! SaveIt()
   endif
 endfunction
 
-function! ToggleSaveIt()
+function! ToggleSaveFile()
   let vim_autosave=$VIM_AUTOSAVE
 
   if vim_autosave == 'true'
@@ -103,9 +78,9 @@ function! ToggleSaveIt()
   let vim_autosave=$VIM_AUTOSAVE
   echo "VIM_AUTOSAVE: ".vim_autosave
 endfunction
-nmap gs :call ToggleSaveIt()<CR>
+nmap gs :call ToggleSaveFile()<CR>
 
-autocmd BufLeave,FocusLost * silent! call SaveIt()
+autocmd BufLeave,FocusLost * silent! call SaveFile()
 
 "nnoremap rm :call delete(expand('%')) \| bdelete!<CR>
 "nnoremap rm :call delete(expand('%'))<CR>

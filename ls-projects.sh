@@ -29,7 +29,7 @@ if [[ $CORE == 'true' ]]; then
   )
 else
   local list=$(find -L ~/projects -type d -maxdepth 1 \( -name "*-fe" -o -name "*-cms" -o -name "*-ws" -o -name "swagger" -o -name "latter-day-saint-charities" \) ! -name '*-web-ws' ! -name 'oauth*' ! -name 'ch-records*' ! -name 'church-history-adviser-fe' ! -name 'di-fe';
-  find -L ~/projects/@churchofjesuschrist -type d -maxdepth 1 \( -name "idm-oauth" -o -name "team-one-config" -o -name "team-one-logging" \)
+  find -L ~/projects/team-one -type d -maxdepth 1 \( -name "oauth-client" -o -name "oauth-coordinator-client" \)
   ) 
   local list="${list}\n"$(find -L ~/projects/brightspot -type d -maxdepth 1 \( -name "lds" -o -name "training" -o -name "bspWebEyes" -o -name "bsp-cli" -o -name "bsp-be-templates" \)
   )

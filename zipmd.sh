@@ -15,6 +15,7 @@ file="$1"
 # file="/Users/dcvezzani/Dropbox/journal/current/20210903-kcw-ldsc-86.md"
 
 fileNoPath="${file/*\//}"
+fileNoPath=$(echo "$fileNoPath" | perl -p -e 's/\.md$//')
 fileJustPath="${file%/*}"
 
 # echo "$file"
@@ -37,7 +38,7 @@ fi
 
 mkdir -p "/tmp/zipmd/${timestamp}/images"
 
-cp $file "/tmp/zipmd/${timestamp}"
+cp $file "/tmp/zipmd/${timestamp}/README.md"
 
 # cp /Users/dcvezzani/Dropbox/journal/images/0fa38ac5-c899-4e34-b7a1-eb279b9bdfa0-03.png /Users/dcvezzani/Dropbox/journal/images/0fa38ac5-c899-4e34-b7a1-eb279b9bdfa0-04.png /Users/dcvezzani/Dropbox/journal/images/0fa38ac5-c899-4e34-b7a1-eb279b9bdfa0-02.png /Users/dcvezzani/Dropbox/journal/images/0fa38ac5-c899-4e34-b7a1-eb279b9bdfa0-01.png /Users/dcvezzani/Dropbox/journal/images/0fa38ac5-c899-4e34-b7a1-eb279b9bdfa0-05.png "/tmp/zipmd/${timestamp}/images"
 
